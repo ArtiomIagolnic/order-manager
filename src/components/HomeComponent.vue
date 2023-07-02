@@ -88,6 +88,7 @@
           type="text"
           class="border border-gray-300 rounded-md py-2 px-4 flex-grow"
           placeholder="Search Customer"
+          required
         />
         <button
           @click="filteredCustomers"
@@ -96,12 +97,11 @@
           Search
         </button>
       </div>
-
+      <p v-if="showNoDataMessage" class="text-red-500 text-center mt-4">
+        No data found.
+      </p>
       <!-- Customer Table -->
-      <table
-        v-if="!searchResults || searchResults.length === 0"
-        class="min-w-full"
-      >
+      <table v-if="!searchQuery || searchResults.length === 0" class="min-w-full">
         <thead>
           <tr>
             <th class="py-2 px-4">ID</th>
@@ -167,12 +167,12 @@ export default {
       },
       searchQuery: '',
       searchResults: [],
-      adminStore: null,
+      adminStore: useAdminStore(),
       showModal: false,
+      showNoDataMessage: false,
     }
   },
   created() {
-    this.adminStore = useAdminStore()
     this.adminStore.initializeCustomers() // Initialize the store when the component is created
   },
   computed: {
@@ -194,8 +194,11 @@ export default {
     filteredCustomers() {
       if (this.searchQuery) {
         this.searchResults = this.adminStore.search(this.searchQuery)
+
+        this.showNoDataMessage = this.searchResults.length === 0
       } else {
         this.searchResults = []
+        this.showNoDataMessage = false
       }
     },
     openModal() {
