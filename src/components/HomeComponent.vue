@@ -15,7 +15,7 @@
 
       <VueFinalModal
         class="mx-auto flex justify-center items-center"
-        content-class="mt-8 max-w-lg container mx-auto flex flex-col p-8 bg-white dark:bg-black rounded border border-gray-100 dark:border-gray-800"
+        content-class="mt-8 max-w-lg container mx-auto flex flex-col p-8 bg-white  rounded border border-gray-100 dark:border-gray-800"
         v-model="showModal"
       >
         <div class="flex flex-col items-center">
@@ -101,7 +101,10 @@
         No data found.
       </p>
       <!-- Customer Table -->
-      <table v-if="!searchQuery || searchResults.length === 0" class="min-w-full">
+      <table
+        v-if="!searchQuery || searchResults.length === 0"
+        class="min-w-full"
+      >
         <thead>
           <tr>
             <th class="py-2 px-4">ID</th>
