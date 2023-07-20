@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { v4 as uuidv4 } from 'uuid'
 
 export const useAdminStore = defineStore('admin', {
     state: () => ({
@@ -6,61 +7,61 @@ export const useAdminStore = defineStore('admin', {
     }),
 
     getters: {
-        all: (state => state.customers)
+        all: (state => state.customers),
     },
 
     actions: {
-        initializeCustomers() {
-            try {
-                const existingCustomers = JSON.parse(localStorage.getItem('customers') || '[]')
-                this.customers = existingCustomers
-            } catch (error) {
-                console.log(error.message)
+        getCustomers(filters) {
+            if (!filters) {
+                try {
+                    return this.customers = JSON.parse(localStorage.getItem('customers') || '[]')
+                } catch (error) {
+                    console.error(error.message)
+                }
+            } else {
+                return this.customers.filter((customer) => {
+                    const searchValue = filters.toLowerCase().trim()
+                    const { firstName, lastName, boughtProduct } = customer
+
+                    return (firstName.toString().toLowerCase().includes(searchValue)) ||
+                        lastName.toString().toLowerCase().includes(searchValue) ||
+                        boughtProduct.toString().toLowerCase().includes(searchValue)
+                })
             }
         },
         addCustomer(data) {
             try {
-
                 const existingCustomers = this.customers
-
+                const customerId = uuidv4()
                 const newCustomer = {
                     ...data,
-                    id: existingCustomers.length > 0 ? existingCustomers[existingCustomers.length - 1].id + 1 : 1,
+                    id: customerId,
                 }
-
                 existingCustomers.push(newCustomer)
-
                 localStorage.setItem('customers', JSON.stringify(existingCustomers))
-
                 this.customers = existingCustomers
-
-                console.log('success')
+            } catch (error) {
+                console.error(error.message)
+            }
+        },
+        updateCustomer(updatedCustomer) {
+            try {
+                const index = this.customers.findIndex((customer) => customer.id === updatedCustomer.id)
+                if (index > -1) {
+                    this.customers[index] = updatedCustomer
+                    localStorage.setItem('customers', JSON.stringify(this.customers))
+                }
             } catch (error) {
                 console.log(error.message)
             }
         },
-        search(query) {
+        deleteCustomer(customer) {
+            const indexOfCustomer = this.customers.indexOf(customer)
+            if (indexOfCustomer > -1) {
+                this.customers.splice(indexOfCustomer, 1)
+                localStorage.setItem('customers', JSON.stringify(this.customers))
+            }
 
-
-            const filteredCustomers = this.customers.filter((customer) => {
-                const searchValue = query.toLowerCase().trim()
-                const { id, firstName, lastName, boughtProduct } = customer
-
-
-                return (id.toString().includes(searchValue) ||
-                    firstName.toString().toLowerCase().includes(searchValue)) ||
-                    lastName.toString().toLowerCase().includes(searchValue) ||
-                    boughtProduct.toString().toLowerCase().includes(searchValue)
-            })
-
-            return filteredCustomers
-
-        },
-
-        // Call the initializeCustomers action when the store is created
-        // to update the state with the value from localStorage
-        initialize() {
-            this.initializeCustomers()
-        },
+        }
     }
 })

@@ -5,22 +5,21 @@
 
       <!-- Add New Customer Button -->
       <button
-        @click="openModal"
+        @click="openModal()"
         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-4 rounded"
       >
         Add New Customer
       </button>
 
       <!-- Modal -->
-
       <VueFinalModal
         class="mx-auto flex justify-center items-center"
-        content-class="mt-8 max-w-lg container mx-auto flex flex-col p-8 bg-white  rounded border border-gray-100 dark:border-gray-800"
+        content-class="mt-8 max-w-lg container mx-auto flex flex-col p-8 bg-white  rounded border border-gray-100"
         v-model="showModal"
       >
         <div class="flex flex-col items-center">
-          <h2 class="text-xl font-bold mb-4">Add New Customer</h2>
-          <form @submit.prevent="addCustomer" class="w-full space-y-4">
+          <h2 class="text-xl font-bold mb-4">{{ modalTitle }}</h2>
+          <form @submit.prevent="handleModalAction" class="w-full space-y-4">
             <div>
               <label for="firstName" class="text-gray-700">First Name:</label>
               <input
@@ -74,7 +73,7 @@
                 type="submit"
                 class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
               >
-                Add Customer
+                {{ modalActionLabel }}
               </button>
             </div>
           </form>
@@ -84,7 +83,8 @@
       <!-- Search Field -->
       <div class="flex mb-4">
         <input
-          v-model="searchQuery"
+          v-model="filters"
+          @input="resetFilter"
           type="text"
           class="border border-gray-300 rounded-md py-2 px-4 flex-grow"
           placeholder="Search Customer"
@@ -101,64 +101,59 @@
         No data found.
       </p>
       <!-- Customer Table -->
-      <table
-        v-if="!searchQuery || searchResults.length === 0"
-        class="min-w-full"
-      >
+      <table class="min-w-full">
         <thead>
           <tr>
-            <th class="py-2 px-4">ID</th>
-            <th class="py-2 px-4">First Name</th>
-            <th class="py-2 px-4">Last Name</th>
-            <th class="py-2 px-4">Age</th>
-            <th class="py-2 px-4">Bought Product</th>
+            <th class="py-2 px-4 text-left">Nr.</th>
+            <th class="py-2 px-4 text-left">First Name</th>
+            <th class="py-2 px-4 text-left">Last Name</th>
+            <th class="py-2 px-4 text-left">Age</th>
+            <th class="py-2 px-4 text-left">Bought Product</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="customer in customers" :key="customer.id">
-            <td class="py-2 px-4">{{ customer.id }}</td>
+          <tr v-for="(customer, i) in displayedCustomers" :key="customer.id">
+            <td class="py-2 px-4">{{ i + 1 }}</td>
             <td class="py-2 px-4">{{ customer.firstName }}</td>
             <td class="py-2 px-4">{{ customer.lastName }}</td>
             <td class="py-2 px-4">{{ customer.age }}</td>
             <td class="py-2 px-4">{{ customer.boughtProduct }}</td>
+            <div class="buttons flex p-1">
+              <button
+                @click="openModal(customer)"
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
+              >
+                Update
+              </button>
+              <button
+                @click="deleteCustomer(customer)"
+                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Delete
+              </button>
+            </div>
           </tr>
         </tbody>
       </table>
-
-      <!-- Search results table -->
-      <table
-        v-if="searchQuery && searchResults && searchResults.length > 0"
-        class="min-w-full"
-      >
-        <thead>
-          <tr>
-            <th class="py-2 px-4">ID</th>
-            <th class="py-2 px-4">First Name</th>
-            <th class="py-2 px-4">Last Name</th>
-            <th class="py-2 px-4">Age</th>
-            <th class="py-2 px-4">Bought Product</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="customer in searchResults" :key="customer.id">
-            <td class="py-2 px-4">{{ customer.id }}</td>
-            <td class="py-2 px-4">{{ customer.firstName }}</td>
-            <td class="py-2 px-4">{{ customer.lastName }}</td>
-            <td class="py-2 px-4">{{ customer.age }}</td>
-            <td class="py-2 px-4">{{ customer.boughtProduct }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="flex justify-end">
+        <button
+          v-if="canLoadMore"
+          @click="loadMoreCustomers"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4 rounded"
+        >
+          Load More
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { useAdminStore } from '@/store/admin.js'
-import { VueFinalModal } from 'vue-final-modal'
+import CustomerModal from '@/pages/customers/components/CustomerModal.vue'
 export default {
   components: {
-    VueFinalModal,
+    CustomerModal
   },
   data() {
     return {
@@ -168,22 +163,61 @@ export default {
         age: '',
         boughtProduct: '',
       },
-      searchQuery: '',
-      searchResults: [],
-      adminStore: useAdminStore(),
+      customers: [],
+      filters: '',
+      pageSize: 10,
+      displayedCustomers: [],
+      loadedCustomersCount: 0,
+      modalTitle: '',
+      modalActionLabel: '',
       showModal: false,
       showNoDataMessage: false,
     }
   },
-  created() {
-    this.adminStore.initializeCustomers() // Initialize the store when the component is created
+  mounted() {
+    this.loadCustomers()
   },
   computed: {
-    customers() {
-      return this.adminStore.all
+    adminStore() {
+      return useAdminStore()
+    },
+    canLoadMore() {
+      return this.loadedCustomersCount < this.customers.length
     },
   },
   methods: {
+    loadCustomers() {
+      this.customers = this.adminStore.getCustomers()
+      this.displayedCustomers = this.customers.slice(0, this.pageSize)
+      this.loadedCustomersCount = this.displayedCustomers.length
+    },
+    loadMoreCustomers() {
+      const remainingCustomers = this.customers.slice(
+        this.loadedCustomersCount,
+        this.loadedCustomersCount + this.pageSize,
+      )
+      this.displayedCustomers = [
+        ...this.displayedCustomers,
+        ...remainingCustomers,
+      ]
+      this.loadedCustomersCount += remainingCustomers.length
+    },
+    filteredCustomers() {
+      if (this.filters && !this.showNoDataMessage) {
+        this.displayedCustomers = this.adminStore.getCustomers(this.filters)
+        this.showNoDataMessage = this.customers.length === 0
+      } else {
+        this.displayedCustomers = this.adminStore.getCustomers()
+        this.showNoDataMessage = false
+      }
+    },
+    resetFilter() {
+      if (!this.filters) {
+        this.filters = ''
+        this.filteredCustomers()
+      }
+    },
+
     addCustomer() {
       this.adminStore.addCustomer(this.customer)
 
@@ -194,17 +228,37 @@ export default {
 
       this.closeModal()
     },
-    filteredCustomers() {
-      if (this.searchQuery) {
-        this.searchResults = this.adminStore.search(this.searchQuery)
-
-        this.showNoDataMessage = this.searchResults.length === 0
-      } else {
-        this.searchResults = []
-        this.showNoDataMessage = false
+    updateCustomer(customer) {
+      this.adminStore.updateCustomer(customer)
+      this.closeModal()
+      this.loadCustomers()
+    },
+    deleteCustomer(customer) {
+      this.adminStore.deleteCustomer(customer)
+      this.loadCustomers()
+    },
+    handleModalAction() {
+      if (this.modalTitle === 'Add new customer') {
+        this.addCustomer()
+      } else if (this.modalTitle === 'Update customer') {
+        this.updateCustomer(this.customer)
       }
     },
-    openModal() {
+    openModal(customer) {
+      if (customer) {
+        this.modalTitle = 'Update customer'
+        this.modalActionLabel = 'Update customer'
+
+        this.customer = { ...customer }
+      } else {
+        this.modalTitle = 'Add new customer'
+        this.modalActionLabel = 'Add customer'
+
+        this.customer.firstName = ''
+        this.customer.lastName = ''
+        this.customer.age = ''
+        this.customer.boughtProduct = ''
+      }
       this.showModal = true
     },
     closeModal() {
