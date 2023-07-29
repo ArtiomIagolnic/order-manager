@@ -1,57 +1,7 @@
 <template>
   <!-- Modal -->
 
-  <CustomerModal
-    :modalTitle="modalTitle"
-    :handleModalAction="handleModalAction"
-    :modalActionLabel="modalActionLabel"
-    @openModal="openModal"
-    @closeModal="closeModal"
-  >
-    <div>
-      <label for="firstName" class="text-gray-700">First Name:</label>
-      <input
-        type="text"
-        id="firstName"
-        v-model="customer.firstName"
-        required
-        class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-      />
-    </div>
-    <div>
-      <label for="lastName" class="text-gray-700">Last Name:</label>
-      <input
-        type="text"
-        id="lastName"
-        v-model="customer.lastName"
-        required
-        class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-      />
-    </div>
-    <div>
-      <label for="age" class="text-gray-700">Age:</label>
-      <input
-        type="number"
-        id="age"
-        v-model="customer.age"
-        required
-        class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-      />
-    </div>
-    <div>
-      <label for="boughtProduct" class="text-gray-700">
-        Bought Product:
-      </label>
-      <input
-        type="text"
-        id="boughtProduct"
-        v-model="customer.boughtProduct"
-        required
-        class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-      />
-    </div>
-  </CustomerModal>
-
+  <CustomerModal />
   <!-- Search Field -->
   <div class="flex mb-4">
     <input
@@ -72,6 +22,7 @@
   <p v-if="showNoDataMessage" class="text-red-500 text-center mt-4">
     No data found.
   </p>
+
   <!-- Customer Table -->
   <table class="min-w-full">
     <thead>
@@ -92,7 +43,7 @@
         <td class="py-2 px-4">{{ customer.boughtProduct }}</td>
         <div class="buttons flex p-1">
           <button
-            @openModal="openModal(customer)"
+            @click="openModal(customer)"
             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
           >
             Update
@@ -107,6 +58,7 @@
       </tr>
     </tbody>
   </table>
+
   <div class="flex justify-end">
     <button
       v-if="canLoadMore"
@@ -127,20 +79,11 @@ export default {
   },
   data() {
     return {
-      customer: {
-        firstName: '',
-        lastName: '',
-        age: '',
-        boughtProduct: '',
-      },
       customers: [],
       filters: '',
       pageSize: 10,
       displayedCustomers: [],
       loadedCustomersCount: 0,
-      modalTitle: '',
-      modalActionLabel: '',
-
       showNoDataMessage: false,
     }
   },
@@ -156,9 +99,6 @@ export default {
     },
   },
   methods: {
-    some() {
-      console.log(arguments)
-    },
     loadCustomers() {
       this.customers = this.adminStore.getCustomers()
       this.displayedCustomers = this.customers.slice(0, this.pageSize)
@@ -189,53 +129,6 @@ export default {
         this.filters = ''
         this.filteredCustomers()
       }
-    },
-
-    addCustomer() {
-      this.adminStore.addCustomer(this.customer)
-
-      this.customer.firstName = ''
-      this.customer.lastName = ''
-      this.customer.age = ''
-      this.customer.boughtProduct = ''
-
-      this.closeModal()
-    },
-    updateCustomer(customer) {
-      this.adminStore.updateCustomer(customer)
-      this.closeModal()
-      this.loadCustomers()
-    },
-    deleteCustomer(customer) {
-      this.adminStore.deleteCustomer(customer)
-      this.loadCustomers()
-    },
-    handleModalAction() {
-      if (this.modalTitle === 'Add new customer') {
-        this.addCustomer()
-      } else if (this.modalTitle === 'Update customer') {
-        this.updateCustomer(this.customer)
-      }
-    },
-    openModal(customer) {
-      if (customer) {
-        this.modalTitle = 'Update customer'
-        this.modalActionLabel = 'Update customer'
-
-        this.customer = { ...customer }
-      } else {
-        this.modalTitle = 'Add new customer'
-        this.modalActionLabel = 'Add customer'
-
-        this.customer.firstName = ''
-        this.customer.lastName = ''
-        this.customer.age = ''
-        this.customer.boughtProduct = ''
-      }
-      this.showModal = true
-    },
-    closeModal() {
-      this.showModal = false
     },
   },
 }

@@ -22,16 +22,9 @@
     </div>
   </div>
 </template>
-<style>
-/* Add focus outline */
-.focus\:outline-blue:focus {
-  outline: 2px solid #4d9cdb;
-  outline-offset: 2px;
-}
-</style>
 
 <script>
 export default {
-  name: 'App',
+  name: 'App'
 }
 </script>
