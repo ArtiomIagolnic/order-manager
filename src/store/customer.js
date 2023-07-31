@@ -1,15 +1,13 @@
 import { defineStore } from 'pinia'
 import { v4 as uuidv4 } from 'uuid'
 
-export const useAdminStore = defineStore('admin', {
+export const useCustomerStore = defineStore('customer', {
     state: () => ({
         customers: []
     }),
-
     getters: {
         all: (state => state.customers),
     },
-
     actions: {
         getCustomers(filters) {
             if (!filters) {
@@ -61,7 +59,6 @@ export const useAdminStore = defineStore('admin', {
                 this.customers.splice(indexOfCustomer, 1)
                 localStorage.setItem('customers', JSON.stringify(this.customers))
             }
-
         }
     }
 })
