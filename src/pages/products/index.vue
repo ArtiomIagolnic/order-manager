@@ -109,6 +109,7 @@ export default {
       loadedProductsCount: 0,
       showNoDataMessage: false,
       updatedProduct: {},
+      showModal: true,
     }
   },
   created() {

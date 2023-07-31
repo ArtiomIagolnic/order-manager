@@ -23,97 +23,165 @@
   </p>
 
   <!-- Customer Table -->
-  <table class="min-w-full">
-    <thead>
-      <tr>
-        <th class="py-2 px-4 text-left">Nr.</th>
-        <th class="py-2 px-4 text-left">First Name</th>
-        <th class="py-2 px-4 text-left">Last Name</th>
-        <th class="py-2 px-4 text-left">Age</th>
-        <th class="py-2 px-4 text-left">Bought Product</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(customer, i) in displayedCustomers" :key="customer.id">
-        <td class="py-2 px-4">{{ i + 1 }}</td>
-        <td class="py-2 px-4">{{ customer.firstName }}</td>
-        <td class="py-2 px-4">{{ customer.lastName }}</td>
-        <td class="py-2 px-4">{{ customer.age }}</td>
-        <td class="py-2 px-4">{{ customer.boughtProduct }}</td>
-        <div class="buttons flex p-1">
-          <ModalWindow
-            @openModal="openModal(customer)"
-            title="Update"
-            classes="bg-green-500 mr-2 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >
-            <template #table>
-              <h2 class="text-xl font-bold mb-4">Update customer</h2>
-              <form @submit.prevent="updateCustomer" class="w-full space-y-4">
-                <div>
-                  <label for="firstName" class="text-gray-700">
-                    First Name:
-                  </label>
-                  <input
-                    type="text"
-                    id="firstName"
-                    v-model="updatedCustomer.firstName"
-                    required
-                    class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label for="lastName" class="text-gray-700">Last Name:</label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    v-model="updatedCustomer.lastName"
-                    required
-                    class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label for="age" class="text-gray-700">Age:</label>
-                  <input
-                    type="number"
-                    id="age"
-                    v-model="updatedCustomer.age"
-                    required
-                    class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label for="boughtProduct" class="text-gray-700">
-                    Bought Product:
-                  </label>
-                  <input
-                    type="text"
-                    id="boughtProduct"
-                    v-model="updatedCustomer.boughtProduct"
-                    required
-                    class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <button
-                    type="submit"
-                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mb-2 rounded w-full"
-                  >
-                    Update
-                  </button>
-                </div>
-              </form>
-            </template>
-          </ModalWindow>
-          <button
-            @click="deleteCustomer(customer)"
-            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Delete
-          </button>
-        </div>
-      </tr>
-    </tbody>
-  </table>
+  <div class="overflow-x-auto">
+    <table class="min-w-full table-auto">
+      <thead>
+        <tr>
+          <th class="py-2 px-4 text-left">Nr.</th>
+          <th class="py-2 px-4 text-left">First Name</th>
+          <th class="py-2 px-4 text-left">Last Name</th>
+          <th class="py-2 px-4 text-left">Age</th>
+          <th class="py-2 px-4 text-left">Bought Product</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(customer, i) in displayedCustomers" :key="customer.id">
+          <td class="py-2 px-4">{{ i + 1 }}</td>
+          <td class="py-2 px-4">{{ customer.firstName }}</td>
+          <td class="py-2 px-4">{{ customer.lastName }}</td>
+          <td class="py-2 px-4">{{ customer.age }}</td>
+
+          <td class="py-2 px-4">
+            <ModalWindow
+              @openModal="openModal(customer.boughtProduct)"
+              :title="customer.boughtProduct"
+              :product="getProductByName(customer.boughtProduct)"
+            >
+              <template #table>
+                <h2 class="text-xl font-bold mb-4">Product</h2>
+                <form class="w-full space-y-4">
+                  <div>
+                    <label for="name" class="text-gray-700">
+                      Name
+                    </label>
+                    <input
+                      disabled="true"
+                      type="text"
+                      id="name"
+                      v-model="selectedProduct.name"
+                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label for="price" class="text-gray-700">Price</label>
+                    <input
+                      disabled="true"
+                      type="text"
+                      id="price"
+                      v-model="selectedProduct.price"
+                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label for="stock" class="text-gray-700">Stock</label>
+                    <input
+                      type="number"
+                      id="stock"
+                      v-model="selectedProduct.stock"
+                      disabled="true"
+                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label for="sku" class="text-gray-700">SKU</label>
+                    <input
+                      type="number"
+                      id="sku"
+                      v-model="selectedProduct.sku"
+                      disabled="true"
+                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                </form>
+              </template>
+            </ModalWindow>
+          </td>
+
+          <div class="buttons flex p-1">
+            <ModalWindow
+              @openModal="openModal(customer)"
+              title="Update"
+              classes="bg-green-500 mr-2 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            >
+              <template #table>
+                <h2 class="text-xl font-bold mb-4">Update customer</h2>
+                <form @submit.prevent="updateCustomer" class="w-full space-y-4">
+                  <div>
+                    <label for="firstName" class="text-gray-700">
+                      First Name:
+                    </label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      v-model="updatedCustomer.firstName"
+                      required
+                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label for="lastName" class="text-gray-700">
+                      Last Name:
+                    </label>
+                    <input
+                      type="text"
+                      id="lastName"
+                      v-model="updatedCustomer.lastName"
+                      required
+                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label for="age" class="text-gray-700">Age:</label>
+                    <input
+                      type="number"
+                      id="age"
+                      v-model="updatedCustomer.age"
+                      required
+                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label for="boughtProduct" class="text-gray-700">
+                      Bought Product:
+                    </label>
+                    <select
+                      v-model="customer.boughtProduct"
+                      name="boughtProduct"
+                      id="boughtProduct"
+                      required
+                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                    >
+                      <option
+                        v-for="product in products"
+                        :key="product.id"
+                        :value="product.name"
+                      >
+                        {{ product.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div>
+                    <button
+                      type="submit"
+                      class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mb-2 rounded w-full"
+                    >
+                      Update
+                    </button>
+                  </div>
+                </form>
+              </template>
+            </ModalWindow>
+            <button
+              @click="deleteCustomer(customer)"
+              class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Delete
+            </button>
+          </div>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <div class="flex justify-end">
     <button
@@ -128,6 +196,7 @@
 
 <script>
 import { useCustomerStore } from '@/store/customer.js'
+import { useProductStore } from '@/store/product.js'
 import ModalWindow from '@/components/ModalWindow.vue'
 import CustomerModal from './components/CustomerModal.vue'
 export default {
@@ -144,6 +213,7 @@ export default {
       loadedCustomersCount: 0,
       showNoDataMessage: false,
       updatedCustomer: {},
+      selectedProduct: {},
     }
   },
   created() {
@@ -152,6 +222,9 @@ export default {
   computed: {
     customerStore() {
       return useCustomerStore()
+    },
+    products() {
+      return useProductStore().getProducts()
     },
     canLoadMore() {
       return this.loadedCustomersCount < this.customers.length
@@ -189,8 +262,12 @@ export default {
         this.filteredCustomers()
       }
     },
-    openModal(customer) {
-      this.updatedCustomer = JSON.parse(JSON.stringify(customer))
+    openModal(data) {
+      if (typeof data === 'object') {
+        this.updatedCustomer = JSON.parse(JSON.stringify(data))
+      } else if (typeof data === 'string') {
+        this.selectedProduct = this.getProductByName(data)
+      }
     },
     updateCustomer() {
       this.customerStore.updateCustomer(this.updatedCustomer)
@@ -199,6 +276,9 @@ export default {
     deleteCustomer(customer) {
       this.customerStore.deleteCustomer(customer)
       this.loadCustomers()
+    },
+    getProductByName(productName) {
+      return this.products.find((product) => product.name === productName)
     },
   },
 }

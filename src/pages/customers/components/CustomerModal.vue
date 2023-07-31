@@ -41,13 +41,21 @@
           <label for="boughtProduct" class="text-gray-700">
             Bought Product:
           </label>
-          <input
-            type="text"
-            id="boughtProduct"
+          <select
             v-model="customer.boughtProduct"
+            name="boughtProduct"
+            id="boughtProduct"
             required
             class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-          />
+          >
+            <option
+              v-for="product in products"
+              :key="product.id"
+              :value="product.name"
+            >
+              {{ product.name }}
+            </option>
+          </select>
         </div>
         <div class="">
           <button
@@ -64,6 +72,7 @@
 <script>
 import ModalWindow from '@/components/ModalWindow.vue'
 import { useCustomerStore } from '@/store/customer.js'
+import { useProductStore } from '@/store/product.js'
 export default {
   components: {
     ModalWindow,
@@ -81,6 +90,9 @@ export default {
   computed: {
     customerStore() {
       return useCustomerStore()
+    },
+    products() {
+      return useProductStore().getProducts()
     },
   },
   methods: {

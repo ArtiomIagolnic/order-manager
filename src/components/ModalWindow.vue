@@ -1,7 +1,7 @@
 <template>
   <!-- Add New Customer Button -->
 
-  <button @click="openModal" :class="classes">
+  <button @click="openModal" :class="classes" >
     {{ title }}
   </button>
 
@@ -36,6 +36,7 @@ export default {
   props: {
     title: String,
     classes: String,
+    product: { Object, default: null },
   },
   methods: {
     openModal() {
