@@ -5,9 +5,6 @@ export const useCustomerStore = defineStore('customer', {
     state: () => ({
         customers: []
     }),
-    getters: {
-        all: (state => state.customers),
-    },
     actions: {
         getCustomers(filters) {
             if (!filters) {
@@ -33,7 +30,7 @@ export const useCustomerStore = defineStore('customer', {
                 const customerId = uuidv4()
                 const newCustomer = {
                     ...data,
-                    id: customerId,
+                    id: customerId
                 }
                 existingCustomers.push(newCustomer)
                 localStorage.setItem('customers', JSON.stringify(existingCustomers))
@@ -50,7 +47,7 @@ export const useCustomerStore = defineStore('customer', {
                     localStorage.setItem('customers', JSON.stringify(this.customers))
                 }
             } catch (error) {
-                console.log(error.message)
+                console.error();
             }
         },
         deleteCustomer(customer) {

@@ -1,6 +1,6 @@
 <template>
   <ModalWindow
-    @openModal="openModal()"
+    @openModal="openModal"
     title="Add new customer"
     classes="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-4 rounded"
   >
@@ -75,7 +75,7 @@ import { useCustomerStore } from '@/store/customer.js'
 import { useProductStore } from '@/store/product.js'
 export default {
   components: {
-    ModalWindow,
+    ModalWindow
   },
   data() {
     return {
@@ -83,8 +83,8 @@ export default {
         firstName: '',
         lastName: '',
         age: '',
-        boughtProduct: '',
-      },
+        boughtProduct: ''
+      }
     }
   },
   computed: {
@@ -93,33 +93,24 @@ export default {
     },
     products() {
       return useProductStore().getProducts()
-    },
+    }
   },
   methods: {
     addCustomer() {
       this.customerStore.addCustomer(this.customer)
-
+      this.$emit('customerAdded')
       this.customer.firstName = ''
       this.customer.lastName = ''
       this.customer.age = ''
       this.customer.boughtProduct = ''
     },
-    updateCustomer(customer) {
-      this.customerStore.updateCustomer(customer)
-      this.closeModal()
-      this.loadCustomers()
-    },
-    deleteCustomer(customer) {
-      this.customerStore.deleteCustomer(customer)
-      this.loadCustomers()
-    },
-
     openModal() {
       this.customer.firstName = ''
       this.customer.lastName = ''
       this.customer.age = ''
       this.customer.boughtProduct = ''
-    },
+    }
   },
+  emits: ['customerAdded', 'closeModal']
 }
 </script>

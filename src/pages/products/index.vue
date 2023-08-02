@@ -1,86 +1,88 @@
 <template>
-  <ProductsModal />
+  <ProductsModal @productAdded="loadProducts()" />
+  <div class="overflow-x-auto">
+    <table class="min-w-full table-auto">
+      <thead>
+        <tr>
+          <th class="py-2 px-4 text-left">Nr.</th>
+          <th class="py-2 px-4 text-left">Name</th>
+          <th class="py-2 px-4 text-left">Price</th>
+          <th class="py-2 px-4 text-left">Stock</th>
+          <th class="py-2 px-4 text-left">SKU</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(product, i) in displayedProducts" :key="product.id">
+          <td class="py-2 px-4">{{ i + 1 }}</td>
+          <td class="py-2 px-4">{{ product.name }}</td>
+          <td class="py-2 px-4">{{ product.price }}</td>
+          <td class="py-2 px-4">{{ product.stock }}</td>
+          <td class="py-2 px-4">{{ product.sku }}</td>
+          <div class="buttons flex p-1">
+            <ModalWindow
+              @openModal="openModal(product)"
+              title="Update"
+              classes="bg-green-500 mr-2 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            >
+              <template #table>
+                <h2 class="text-xl font-bold mb-4">Update product</h2>
+                <form @submit.prevent="updateProduct" class="w-full space-y-4">
+                  <div>
+                    <label for="name" class="text-gray-700">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      v-model="updatedProduct.name"
+                      required
+                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label for="price" class="text-gray-700">Price</label>
+                    <input
+                      type="text"
+                      id="price"
+                      v-model="updatedProduct.price"
+                      required
+                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label for="stock" class="text-gray-700">Stock</label>
+                    <input
+                      type="number"
+                      id="stock"
+                      v-model="updatedProduct.stock"
+                      required
+                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
 
-  <table class="min-w-full">
-    <thead>
-      <tr>
-        <th class="py-2 px-4 text-left">Nr.</th>
-        <th class="py-2 px-4 text-left">Name</th>
-        <th class="py-2 px-4 text-left">Price</th>
-        <th class="py-2 px-4 text-left">Stock</th>
-        <th class="py-2 px-4 text-left">SKU</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(product, i) in displayedProducts" :key="product.id">
-        <td class="py-2 px-4">{{ i + 1 }}</td>
-        <td class="py-2 px-4">{{ product.name }}</td>
-        <td class="py-2 px-4">{{ product.price }}</td>
-        <td class="py-2 px-4">{{ product.stock }}</td>
-        <td class="py-2 px-4">{{ product.sku }}</td>
-        <div class="buttons flex p-1">
-          <ModalWindow
-            @openModal="openModal(product)"
-            title="Update"
-            classes="bg-green-500 mr-2 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >
-            <template #table>
-              <h2 class="text-xl font-bold mb-4">Update product</h2>
-              <form @submit.prevent="updateProduct" class="w-full space-y-4">
-                <div>
-                  <label for="name" class="text-gray-700">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    v-model="updatedProduct.name"
-                    required
-                    class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label for="price" class="text-gray-700">Price</label>
-                  <input
-                    type="text"
-                    id="price"
-                    v-model="updatedProduct.price"
-                    required
-                    class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label for="stock" class="text-gray-700">Stock</label>
-                  <input
-                    type="number"
-                    id="stock"
-                    v-model="updatedProduct.stock"
-                    required
-                    class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                  />
-                </div>
+                  <div>
+                    <button
+                      type="submit"
+                      class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mb-2 rounded w-full"
+                    >
+                      Update
+                    </button>
+                  </div>
+                </form>
+              </template>
+            </ModalWindow>
+            <button
+              @click="deleteProduct(product)"
+              class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Delete
+            </button>
+          </div>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-                <div>
-                  <button
-                    type="submit"
-                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mb-2 rounded w-full"
-                  >
-                    Update
-                  </button>
-                </div>
-              </form>
-            </template>
-          </ModalWindow>
-          <button
-            @click="deleteProduct(product)"
-            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Delete
-          </button>
-        </div>
-      </tr>
-    </tbody>
-  </table>
   <div class="flex justify-end">
     <button
       v-if="canLoadMore"
@@ -99,7 +101,7 @@ import ModalWindow from '@/components/ModalWindow.vue'
 export default {
   components: {
     ProductsModal,
-    ModalWindow,
+    ModalWindow
   },
   data() {
     return {
@@ -109,7 +111,7 @@ export default {
       loadedProductsCount: 0,
       showNoDataMessage: false,
       updatedProduct: {},
-      showModal: true,
+      showModal: true
     }
   },
   created() {
@@ -121,7 +123,7 @@ export default {
     },
     canLoadMore() {
       return this.loadedProductsCount < this.products.length
-    },
+    }
   },
   methods: {
     loadProducts() {
@@ -147,7 +149,7 @@ export default {
     updateProduct() {
       this.productStore.updateProduct(this.updatedProduct)
       this.loadProducts()
-    },
-  },
+    }
+  }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <!-- Modal -->
-  <CustomerModal />
+  <CustomerModal @customerAdded="loadCustomers()" />
   <!-- Search Field -->
   <div class="flex mb-4">
     <input
@@ -45,11 +45,10 @@
             <ModalWindow
               @openModal="openModal(customer.boughtProduct)"
               :title="customer.boughtProduct"
-              :product="getProductByName(customer.boughtProduct)"
             >
               <template #table>
                 <h2 class="text-xl font-bold mb-4">Product</h2>
-                <form class="w-full space-y-4">
+                <form class="w-full space-y-4 mb-4">
                   <div>
                     <label for="name" class="text-gray-700">
                       Name
@@ -145,7 +144,7 @@
                       Bought Product:
                     </label>
                     <select
-                      v-model="customer.boughtProduct"
+                      v-model="updatedCustomer.boughtProduct"
                       name="boughtProduct"
                       id="boughtProduct"
                       required
@@ -199,10 +198,11 @@ import { useCustomerStore } from '@/store/customer.js'
 import { useProductStore } from '@/store/product.js'
 import ModalWindow from '@/components/ModalWindow.vue'
 import CustomerModal from './components/CustomerModal.vue'
+
 export default {
   components: {
     CustomerModal,
-    ModalWindow,
+    ModalWindow
   },
   data() {
     return {
@@ -213,7 +213,7 @@ export default {
       loadedCustomersCount: 0,
       showNoDataMessage: false,
       updatedCustomer: {},
-      selectedProduct: {},
+      selectedProduct: {}
     }
   },
   created() {
@@ -228,7 +228,7 @@ export default {
     },
     canLoadMore() {
       return this.loadedCustomersCount < this.customers.length
-    },
+    }
   },
   methods: {
     loadCustomers() {
@@ -248,13 +248,12 @@ export default {
       this.loadedCustomersCount += remainingCustomers.length
     },
     filteredCustomers() {
-      if (this.filters && !this.showNoDataMessage) {
+      if (this.filters.trim() !== '') {
         this.displayedCustomers = this.customerStore.getCustomers(this.filters)
-        this.showNoDataMessage = this.customers.length === 0
       } else {
         this.displayedCustomers = this.customerStore.getCustomers()
-        this.showNoDataMessage = false
       }
+      this.showNoDataMessage = this.displayedCustomers.length === 0
     },
     resetFilter() {
       if (!this.filters) {
@@ -279,7 +278,7 @@ export default {
     },
     getProductByName(productName) {
       return this.products.find((product) => product.name === productName)
-    },
-  },
+    }
+  }
 }
 </script>

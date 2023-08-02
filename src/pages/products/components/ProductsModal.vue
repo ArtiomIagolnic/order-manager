@@ -65,23 +65,22 @@ import ModalWindow from '@/components/ModalWindow.vue'
 import { useProductStore } from '@/store/product.js'
 export default {
   components: {
-    ModalWindow,
+    ModalWindow
   },
-
   data() {
     return {
       product: {
         name: '',
         price: '',
         stock: '',
-        sku: '',
-      },
+        sku: ''
+      }
     }
   },
   computed: {
     productStore() {
       return useProductStore()
-    },
+    }
   },
   methods: {
     openModal() {
@@ -92,12 +91,13 @@ export default {
     },
     addProduct() {
       this.productStore.addProduct(this.product)
-
+      this.$emit('productAdded')
       this.product.name = ''
       this.product.price = ''
       this.product.stock = ''
       this.product.sku = ''
-    },
+    }
   },
+  emits: ['productAdded']
 }
 </script>

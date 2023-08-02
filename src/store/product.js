@@ -5,10 +5,6 @@ export const useProductStore = defineStore('product', {
     state: () => ({
         products: []
     }),
-    getters: {
-        all: (state => state.products),
-    },
-
     actions: {
         getProducts() {
             try {
@@ -23,7 +19,7 @@ export const useProductStore = defineStore('product', {
                 const productId = uuidv4()
                 const newProduct = {
                     ...data,
-                    id: productId,
+                    id: productId
                 }
                 existingProducts.push(newProduct)
                 localStorage.setItem('products', JSON.stringify(existingProducts))
@@ -47,7 +43,7 @@ export const useProductStore = defineStore('product', {
                     localStorage.setItem('products', JSON.stringify(this.products))
                 }
             } catch (error) {
-                console.log(error.message)
+                console.error(error)
             }
         }
     }
