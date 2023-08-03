@@ -85,6 +85,6 @@ export default {
       this.customer.boughtProduct = ''
     }
   },
-  emits: ['customerAdded'],
+  emits: ['customerAdded']
 }
 </script>

@@ -22,7 +22,6 @@
         <div class="flex-1">
           <router-link
             :to="{ name: 'products' }"
-            :exact-active-class="'bg-blue-800'"
           >
             <button
               class="w-full px-6 py-3 text-white font-semibold rounded bg-blue-500 hover:bg-blue-600"
@@ -39,6 +38,6 @@
 
 <script>
 export default {
-  name: "App",
-};
+  name: "App"
+}
 </script>
