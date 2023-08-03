@@ -202,10 +202,10 @@ export default {
       }
     },
     openModal(data) {
-      const existingProduct = this.products.find(product => product.name === this.updatedCustomer.boughtProduct)
       if (typeof data === 'object') {
         this.updatedCustomer = JSON.parse(JSON.stringify(data))
       } else if (typeof data === 'string') {
+        const existingProduct = this.products.find(product => product.name === data)
         if(existingProduct){
           this.selectedProduct = this.getProductByName(data)
         }else{
