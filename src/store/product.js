@@ -6,6 +6,31 @@ export const useProductStore = defineStore('product', {
         products: []
     }),
     actions: {
+        //Some base example products for new users
+        initializeBaseProducts() {
+            // check if there are any data in products store
+            const existingProducts = JSON.parse(localStorage.getItem('products') || '[]')
+            if (existingProducts.length === 0) {
+                const baseProducts = [
+                    {
+                        id: uuidv4(),
+                        name: 'TV',
+                        price: '527.99',
+                        stock: '34',
+                        sku: '34239234'
+                    },
+                    {
+                        id: uuidv4(),
+                        name: 'Iphone',
+                        price: '1199.99',
+                        stock: '124',
+                        sku: '49080984'
+                    },
+                ]
+                localStorage.setItem('products', JSON.stringify(baseProducts));
+                this.products = baseProducts
+            }
+        },
         getProducts() {
             try {
                 return this.products = JSON.parse(localStorage.getItem('products') || '[]')

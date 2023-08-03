@@ -12,6 +12,9 @@
   <p v-if="showNoDataMessage" class="text-red-500 text-center mt-4">
     No data found.
   </p>
+  <p v-if="customers.length===0" class="text-red-500 text-center mt-4">
+    No customers added yet
+  </p>
 
   <!-- Customer Table -->
   <div class="overflow-x-auto">
@@ -64,7 +67,6 @@
               </template>
 
             </ModalWindow>
-
           </td>
 
           <div class="buttons flex p-1">
@@ -200,10 +202,20 @@ export default {
       }
     },
     openModal(data) {
+      const existingProduct = this.products.find(product => product.name === this.updatedCustomer.boughtProduct)
       if (typeof data === 'object') {
         this.updatedCustomer = JSON.parse(JSON.stringify(data))
       } else if (typeof data === 'string') {
-        this.selectedProduct = this.getProductByName(data)
+        if(existingProduct){
+          this.selectedProduct = this.getProductByName(data)
+        }else{
+          this.selectedProduct = {
+          name: "Product is not available",
+          price: "",
+          stock: "",
+          sku: "",
+        };
+        }
       }
     },
     updateCustomer() {
