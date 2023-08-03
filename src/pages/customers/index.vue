@@ -68,7 +68,7 @@
           </td>
 
           <div class="buttons flex p-1">
-            <ModalWindow @openModal="openModal(customer)" title="Update"
+            <ModalWindow @openModal="openModal(customer)" :forceClose="changedVal" title="Update"
               classes="bg-green-500 mr-2 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
               <template #table>
                 <h2 class="text-xl font-bold mb-4">Update customer</h2>
@@ -150,7 +150,8 @@ export default {
       loadedCustomersCount: 0,
       showNoDataMessage: false,
       updatedCustomer: {},
-      selectedProduct: {}
+      selectedProduct: {},
+      changedVal: false
     }
   },
   created() {
@@ -207,6 +208,8 @@ export default {
     },
     updateCustomer() {
       this.customerStore.updateCustomer(this.updatedCustomer)
+      //Close modal window due changing value
+      this.changedVal = !this.changedVal
       this.loadCustomers()
     },
     deleteCustomer(customer) {

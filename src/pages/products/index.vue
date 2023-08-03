@@ -21,6 +21,7 @@
           <div class="buttons flex p-1">
             <ModalWindow
               @openModal="openModal(product)"
+              :forceClose="changedVal"
               title="Update"
               classes="bg-green-500 mr-2 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
             >
@@ -111,7 +112,7 @@ export default {
       loadedProductsCount: 0,
       showNoDataMessage: false,
       updatedProduct: {},
-      showModal: true
+      changedVal:false
     }
   },
   created() {
@@ -148,6 +149,8 @@ export default {
     },
     updateProduct() {
       this.productStore.updateProduct(this.updatedProduct)
+      //Close modal window due changing value
+      this.changedVal=!this.changedVal
       this.loadProducts()
     }
   }
