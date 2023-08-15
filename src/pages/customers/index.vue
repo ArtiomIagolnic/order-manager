@@ -5,7 +5,7 @@
   <div class="flex mb-4">
     <input v-model="filters" @input="resetFilter" type="text"
       class="border border-gray-300 rounded-md py-2 px-4 flex-grow" placeholder="Search Customer" required />
-    <button @click="filteredCustomers" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-2 rounded">
+    <button @click="filteredCustomers" class="bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 ml-2 rounded">
       Search
     </button>
   </div>
@@ -37,7 +37,7 @@
 
           <td class="py-2 px-4 ">
             <ModalWindow @openModal="openModal(customer.boughtProduct)" :title="customer.boughtProduct"
-              classes="hover:font-semibold rounded-lg cursor-pointer">
+              classes=" hover:font-semibold rounded-lg cursor-pointer">
               <template #table>
                 <h2 class="text-xl font-bold mb-4">Product</h2>
                 <form class="w-full space-y-4 mb-4">
@@ -126,7 +126,7 @@
 
   <div class="flex justify-end">
     <button v-if="canLoadMore" @click="loadMoreCustomers"
-      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4 rounded">
+      class="w-2/5 bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 mt-4 rounded">
       Load More
     </button>
   </div>

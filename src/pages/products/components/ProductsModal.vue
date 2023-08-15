@@ -1,6 +1,6 @@
 <template>
   <ModalWindow @openModal="openModal" :forceClose="changedVal" title="Add new product"
-    classes="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-4 rounded">
+    classes="w-2/5 bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 mb-4 rounded">
     <template #table>
       <h2 class="text-xl font-bold mb-4">Add new product</h2>
       <form @submit.prevent="addProduct" class="w-full space-y-4">
@@ -16,16 +16,17 @@
         </div>
         <div>
           <label for="stock" class="text-gray-700">Stock</label>
-          <input type="text" id="stock" v-model="product.stock" required
+          <input type="number" id="stock" v-model="product.stock" required
             class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
         </div>
         <div>
           <label for="sku" class="text-gray-700">SKU</label>
-          <input type="number" id="sku" v-model="product.sku" required
+          <input type="text" id="sku" v-model="product.sku" required
             class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
         </div>
         <div class="">
-          <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mb-2 rounded w-full">
+          <button type="submit"
+            class="bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 mb-2 rounded w-full">
             Add new product
           </button>
         </div>

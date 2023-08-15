@@ -28,9 +28,9 @@ export default {
     };
   },
   props: {
-    title: { String, required: true },
-    classes: String,
-    forceClose: { Boolean }
+    title: { String, required: true, default: '' },
+    classes: { String, default: '' },
+    forceClose: { Boolean, default: false }
   },
   watch: {
     //Handle closing modal window after changing values in parent component 

@@ -1,6 +1,6 @@
 <template>
   <ModalWindow @openModal="openModal" :forceClose="changedVal" title="Add new customer"
-    classes="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-4 rounded">
+    classes="w-2/5 bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 mb-4 rounded">
     <template #table>
       <h2 class="text-xl font-bold mb-4">Add new customer</h2>
       <form @submit.prevent="addCustomer" class="w-full space-y-4">
@@ -31,7 +31,8 @@
           </select>
         </div>
         <div class="">
-          <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mb-2 rounded w-full">
+          <button type="submit"
+            class="bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 mb-2 rounded w-full">
             Add new customer
           </button>
         </div>

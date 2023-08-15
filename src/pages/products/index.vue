@@ -19,12 +19,8 @@
           <td class="py-2 px-4">{{ product.stock }}</td>
           <td class="py-2 px-4">{{ product.sku }}</td>
           <div class="buttons flex p-1">
-            <ModalWindow
-              @openModal="openModal(product)"
-              :forceClose="changedVal"
-              title="Update"
-              classes="bg-green-500 mr-2 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            >
+            <ModalWindow @openModal="openModal(product)" :forceClose="changedVal" title="Update"
+              classes="bg-green-500 mr-2 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
               <template #table>
                 <h2 class="text-xl font-bold mb-4">Update product</h2>
                 <form @submit.prevent="updateProduct" class="w-full space-y-4">
@@ -32,50 +28,31 @@
                     <label for="name" class="text-gray-700">
                       Name
                     </label>
-                    <input
-                      type="text"
-                      id="name"
-                      v-model="updatedProduct.name"
-                      required
-                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                    />
+                    <input type="text" id="name" v-model="updatedProduct.name" required
+                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
                   </div>
                   <div>
                     <label for="price" class="text-gray-700">Price</label>
-                    <input
-                      type="text"
-                      id="price"
-                      v-model="updatedProduct.price"
-                      required
-                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                    />
+                    <input type="text" id="price" v-model="updatedProduct.price" required
+                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
                   </div>
                   <div>
                     <label for="stock" class="text-gray-700">Stock</label>
-                    <input
-                      type="number"
-                      id="stock"
-                      v-model="updatedProduct.stock"
-                      required
-                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                    />
+                    <input type="number" id="stock" v-model="updatedProduct.stock" required
+                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
                   </div>
 
                   <div>
-                    <button
-                      type="submit"
-                      class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mb-2 rounded w-full"
-                    >
+                    <button type="submit"
+                      class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mb-2 rounded w-full">
                       Update
                     </button>
                   </div>
                 </form>
               </template>
             </ModalWindow>
-            <button
-              @click="deleteProduct(product)"
-              class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            >
+            <button @click="deleteProduct(product)"
+              class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
               Delete
             </button>
           </div>
@@ -85,11 +62,8 @@
   </div>
 
   <div class="flex justify-end">
-    <button
-      v-if="canLoadMore"
-      @click="loadMoreProducts"
-      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4 rounded"
-    >
+    <button v-if="canLoadMore" @click="loadMoreProducts"
+      class="bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 mt-4 rounded">
       Load More
     </button>
   </div>
@@ -112,7 +86,7 @@ export default {
       loadedProductsCount: 0,
       showNoDataMessage: false,
       updatedProduct: {},
-      changedVal:false
+      changedVal: false
     }
   },
   created() {
@@ -150,7 +124,7 @@ export default {
     updateProduct() {
       this.productStore.updateProduct(this.updatedProduct)
       //Close modal window due changing value
-      this.changedVal=!this.changedVal
+      this.changedVal = !this.changedVal
       this.loadProducts()
     }
   }
