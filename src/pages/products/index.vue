@@ -44,7 +44,7 @@
 
                   <div>
                     <button type="submit"
-                      class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mb-2 rounded w-full">
+                      class="bg-green-500 mr-2 hover:bg-green-700 text-white font-bold py-2 px-4 mb-2 rounded w-full">
                       Update
                     </button>
                   </div>
