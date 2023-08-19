@@ -1,9 +1,9 @@
 <template>
-  <ModalWindow @openModal="openModal" :forceClose="changedVal" title="Add new customer"
-    classes="w-2/5 bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 mb-4 rounded">
-    <template #table>
-      <h2 class="text-xl font-bold mb-4">Add new customer</h2>
-      <form @submit.prevent="addCustomer" class="w-full space-y-4">
+  <div v-show="modalActive" class="fixed inset-0 flex items-center justify-center z-50">
+    <div class="bg-black bg-opacity-50 fixed inset-0" @click="$emit('close-modal')"></div>
+    <div class="bg-white w-full md:w-2/3 lg:w-1/2 p-6 rounded-lg relative">
+      <h2 class="text-xl font-bold mb-4">{{ modalTitle }}</h2>
+      <form @submit.prevent="saveCustomer" class="space-y-4">
         <div>
           <label for="firstName" class="text-gray-700">First Name:</label>
           <input type="text" id="firstName" v-model="customer.firstName" required
@@ -20,72 +20,89 @@
             class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
         </div>
         <div>
-          <label for="boughtProduct" class="text-gray-700">
-            Bought Product:
-          </label>
-          <select v-model="customer.boughtProduct" name="boughtProduct" id="boughtProduct" required
-            class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500">
-            <option v-for="product in products" :key="product.id" :value="product.name">
-              {{ product.name }}
-            </option>
-          </select>
+          <label for="shippAdress" class="text-gray-700">Shipping Adress:</label>
+          <input type="text" id="shippAdress" v-model="customer.shippingAdress" required
+            class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
+        </div>
+        <div>
+          <label for="billAdress" class="text-gray-700">Billing Adress:</label>
+          <input type="text" id="billAdress" v-model="customer.billingAdress" required
+            class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
         </div>
         <div class="">
-          <button type="submit"
-            class="bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 mb-2 rounded w-full">
-            Add new customer
+          <button type="submit" :class="buttonClass"
+            class="mb-2 bg-blue-500 text-white hover:bg-blue-600 font-bold py-2 px-4 rounded w-full">
+            {{ submitText }}
           </button>
         </div>
       </form>
-    </template>
 
-  </ModalWindow>
+      <button @click="$emit('close-modal')"
+        class="bg-red-500 text-white hover:bg-blue-600 font-bold py-2 px-4 rounded w-full">Close</button>
+    </div>
+  </div>
 </template>
 <script>
-import ModalWindow from '@/components/ModalWindow.vue'
 import { useCustomerStore } from '@/store/customer.js'
 import { useProductStore } from '@/store/product.js'
 export default {
-  components: {
-    ModalWindow
-  },
-  data() {
-    return {
-      customer: {
-        firstName: '',
-        lastName: '',
-        age: '',
-        boughtProduct: ''
-      },
-      changedVal: false
+  props: {
+    updatedCustomer: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+    modalActive: {
+      type: Boolean,
+      default: false
     }
   },
+
   computed: {
     customerStore() {
       return useCustomerStore()
     },
-    products() {
-      return useProductStore().getProducts()
+    customer() {
+      if (Object.keys(this.updatedCustomer).length > 0) {
+        return this.updatedCustomer
+      } else {
+        return {
+          firstName: '',
+          lastName: '',
+          age: '',
+          shippingAdress: '',
+          billingAdress: ''
+        }
+      }
     },
-  },
-  methods: {
-    addCustomer() {
-      this.customerStore.addCustomer(this.customer)
-      //Close modal window due changing value
-      this.changedVal = !this.changedVal
-      this.customer.firstName = ''
-      this.customer.lastName = ''
-      this.customer.age = ''
-      this.customer.boughtProduct = ''
-      this.$emit('customerAdded')
+    isUpdating() {
+      return Object.keys(this.updatedCustomer).length > 0
     },
-    openModal() {
-      this.customer.firstName = ''
-      this.customer.lastName = ''
-      this.customer.age = ''
-      this.customer.boughtProduct = ''
+    modalTitle() {
+      return this.isUpdating ? 'Update Customer' : 'Add new Customer'
+    },
+    submitText() {
+      return this.isUpdating ? 'Update Customer' : 'Add new Customer'
+    },
+    buttonClass() {
+      return this.isUpdating ? 'mb-2 bg-blue-500 text-white hover:bg-blue-600 font-bold py-2 px-4 rounded w-full' : 'w-full mb-2 text-black bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 mb-4 rounded'
     }
   },
-  emits: ['customerAdded']
+  methods: {
+    saveCustomer() {
+      if (Object.keys(this.updatedCustomer).length > 0) {
+        this.customerStore.updateCustomer(this.customer)
+        this.$emit('customerUpdated')
+        this.$emit('close-modal')
+      } else {
+        this.customerStore.addCustomer(this.customer)
+        this.$emit('customerAdded')
+        this.$emit('close-modal')
+      }
+
+    }
+  },
+  emits: ['customerAdded', 'customerUpdated', 'close-modal'],
 }
 </script>

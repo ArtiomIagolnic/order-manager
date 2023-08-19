@@ -1,5 +1,10 @@
 <template>
-  <ProductsModal @productAdded="loadProducts()" />
+  <ProductsModal :updatedProduct="updatedProduct" :modalActive="openProductModal" @close-modal="closeModal"
+    @productAdded="loadProducts()" @productUpdated="loadProducts()" />
+
+  <button @click="openModal()"
+    class="w-2/5 bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 mb-4 rounded">Add
+    new product</button>
   <div class="overflow-x-auto">
     <table class="min-w-full table-auto">
       <thead>
@@ -19,38 +24,10 @@
           <td class="py-2 px-4">{{ product.stock }}</td>
           <td class="py-2 px-4">{{ product.sku }}</td>
           <div class="buttons flex p-1">
-            <ModalWindow @openModal="openModal(product)" :forceClose="changedVal" title="Update"
-              classes="bg-green-500 mr-2 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-              <template #table>
-                <h2 class="text-xl font-bold mb-4">Update product</h2>
-                <form @submit.prevent="updateProduct" class="w-full space-y-4">
-                  <div>
-                    <label for="name" class="text-gray-700">
-                      Name
-                    </label>
-                    <input type="text" id="name" v-model="updatedProduct.name" required
-                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
-                  </div>
-                  <div>
-                    <label for="price" class="text-gray-700">Price</label>
-                    <input type="text" id="price" v-model="updatedProduct.price" required
-                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
-                  </div>
-                  <div>
-                    <label for="stock" class="text-gray-700">Stock</label>
-                    <input type="number" id="stock" v-model="updatedProduct.stock" required
-                      class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
-                  </div>
-
-                  <div>
-                    <button type="submit"
-                      class="bg-green-500 mr-2 hover:bg-green-700 text-white font-bold py-2 px-4 mb-2 rounded w-full">
-                      Update
-                    </button>
-                  </div>
-                </form>
-              </template>
-            </ModalWindow>
+            <button @click="openModal(product)"
+              class="bg-green-500 mr-2 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+              Update
+            </button>
             <button @click="deleteProduct(product)"
               class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
               Delete
@@ -72,11 +49,9 @@
 <script>
 import { useProductStore } from '@/store/product.js'
 import ProductsModal from './components/ProductsModal.vue'
-import ModalWindow from '@/components/ModalWindow.vue'
 export default {
   components: {
-    ProductsModal,
-    ModalWindow
+    ProductsModal
   },
   data() {
     return {
@@ -86,7 +61,7 @@ export default {
       loadedProductsCount: 0,
       showNoDataMessage: false,
       updatedProduct: {},
-      changedVal: false
+      openProductModal: false
     }
   },
   created() {
@@ -119,13 +94,15 @@ export default {
       this.loadProducts()
     },
     openModal(product) {
-      this.updatedProduct = JSON.parse(JSON.stringify(product))
+      if (product) {
+        this.updatedProduct = product
+      } else {
+        this.updatedProduct = {}
+      }
+      this.openProductModal = true
     },
-    updateProduct() {
-      this.productStore.updateProduct(this.updatedProduct)
-      //Close modal window due changing value
-      this.changedVal = !this.changedVal
-      this.loadProducts()
+    closeModal() {
+      this.openProductModal = false
     }
   }
 }

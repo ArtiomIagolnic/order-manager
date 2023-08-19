@@ -10,7 +10,4 @@ import App from "./App.vue";
 const pinia = createPinia();
 const app = createApp(App);
 
-// Initialize base products
-useProductStore(pinia).initializeBaseProducts();
-
 app.use(pinia).use(router).mount("#app");
