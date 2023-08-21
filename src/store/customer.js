@@ -23,8 +23,7 @@ export const useCustomerStore = defineStore("customer", {
 
           return (
             firstName.toString().toLowerCase().includes(searchValue) ||
-            lastName.toString().toLowerCase().includes(searchValue) ||
-            boughtProduct.toString().toLowerCase().includes(searchValue)
+            lastName.toString().toLowerCase().includes(searchValue)
           );
         });
       }

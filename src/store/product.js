@@ -6,7 +6,15 @@ export const useProductStore = defineStore("product", {
   state: () => ({
     products: [],
   }),
+
   actions: {
+    getProductById(productId) {
+      try {
+        return this.products.find((product) => product.id === productId);
+      } catch (error) {
+        console.error(error.message);
+      }
+    },
     getProducts() {
       try {
         return (this.products = JSON.parse(
