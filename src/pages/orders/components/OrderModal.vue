@@ -27,9 +27,10 @@
                         <option v-for="product in products" :key="product.id" :value="product.id">{{ product.name }}
                         </option>
                     </select>
-                    <p v-if="validationMessage" class="text-red-500">{{ validationMessage }}</p>
+
                 </div>
                 <div v-if="selectedProduct">
+                    <div v-if="isSoldOut" class="text-red-500">Product Sold Out</div>
                     <p class="text-gray-700">{{ products.find(p => p.id === selectedProduct).name }} Price: €{{
                         selectedProductPrice }}</p>
                     <p class="text-gray-700">Stock: {{ selectedProductStock }}</p>
@@ -39,9 +40,10 @@
                         class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
                         min="0" :max="selectedProductStock" />
                     <p class="text-gray-700">Total Price: €{{ totalProductPrice }}</p>
-                    <button @click="addProductToOrder"
-                        class="mt-2 bg-blue-500 text-white hover:bg-blue-600 font-bold py-2 px-4 rounded">Add
-                        Product</button>
+                    <button @click="addProductToOrder" :disabled="isSoldOut"
+                        class="mt-2 bg-blue-500 text-white hover:bg-blue-600 font-bold py-2 px-4 rounded">
+                        {{ isSoldOut ? 'Product Sold Out' : 'Add Product' }}
+                    </button>
                 </div>
                 <div v-if="order.products.length > 0">
                     <h3 class="text-xl font-semibold mt-4">Selected Products:</h3>
@@ -119,6 +121,9 @@ export default {
             }
             return 0
         },
+        isSoldOut() {
+            return this.selectedProductStock === 0
+        },
         isUpdating() {
             return Object.keys(this.updatedOrder).length > 0
         },
@@ -163,13 +168,16 @@ export default {
                         price: productToAdd.price,
                         quantity: parseInt(this.quantityToAdd),
                         totalPrice: this.quantityToAdd * productToAdd.price
-                    });
+                    })
                 }
                 this.order.totalAmount = this.order.products.reduce((total, product) => total + product.totalPrice, 0)
+                this.selectedProduct = null
+                this.quantityToAdd = 0
             }
         },
         removeProductFromOrder(index) {
             this.order.products.splice(index, 1)
+            this.order.totalAmount = this.order.products.reduce((total, product) => total + product.totalPrice, 0)
         },
         saveOrder() {
             if (Object.keys(this.updatedOrder).length > 0) {

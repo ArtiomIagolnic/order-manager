@@ -4,7 +4,7 @@ import AppCustomersList from "@/pages/customers/index.vue";
 import AppProductsList from "@/pages/products/index.vue";
 import AppOrdersList from "@/pages/orders/index.vue";
 import AppE404 from "@/components/E404.vue";
-import AppHomeComponent from "@/components/Home.vue";
+import AppHomeComponent from "@/pages/Home.vue";
 
 const routes = [
   {

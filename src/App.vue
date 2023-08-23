@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <NavBar />
-    <div class="mx-auto p-8">
-      <div class="container mx-auto bg-white p-8 rounded-lg shadow">
-        <router-view></router-view>
-      </div>
+  <NavBar />
+  <div class="mx-auto p-8">
+    <div class="container mx-auto bg-white p-8 rounded-lg shadow">
+      <router-view></router-view>
     </div>
-    <Notifications />
   </div>
+  <Notifications />
 </template>
 
 <script>

@@ -3,7 +3,7 @@
     @productAdded="loadProducts()" @productUpdated="loadProducts()" />
 
   <button @click="openModal()"
-    class="w-2/5 bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 mb-4 rounded">Add
+    class="w-full md:w-2/5 bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 mb-4 rounded">Add
     new product</button>
   <div class="overflow-x-auto">
     <table class="min-w-full table-auto">
@@ -20,7 +20,7 @@
         <tr v-for="(product, i) in displayedProducts" :key="product.id">
           <td class="py-2 px-4">{{ i + 1 }}</td>
           <td class="py-2 px-4">{{ product.name }}</td>
-          <td class="py-2 px-4">{{ product.price }}</td>
+          <td class="py-2 px-4">{{ product.price }}€</td>
           <td class="py-2 px-4">{{ product.stock }}</td>
           <td class="py-2 px-4">{{ product.sku }}</td>
           <div class="buttons flex p-1">

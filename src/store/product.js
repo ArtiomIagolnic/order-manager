@@ -71,5 +71,16 @@ export const useProductStore = defineStore("product", {
         console.error(error);
       }
     },
+    updateProductStock(productId, quantity, mode) {
+      const existingProduct = this.getProductById(productId);
+      if (existingProduct) {
+        if (mode === "substract") {
+          existingProduct.stock -= quantity;
+        } else if (mode === "add") {
+          existingProduct.stock += quantity;
+        }
+        localStorage.setItem("products", JSON.stringify(this.products));
+      }
+    },
   },
 });

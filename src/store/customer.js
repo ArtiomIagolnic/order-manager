@@ -19,7 +19,7 @@ export const useCustomerStore = defineStore("customer", {
       } else {
         return this.customers.filter((customer) => {
           const searchValue = filters.toLowerCase().trim();
-          const { firstName, lastName, boughtProduct } = customer;
+          const { firstName, lastName } = customer;
 
           return (
             firstName.toString().toLowerCase().includes(searchValue) ||

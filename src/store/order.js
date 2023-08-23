@@ -8,13 +8,26 @@ export const useOrderStore = defineStore("order", {
     orders: [],
   }),
   actions: {
-    getOrders() {
-      try {
-        return (this.orders = JSON.parse(
-          localStorage.getItem("orders") || "[]"
-        ));
-      } catch (error) {
-        console.error(error.message);
+    getOrders(filters) {
+      if (!filters) {
+        try {
+          return (this.orders = JSON.parse(
+            localStorage.getItem("orders") || "[]"
+          ));
+        } catch (error) {
+          console.error(error.message);
+        }
+      } else {
+        return this.orders.filter((order) => {
+          const searchValue = filters.toLowerCase().trim();
+          const { customer, date, displayedId } = order;
+
+          return (
+            customer.toString().toLowerCase().includes(searchValue) ||
+            date.toString().includes(searchValue) ||
+            displayedId.toString().toLowerCase().includes(searchValue)
+          );
+        });
       }
     },
     generateReadableOrderId() {
@@ -34,7 +47,6 @@ export const useOrderStore = defineStore("order", {
         existingOrders.push(newOrder);
         localStorage.setItem("orders", JSON.stringify(existingOrders));
         this.updateProductStock(newOrder.products, "substract");
-        this.orders = existingOrders;
         useNotificationStore().addNotification({
           type: "added",
           message: "Order was added successfully",
@@ -94,16 +106,7 @@ export const useOrderStore = defineStore("order", {
     updateProductStock(productsToUpdate, mode) {
       const productStore = useProductStore();
       for (const product of productsToUpdate) {
-        const existingProduct = productStore.getProductById(product.id);
-        if (existingProduct) {
-          if (mode === "substract") {
-            existingProduct.stock -= product.quantity;
-          }
-          if (mode === "add") {
-            existingProduct.stock += product.quantity;
-          }
-          productStore.updateProduct(existingProduct);
-        }
+        productStore.updateProductStock(product.id, product.quantity, mode);
       }
     },
   },
