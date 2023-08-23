@@ -11,7 +11,7 @@
         </div>
         <div>
           <label for="price" class="text-gray-700">Price</label>
-          <input type="number" id="price" v-model="product.price" required
+          <input type="number" step="0.01" min="0" id="price" v-model="product.price" required
             class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
         </div>
         <div>
@@ -78,11 +78,6 @@ export default {
     },
     buttonClass() {
       return this.isUpdating ? 'mb-2 bg-blue-500 text-white hover:bg-blue-600 font-bold py-2 px-4 rounded w-full' : 'w-full mb-2 text-black bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 mb-4 rounded'
-    }
-  },
-  watch: {
-    updatedProduct(newVal) {
-      this.product = newVal;
     }
   },
   methods: {

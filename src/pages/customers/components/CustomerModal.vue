@@ -31,7 +31,7 @@
         </div>
         <div class="">
           <button type="submit" :class="buttonClass"
-            class="mb-2 bg-blue-500 text-white hover:bg-blue-600 font-bold py-2 px-4 rounded w-full">
+            class="mb-2 bg-blue-500  hover:bg-blue-600 font-bold py-2 px-4 rounded w-full">
             {{ submitText }}
           </button>
         </div>

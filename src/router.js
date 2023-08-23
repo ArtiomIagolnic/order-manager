@@ -29,11 +29,11 @@ const routes = [
   },
   {
     path: "/:any(.*)",
-    component: AppE404,
-  },
+    component: AppE404
+  }
 ];
 
 export default createRouter({
   routes,
-  history: createWebHistory(),
+  history: createWebHistory()
 });

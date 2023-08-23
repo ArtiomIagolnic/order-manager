@@ -138,9 +138,6 @@ export default {
         }
     },
     watch: {
-        updatedOrder(newVal) {
-            this.product = newVal;
-        },
         selectedProduct(newVal) {
             if (newVal) {
                 const product = this.products.find(p => p.id === newVal);
@@ -170,14 +167,14 @@ export default {
                         totalPrice: this.quantityToAdd * productToAdd.price
                     })
                 }
-                this.order.totalAmount = this.order.products.reduce((total, product) => total + product.totalPrice, 0)
+                this.order.totalAmount = this.order.products.reduce((total, product) => total + product.totalPrice, 0).toFixed(2)
                 this.selectedProduct = null
                 this.quantityToAdd = 0
             }
         },
         removeProductFromOrder(index) {
             this.order.products.splice(index, 1)
-            this.order.totalAmount = this.order.products.reduce((total, product) => total + product.totalPrice, 0)
+            this.order.totalAmount = this.order.products.reduce((total, product) => total + product.totalPrice, 0).toFixed(2)
         },
         saveOrder() {
             if (Object.keys(this.updatedOrder).length > 0) {
