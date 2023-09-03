@@ -80,7 +80,7 @@
               <div class="border-grey-light border hover:bg-gray-100 p-3 flex justify-around">
                 <button @click="openModal(product)"
                   class="text-blue-400 hover:text-blue-600 hover:font-medium cursor-pointer">Update</button>
-                <button @click="deleteOrder(product)"
+                <button @click="deleteProduct(product)"
                   class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer">Delete</button>
               </div>
             </tr>
@@ -142,8 +142,8 @@ export default {
     }
   },
   methods: {
-    loadProducts() {
-      this.products = this.productStore.getProducts()
+    async loadProducts() {
+      this.products = await this.productStore.getProducts()
       this.displayedProducts = this.products.slice(0, this.pageSize)
       this.loadedProductsCount = this.displayedProducts.length
     },
@@ -155,8 +155,8 @@ export default {
       this.displayedProducts = [...this.displayedProducts, ...remainingProducts]
       this.loadedProductsCount += remainingProducts.length
     },
-    deleteProduct(product) {
-      this.productStore.deleteProduct(product)
+    async deleteProduct(product) {
+      await this.productStore.deleteProduct(product)
       this.loadProducts()
     },
     openModal(product) {
@@ -170,11 +170,11 @@ export default {
     closeModal() {
       this.openProductModal = false
     },
-    filteredProducts() {
+    async filteredProducts() {
       if (this.filters.trim() !== '') {
-        this.displayedProducts = this.productStore.getProducts(this.filters)
+        this.displayedProducts = await this.productStore.getProducts(this.filters)
       } else {
-        this.displayedProducts = this.productStore.getProducts()
+        this.displayedProducts = await this.productStore.getProducts()
       }
 
       this.showNoDataMessage = this.displayedProducts.length === 0

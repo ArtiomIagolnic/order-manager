@@ -70,12 +70,12 @@
                 </thead>
                 <tbody class="flex-none">
                     <tr v-for="(order, i) in displayedOrders" :key="order.id" class="flex-col flex-no wrap mb-0">
-                        <td class="border-grey-light border hover:bg-gray-100 p-2">{{ order.displayedId }}</td>
-                        <td class="border-grey-light border hover:bg-gray-100 p-2 truncate">{{ order.customer }}</td>
-                        <td class="border-grey-light border hover-bg-gray-100 p-2 truncate">{{ order.date }}</td>
-                        <td class="border-grey-light border hover-bg-gray-100 p-2 truncate"> {{ order.totalAmount }}€
+                        <td class="border-grey-light border hover:bg-gray-100 p-3">{{ order.displayedId }}</td>
+                        <td class="border-grey-light border hover:bg-gray-100 p-3 truncate">{{ order.customer }}</td>
+                        <td class="border-grey-light border hover-bg-gray-100 p-3 truncate">{{ order.date }}</td>
+                        <td class="border-grey-light border hover-bg-gray-100 p-3 truncate"> {{ order.totalAmount }}€
                         </td>
-                        <div class="border-grey-light border hover:bg-gray-100 p-3 flex justify-around">
+                        <div class="border-grey-light border hover:bg-gray-100 p-3 flex justify-between">
                             <button @click="openModal(order)"
                                 class="text-blue-400 hover:text-blue-600 hover:font-medium cursor-pointer">Update</button>
                             <button @click="deleteOrder(order)"
@@ -137,8 +137,8 @@ export default {
         }
     },
     methods: {
-        loadOrders() {
-            this.orders = this.orderStore.getOrders()
+        async loadOrders() {
+            this.orders = await this.orderStore.getOrders()
             this.displayedOrders = this.orders.slice(0, this.pageSize)
             this.loadedOrdersCount = this.displayedOrders.length
         },

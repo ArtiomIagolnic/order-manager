@@ -90,13 +90,13 @@ export default {
     }
   },
   methods: {
-    saveCustomer() {
+    async saveCustomer() {
       if (Object.keys(this.updatedCustomer).length > 0) {
-        this.customerStore.updateCustomer(this.customer)
+       await this.customerStore.updateCustomer(this.customer)
         this.$emit('customerUpdated')
         this.$emit('close-modal')
       } else {
-        this.customerStore.addCustomer(this.customer)
+        await this.customerStore.addCustomer(this.customer)
         this.$emit('customerAdded')
         this.$emit('close-modal')
       }

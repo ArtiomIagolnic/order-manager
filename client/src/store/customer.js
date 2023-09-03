@@ -7,13 +7,15 @@ export const useCustomerStore = defineStore("customer", {
   state: () => ({
     customers: [],
   }),
+
   actions: {
-    getCustomers(filters) {
+    async getCustomers(filters) {
       if (!filters) {
         try {
-          return (this.customers = JSON.parse(
-            localStorage.getItem("customers") || "[]"
-          ));
+          const response = await axios.get(
+            "http://localhost:8000/api/customers/all"
+          );
+          return (this.customers = response.data || []);
         } catch (error) {
           console.error(error.message);
         }
@@ -31,15 +33,15 @@ export const useCustomerStore = defineStore("customer", {
     },
     async addCustomer(data) {
       try {
-        const existingCustomers = this.customers;
         const customerId = uuidv4();
         const newCustomer = {
           ...data,
           id: customerId,
         };
-        existingCustomers.push(newCustomer);
-        localStorage.setItem("customers", JSON.stringify(existingCustomers));
-        this.customers = existingCustomers;
+        await axios.post(
+          "http://localhost:8000/api/customers/add",
+          newCustomer
+        );
 
         useNotificationStore().addNotification({
           type: "success",
@@ -49,34 +51,32 @@ export const useCustomerStore = defineStore("customer", {
         console.error(error.message);
       }
     },
-    updateCustomer(updatedCustomer) {
+    async updateCustomer(updatedCustomer) {
       try {
-        const index = this.customers.findIndex(
-          (customer) => customer.id === updatedCustomer.id
+        await axios.put(
+          "http://localhost:8000/api/customers/update",
+          updatedCustomer
         );
-        if (index > -1) {
-          this.customers[index] = updatedCustomer;
-          localStorage.setItem("customers", JSON.stringify(this.customers));
-
-          useNotificationStore().addNotification({
-            type: "success",
-            message: "Customer was updated successfully",
-          });
-        }
+        useNotificationStore().addNotification({
+          type: "success",
+          message: "Customer was updated successfully",
+        });
       } catch (error) {
         console.error();
       }
     },
-    deleteCustomer(customer) {
-      const indexOfCustomer = this.customers.indexOf(customer);
-      if (indexOfCustomer > -1) {
-        this.customers.splice(indexOfCustomer, 1);
-        localStorage.setItem("customers", JSON.stringify(this.customers));
-
+    async deleteCustomer(customer) {
+      try {
+        await axios.delete(
+          `http://localhost:8000/api/customers/delete/${customer.id}`,
+          customer
+        );
         useNotificationStore().addNotification({
           type: "success",
           message: "Customer was deleted successfully",
         });
+      } catch (error) {
+        console.error();
       }
     },
   },

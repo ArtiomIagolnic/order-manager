@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Table ",
+    "price": 527.99,
+    "stock": 9,
+    "sku": "xgfd6656",
+    "id": "3234e7ff-e60b-4686-9e62-5b7adb1b1b79"
+  },
+  {
+    "name": "tv",
+    "price": 527.99,
+    "stock": 99,
+    "sku": "fwe4234sef",
+    "id": "eb31e18c-a4de-4668-94d3-402482d90980"
+  }
+]

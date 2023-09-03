@@ -2,18 +2,20 @@ import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import { useNotificationStore } from "@/store/notifications";
 import { useProductStore } from "@/store/product";
+import axios from "axios";
 
 export const useOrderStore = defineStore("order", {
   state: () => ({
     orders: [],
   }),
   actions: {
-    getOrders(filters) {
+    async getOrders(filters) {
       if (!filters) {
         try {
-          return (this.orders = JSON.parse(
-            localStorage.getItem("orders") || "[]"
-          ));
+          const response = await axios.get(
+            "http://localhost:8000/api/orders/all"
+          );
+          return (this.orders = response.data || []);
         } catch (error) {
           console.error(error.message);
         }
@@ -34,9 +36,8 @@ export const useOrderStore = defineStore("order", {
       const uuid = uuidv4();
       return `OR-${uuid.substring(0, 5)}`;
     },
-    addOrder(data) {
+    async addOrder(data) {
       try {
-        const existingOrders = this.orders;
         const orderId = uuidv4();
 
         const newOrder = {
@@ -44,9 +45,9 @@ export const useOrderStore = defineStore("order", {
           displayedId: this.generateReadableOrderId(),
           id: orderId,
         };
-        existingOrders.push(newOrder);
-        localStorage.setItem("orders", JSON.stringify(existingOrders));
-        this.updateProductStock(newOrder.products, "substract");
+        await axios.post("http://localhost:8000/api/orders/add", newOrder);
+
+        await this.updateProductStock(newOrder.products, "substract");
         useNotificationStore().addNotification({
           type: "success",
           message: "Order was added successfully",
@@ -55,58 +56,43 @@ export const useOrderStore = defineStore("order", {
         console.error(error.message);
       }
     },
-    deleteOrder(order) {
-      const indexOfOrder = this.orders.indexOf(order);
-      if (indexOfOrder > -1) {
-        this.orders.splice(indexOfOrder, 1);
-        localStorage.setItem("orders", JSON.stringify(this.orders));
-        this.updateProductStock(order.products, "add");
+    async deleteOrder(order) {
+      await axios.delete(
+        `http://localhost:8000/api/orders/delete/${order.id}`,
+        order
+      );
+      await this.updateProductStock(order.products, "add");
+      useNotificationStore().addNotification({
+        type: "success",
+        message: "Order was deleted successfully",
+      });
+    },
+    async updateOrder(updatedOrder) {
+      try {
+        await axios.put(
+          "http://localhost:8000/api/orders/update",
+          updatedOrder
+        );
         useNotificationStore().addNotification({
           type: "success",
-          message: "Order was deleted successfully",
+          message: "Order was updated successfully",
         });
-      }
-    },
-    updateOrder(updatedOrder) {
-      try {
-        const index = this.orders.findIndex(
-          (order) => order.id === updatedOrder.id
-        );
-        if (index > -1) {
-          const prevOrder = this.orders[index];
-          this.orders[index] = updatedOrder;
-          localStorage.setItem("orders", JSON.stringify(this.orders));
-          useNotificationStore().addNotification({
-            type: "success",
-            message: "Order was updated successfully",
-          });
-
-          const productStore = useProductStore();
-          for (const product of updatedOrder.products) {
-            const prevProduct = prevOrder.products.find(
-              (prevProd) => prevProd.id === product.id
-            );
-            if (prevProduct) {
-              const quantityDifference =
-                product.quantity - prevProduct.quantity;
-              if (quantityDifference !== 0) {
-                const existingProduct = productStore.getProductById(product.id);
-                if (existingProduct) {
-                  existingProduct.stock -= quantityDifference;
-                  productStore.updateProduct(existingProduct);
-                }
-              }
-            }
-          }
-        }
       } catch (error) {
         console.error(error);
       }
     },
-    updateProductStock(productsToUpdate, mode) {
-      const productStore = useProductStore();
+    async updateProductStock(productsToUpdate, mode) {
       for (const product of productsToUpdate) {
-        productStore.updateProductStock(product.id, product.quantity, mode);
+        try {
+          await axios.put(
+            "http://localhost:8000/api/products/product-stock",
+            product.id,
+            product.quantity,
+            mode
+          );
+        } catch (error) {
+          console.error(error);
+        }
       }
     },
   },

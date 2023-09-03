@@ -81,12 +81,12 @@ export default {
     }
   },
   methods: {
-    saveProduct() {
+    async saveProduct() {
       if (Object.keys(this.updatedProduct).length > 0) {
-        this.productStore.updateProduct(this.product)
+        await this.productStore.updateProduct(this.product)
         this.$emit('productUpdated')
       } else {
-        this.productStore.addProduct(this.product)
+        await this.productStore.addProduct(this.product)
         this.$emit('productAdded')
       }
       this.$emit('close-modal')

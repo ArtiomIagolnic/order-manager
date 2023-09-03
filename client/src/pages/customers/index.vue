@@ -63,7 +63,7 @@
             <th class="p-3 text-left">Name</th>
             <th class="p-3 text-left">Age</th>
             <th class="p-3 text-left">Billing Address</th>
-            <th class="p-3 text-center" >Actions</th>
+            <th class="p-3 text-center">Actions</th>
           </tr>
         </thead>
         <tbody class="flex-none">
@@ -76,7 +76,7 @@
             <td class="border-grey-light border hover:bg-gray-100 p-3 flex justify-around">
               <button @click="openModal(customer)"
                 class="text-blue-400 hover:text-blue-600 hover:font-medium cursor-pointer">Update</button>
-              <button @click="deleteOrder(customer)"
+              <button @click="deleteCustomer(customer)"
                 class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer">Delete</button>
             </td>
           </tr>
@@ -131,17 +131,14 @@ export default {
     customerStore() {
       return useCustomerStore()
     },
-    products() {
-      return useProductStore().getProducts()
-    },
     canLoadMore() {
       return this.loadedCustomersCount < this.customers.length
     },
 
   },
   methods: {
-    loadCustomers() {
-      this.customers = this.customerStore.getCustomers()
+    async loadCustomers() {
+      this.customers = await this.customerStore.getCustomers()
       this.displayedCustomers = this.customers.slice(0, this.pageSize)
       this.loadedCustomersCount = this.displayedCustomers.length
     },
@@ -156,11 +153,11 @@ export default {
       ]
       this.loadedCustomersCount += remainingCustomers.length
     },
-    filteredCustomers() {
+    async filteredCustomers() {
       if (this.filters.trim() !== '') {
-        this.displayedCustomers = this.customerStore.getCustomers(this.filters)
+        this.displayedCustomers = await this.customerStore.getCustomers(this.filters)
       } else {
-        this.displayedCustomers = this.customerStore.getCustomers()
+        this.displayedCustomers = await this.customerStore.getCustomers()
       }
       this.showNoDataMessage = this.displayedCustomers.length === 0
     },
@@ -181,8 +178,8 @@ export default {
     closeModal() {
       this.openCustomerModal = false
     },
-    deleteCustomer(customer) {
-      this.customerStore.deleteCustomer(customer)
+    async deleteCustomer(customer) {
+      await this.customerStore.deleteCustomer(customer)
       this.loadCustomers()
     },
     onResize() {

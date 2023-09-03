@@ -91,18 +91,18 @@ export default {
             quantityToAdd: 0,
             selectedProductPrice: null,
             selectedProductStock: null,
-            validationMessage: ''
+            validationMessage: '',
+            customers: [],
+            products: []
         }
+    },
+    async created() {
+        this.customers = await useCustomerStore().getCustomers();
+        this.products = await useProductStore().getProducts();
     },
     computed: {
         orderStore() {
             return useOrderStore()
-        },
-        customers() {
-            return useCustomerStore().getCustomers()
-        },
-        products() {
-            return useProductStore().getProducts()
         },
         order() {
             if (Object.keys(this.updatedOrder).length > 0) {
@@ -177,12 +177,12 @@ export default {
             this.order.products.splice(index, 1)
             this.order.totalAmount = this.order.products.reduce((total, product) => total + product.totalPrice, 0).toFixed(2)
         },
-        saveOrder() {
+        async saveOrder() {
             if (Object.keys(this.updatedOrder).length > 0) {
-                this.orderStore.updateOrder(this.order)
+                await this.orderStore.updateOrder(this.order)
                 this.$emit('orderUpdated')
             } else {
-                this.orderStore.addOrder(this.order)
+                await this.orderStore.addOrder(this.order)
                 this.$emit('orderAdded')
             }
             this.$emit('close-modal')

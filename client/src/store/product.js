@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import { useNotificationStore } from "@/store/notifications";
+import axios from "axios";
 
 export const useProductStore = defineStore("product", {
   state: () => ({
@@ -15,12 +16,13 @@ export const useProductStore = defineStore("product", {
         console.error(error.message);
       }
     },
-    getProducts(filters) {
+    async getProducts(filters) {
       if (!filters) {
         try {
-          return (this.products = JSON.parse(
-            localStorage.getItem("products") || "[]"
-          ));
+          const response = await axios.get(
+            "http://localhost:8000/api/products/all"
+          );
+          return (this.products = response.data || []);
         } catch (error) {
           console.error(error.message);
         }
@@ -35,17 +37,14 @@ export const useProductStore = defineStore("product", {
         });
       }
     },
-    addProduct(data) {
+    async addProduct(data) {
       try {
-        const existingProducts = this.products;
         const productId = uuidv4();
         const newProduct = {
           ...data,
           id: productId,
         };
-        existingProducts.push(newProduct);
-        localStorage.setItem("products", JSON.stringify(existingProducts));
-        this.products = existingProducts;
+        await axios.post("http://localhost:8000/api/products/add", newProduct);
         useNotificationStore().addNotification({
           type: "success",
           message: "Product was added successfully",
@@ -54,43 +53,44 @@ export const useProductStore = defineStore("product", {
         console.error(error.message);
       }
     },
-    deleteProduct(product) {
-      const indexOfProduct = this.products.indexOf(product);
-      if (indexOfProduct > -1) {
-        this.products.splice(indexOfProduct, 1);
-        localStorage.setItem("products", JSON.stringify(this.products));
+    async deleteProduct(product) {
+      await axios.delete(
+        `http://localhost:8000/api/products/delete/${product.id}`,
+        product
+      );
+      useNotificationStore().addNotification({
+        type: "success",
+        message: "Product was deleted successfully",
+      });
+    },
+    async updateProduct(updatedProduct) {
+      try {
+        await axios.put(
+          "http://localhost:8000/api/products/update",
+          updatedProduct
+        );
         useNotificationStore().addNotification({
           type: "success",
-          message: "Product was deleted successfully",
+          message: "Product was updated successfully",
         });
-      }
-    },
-    updateProduct(updatedProduct) {
-      try {
-        const index = this.products.findIndex(
-          (product) => product.id === updatedProduct.id
-        );
-        if (index > -1) {
-          this.products[index] = updatedProduct;
-          localStorage.setItem("products", JSON.stringify(this.products));
-          useNotificationStore().addNotification({
-            type: "success",
-            message: "Product was updated successfully",
-          });
-        }
       } catch (error) {
         console.error(error);
       }
     },
-    updateProductStock(productId, quantity, mode) {
-      const existingProduct = this.getProductById(productId);
-      if (existingProduct) {
-        if (mode === "substract") {
-          existingProduct.stock -= quantity;
-        } else if (mode === "add") {
-          existingProduct.stock += quantity;
-        }
-        localStorage.setItem("products", JSON.stringify(this.products));
+    async updateProductStock(productId, quantity, mode) {
+      try {
+        await axios.put(
+          "http://localhost:8000/api/products/update/product-stock",
+          productId,
+          quantity,
+          mode
+        );
+        useNotificationStore().addNotification({
+          type: "success",
+          message: "Product stock was updated successfully",
+        });
+      } catch (error) {
+        console.error(error);
       }
     },
   },
