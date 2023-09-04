@@ -76,22 +76,6 @@ export const useProductStore = defineStore("product", {
       } catch (error) {
         console.error(error);
       }
-    },
-    async updateProductStock(productId, quantity, mode) {
-      try {
-        await axios.put(
-          "http://localhost:8000/api/products/update/product-stock",
-          productId,
-          quantity,
-          mode
-        );
-        useNotificationStore().addNotification({
-          type: "success",
-          message: "Product stock was updated successfully",
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    },
-  },
+    }
+  }
 });

@@ -15,6 +15,7 @@
       Search
     </button>
   </div>
+
   <p v-if="showNoDataMessage" class="text-red-500 text-center mt-4">
     No data found.
   </p>
@@ -25,6 +26,7 @@
   <!-- mobile version -->
   <div class="container">
     <div v-if="windowWidth < 640">
+
       <table v-for="(customer, i) in displayedCustomers" :key="customer.id"
         class="w-full flex flex-row flex-no-wrap rounded-lg overflow-hidden my-5">
 
@@ -56,6 +58,7 @@
 
     <!-- Desktop version -->
     <div v-else>
+
       <table class="w-full flex flex-row flex-no-wrap bg-white rounded-lg overflow-hidden shadow-lg my-5">
         <thead class="text-white">
           <tr class="bg-teal-400 flex-col flex-no wrap table-row rounded-l-lg rounded-none mb-2 sm:mb-0">
@@ -98,12 +101,14 @@ import { useCustomerStore } from '@/store/customer.js'
 import { useProductStore } from '@/store/product.js'
 import CustomerModal from './components/CustomerModal.vue'
 
+
 export default {
   components: {
     CustomerModal
   },
   data() {
     return {
+      tableHeaders: ['Nr.', 'Name', 'Age', 'Billing Adress', 'Actions'],
       customers: [],
       filters: '',
       pageSize: 10,

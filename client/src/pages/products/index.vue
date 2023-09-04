@@ -102,11 +102,10 @@
 <script>
 import { useProductStore } from '@/store/product.js'
 import ProductsModal from './components/ProductsModal.vue'
-import TableComponent from '@/components/TableComponent.vue'
+
 export default {
   components: {
-    ProductsModal,
-    TableComponent
+    ProductsModal
   },
   data() {
     return {

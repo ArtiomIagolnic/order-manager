@@ -171,11 +171,11 @@ export default {
                 this.filteredOrders()
             }
         },
-        filteredOrders() {
+        async filteredOrders() {
             if (this.filters.trim() !== '') {
-                this.displayedOrders = this.orderStore.getOrders(this.filters)
+                this.displayedOrders = await this.orderStore.getOrders(this.filters)
             } else {
-                this.displayedOrders = this.orderStore.getOrders();
+                this.displayedOrders = await this.orderStore.getOrders();
             }
             this.showNoDataMessage = this.displayedOrders.length === 0;
         },

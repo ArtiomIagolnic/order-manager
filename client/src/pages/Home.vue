@@ -4,7 +4,9 @@
       <p class="text-lg md:text-xl">
         Welcome to customer manager
       </p>
-      <Line :data="chartData" :options="options" />
+      <div v-if="chartData.labels.length > 0">
+        <Line :data="chartData" :options="options" />
+      </div>
     </div>
   </div>
 </template>
@@ -41,34 +43,33 @@ export default {
       options: {
         responsive: true,
         maintainAspectRatio: true
+      },
+      chartData: {
+        labels: [],
+        datasets: [
+          {
+            label: "Order total price",
+            backgroundColor: "#f87979",
+            data: [],
+          },
+        ]
       }
     }
   },
-  computed: {
-    chartData() {
-      try {
-        const orderStore = useOrderStore();
-        const orders = orderStore.getOrders()
-        if (orders) {
-          const sortedDates = orders.map((order) => new Date(order.date)).sort((a, b) => a - b)
-          const formattedDatesLabels = sortedDates.map((date) => new Date(date).toLocaleDateString('de-DE', { year: 'numeric', month: 'long', day: 'numeric' }))
-          const orderAmounts = orders.map((order) => order.totalAmount)
-          return {
-            labels: formattedDatesLabels,
-            datasets: [
-              {
-                label: "Order total price",
-                backgroundColor: "#f87979",
-                data: orderAmounts,
-              },
-            ]
-          }
-        } else {
-          return { labels: [], datasets: [] }
-        }
-      } catch (error) {
-        console.error("Error fetching orders data", error);
+  async mounted() {
+    try {
+      const orderStore = useOrderStore()
+      const orders = await orderStore.getOrders()
+      if (orders) {
+        const sortedDates = orders.map((order) => new Date(order.date)).sort((a, b) => a - b)
+        const formattedDatesLabels = sortedDates.map((date) => new Date(date).toLocaleDateString('de-DE', { year: 'numeric', month: 'long', day: 'numeric' }))
+        const orderAmounts = orders.map((order) => parseFloat(order.totalAmount))
+
+        this.chartData.labels = formattedDatesLabels;
+        this.chartData.datasets[0].data = orderAmounts;
       }
+    } catch (error) {
+      console.error(error);
     }
   }
 }

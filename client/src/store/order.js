@@ -47,7 +47,6 @@ export const useOrderStore = defineStore("order", {
         };
         await axios.post("http://localhost:8000/api/orders/add", newOrder);
 
-        await this.updateProductStock(newOrder.products, "substract");
         useNotificationStore().addNotification({
           type: "success",
           message: "Order was added successfully",
@@ -61,7 +60,6 @@ export const useOrderStore = defineStore("order", {
         `http://localhost:8000/api/orders/delete/${order.id}`,
         order
       );
-      await this.updateProductStock(order.products, "add");
       useNotificationStore().addNotification({
         type: "success",
         message: "Order was deleted successfully",
@@ -80,20 +78,6 @@ export const useOrderStore = defineStore("order", {
       } catch (error) {
         console.error(error);
       }
-    },
-    async updateProductStock(productsToUpdate, mode) {
-      for (const product of productsToUpdate) {
-        try {
-          await axios.put(
-            "http://localhost:8000/api/products/product-stock",
-            product.id,
-            product.quantity,
-            mode
-          );
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    },
-  },
+    }
+  }
 });
