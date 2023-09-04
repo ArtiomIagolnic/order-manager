@@ -7,15 +7,7 @@ export const useProductStore = defineStore("product", {
   state: () => ({
     products: [],
   }),
-
   actions: {
-    getProductById(productId) {
-      try {
-        return this.products.find((product) => product.id === productId);
-      } catch (error) {
-        console.error(error.message);
-      }
-    },
     async getProducts(filters) {
       if (!filters) {
         try {
@@ -24,7 +16,10 @@ export const useProductStore = defineStore("product", {
           );
           return (this.products = response.data || []);
         } catch (error) {
-          console.error(error.message);
+          useNotificationStore().addNotification({
+            type: "failed",
+            message: `An error occurred while getting products: ${error.message}`,
+          });
         }
       } else {
         return this.products.filter((product) => {
@@ -50,18 +45,28 @@ export const useProductStore = defineStore("product", {
           message: "Product was added successfully",
         });
       } catch (error) {
-        console.error(error.message);
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while adding product: ${error.message}`,
+        });
       }
     },
     async deleteProduct(product) {
-      await axios.delete(
-        `http://localhost:8000/api/products/delete/${product.id}`,
-        product
-      );
-      useNotificationStore().addNotification({
-        type: "success",
-        message: "Product was deleted successfully",
-      });
+      try {
+        await axios.delete(
+          `http://localhost:8000/api/products/delete/${product.id}`,
+          product
+        );
+        useNotificationStore().addNotification({
+          type: "success",
+          message: "Product was deleted successfully",
+        });
+      } catch (error) {
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while deleting product: ${error.message}`,
+        });
+      }
     },
     async updateProduct(updatedProduct) {
       try {
@@ -74,8 +79,11 @@ export const useProductStore = defineStore("product", {
           message: "Product was updated successfully",
         });
       } catch (error) {
-        console.error(error);
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while updating product: ${error.message}`,
+        });
       }
-    }
-  }
+    },
+  },
 });

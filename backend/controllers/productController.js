@@ -57,45 +57,6 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
 });
 
-//@desc update product stock
-//route PUT /api/products/update-stock
-//access public
-
-const updateProductStock = asyncHandler(async (req, res) => {
-  const { productId, quantity, mode } = req.body;
-
- 
-  // const jsonData = fs.readFileSync(dataPath);
-  // const products = JSON.parse(jsonData);
-
-  // const productIndex = await products.findIndex(
-  //   (product) => product.id === productId
-  // );
-  // if (productIndex === -1) {
-  //   res.status(404);
-  //   throw new Error("Product not found");
-  // } else {
-  //   // Update the product's stock based on the mode (add or subtract)
-  //   if (mode === "add") {
-  //     products[productIndex].stock += quantity;
-  //   } else if (mode === "subtract") {
-  //     if (products[productIndex].stock < quantity) {
-  //       res.status(400);
-  //       throw new Error("Insufficient stock");
-  //     }
-  //     products[productIndex].stock -= quantity;
-  //   }
-  // }
-  // // Write the updated product data back to the file
-  // fs.writeFileSync(dataPath, JSON.stringify(products, null, 2));
-
-  // // Respond with a success message and the updated product
-  // res.status(200).json({
-  //   message: "Product stock updated successfully",
-  //   product: products[productIndex],
-  // });
-});
-
 // @desc delete product
 // route DELETE /api/products/delete
 // @access public
@@ -120,4 +81,4 @@ const deleteProduct = asyncHandler(async (req, res) => {
   }
 });
 
-export { getAll, addProduct, updateProduct, deleteProduct, updateProductStock };
+export { getAll, addProduct, updateProduct, deleteProduct};

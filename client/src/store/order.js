@@ -17,7 +17,10 @@ export const useOrderStore = defineStore("order", {
           );
           return (this.orders = response.data || []);
         } catch (error) {
-          console.error(error.message);
+          useNotificationStore().addNotification({
+            type: "failed",
+            message: `An error occurred while getting orders: ${error.message}`,
+          });
         }
       } else {
         return this.orders.filter((order) => {
@@ -52,18 +55,29 @@ export const useOrderStore = defineStore("order", {
           message: "Order was added successfully",
         });
       } catch (error) {
-        console.error(error.message);
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while adding order: ${error.message}`,
+        });
       }
     },
     async deleteOrder(order) {
-      await axios.delete(
-        `http://localhost:8000/api/orders/delete/${order.id}`,
-        order
-      );
-      useNotificationStore().addNotification({
-        type: "success",
-        message: "Order was deleted successfully",
-      });
+      try {
+        await axios.delete(
+          `http://localhost:8000/api/orders/delete/${order.id}`,
+          order
+        );
+        useNotificationStore().addNotification({
+          type: "success",
+          message: "Order was deleted successfully",
+        });
+      } catch (error) {
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while deleting order: ${error.message}`,
+        });
+      }
+     
     },
     async updateOrder(updatedOrder) {
       try {
@@ -76,8 +90,11 @@ export const useOrderStore = defineStore("order", {
           message: "Order was updated successfully",
         });
       } catch (error) {
-        console.error(error);
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while updating order: ${error.message}`,
+        });
       }
-    }
-  }
+    },
+  },
 });

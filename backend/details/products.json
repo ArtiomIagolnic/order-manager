@@ -12,5 +12,19 @@
     "stock": 99,
     "sku": "fwe4234sef",
     "id": "eb31e18c-a4de-4668-94d3-402482d90980"
+  },
+  {
+    "name": "test",
+    "price": 340,
+    "stock": 9,
+    "sku": "xgfd6656",
+    "id": "11d91cb2-456b-44d2-b472-cbd305d42f6a"
+  },
+  {
+    "name": "iphone",
+    "price": 1299.99,
+    "stock": 89,
+    "sku": "ada34few",
+    "id": "446dc337-6dc4-412a-87fa-eccbabc3a367"
   }
 ]

@@ -9,7 +9,7 @@ import fs from "fs";
 const getAll = asyncHandler(async (req, res) => {
   const jsonData = fs.readFileSync(dataPath);
   const customers = JSON.parse(jsonData);
-  
+
   res.status(200).json(customers);
 });
 

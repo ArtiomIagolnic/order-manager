@@ -17,7 +17,10 @@ export const useCustomerStore = defineStore("customer", {
           );
           return (this.customers = response.data || []);
         } catch (error) {
-          console.error(error.message);
+          useNotificationStore().addNotification({
+            type: "failed",
+            message: `An error occurred while getting customers: ${error.message}`,
+          });
         }
       } else {
         return this.customers.filter((customer) => {
@@ -42,13 +45,15 @@ export const useCustomerStore = defineStore("customer", {
           "http://localhost:8000/api/customers/add",
           newCustomer
         );
-
         useNotificationStore().addNotification({
           type: "success",
           message: "Customer was added successfully",
         });
       } catch (error) {
-        console.error(error.message);
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while adding customer: ${error.message}`,
+        });
       }
     },
     async updateCustomer(updatedCustomer) {
@@ -62,7 +67,10 @@ export const useCustomerStore = defineStore("customer", {
           message: "Customer was updated successfully",
         });
       } catch (error) {
-        console.error();
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while updating customer: ${error.message}`,
+        });
       }
     },
     async deleteCustomer(customer) {
@@ -76,7 +84,10 @@ export const useCustomerStore = defineStore("customer", {
           message: "Customer was deleted successfully",
         });
       } catch (error) {
-        console.error();
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while deleting customer: ${error.message}`,
+        });
       }
     },
   },
