@@ -19,11 +19,11 @@
     "vue-chartjs": "^5.2.0",
     "vue-final-modal": "^3.4.11",
     "vue-router": "^4.2.4",
-    "vue3-uuid": "^1.0.0"
+    "vue3-uuid": "^1.0.0",
+    "@vue/cli-service": "~5.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.24",
     "tailwindcss": "^3.3.2"
