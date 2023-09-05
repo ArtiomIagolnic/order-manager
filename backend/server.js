@@ -4,6 +4,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import fs from "fs";
 import http from "http";
+import { fileURLToPath } from 'url'; // Import the 'fileURLToPath' function
 import path from "path";
 
 dotenv.config();
@@ -15,6 +16,9 @@ const port = process.env.PORT || 8000;
 import customerRoutes from "./routes/customerRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
+
+const __filename = fileURLToPath(import.meta.url); // Get the current module's filename
+const __dirname = path.dirname(__filename); // Get the directory name from the filename
 
 const app = express();
 app.use(cors());
