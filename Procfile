@@ -1,1 +1,1 @@
-web: cd client/dist
+web: npm run start:backend

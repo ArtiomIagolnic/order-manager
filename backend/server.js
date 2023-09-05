@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import bodyParser from "body-parser";
 import fs from "fs";
+import http from "http";
+import path from "path";
 
 dotenv.config();
 
@@ -19,12 +21,16 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Serve static files from the "client/dist" directory
+app.use(express.static(path.join(__dirname, "client", "dist")));
+
 app.use("/api/customers", customerRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Server running");
+// Redirect all other routes to the Vue.js application
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 
 app.use(notFound);
