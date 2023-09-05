@@ -2,8 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import bodyParser from "body-parser";
-import fs from "fs";
-import http from "http";
 import { fileURLToPath } from 'url'; // Import the 'fileURLToPath' function
 import path from "path";
 
@@ -26,7 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serve static files from the "client/dist" directory
-app.use(express.static(path.join(__dirname, "client", "dist")));
+app.use(express.static(path.join(__dirname, "../client/dist"))); // Go up one level to access the client folder
 
 app.use("/api/customers", customerRoutes);
 app.use("/api/products", productRoutes);
@@ -34,7 +32,7 @@ app.use("/api/orders", orderRoutes);
 
 // Redirect all other routes to the Vue.js application
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+  res.sendFile(path.join(__dirname, "../client/dist", "index.html")); // Go up one level to access the client folder
 });
 
 app.use(notFound);
