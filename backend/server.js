@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import bodyParser from "body-parser";
-import { fileURLToPath } from 'url'; // Import the 'fileURLToPath' function
+import { fileURLToPath } from "url"; // Import the 'fileURLToPath' function
 import path from "path";
 
 dotenv.config();
