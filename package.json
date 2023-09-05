@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "scripts": {
     "install:all": "npm install && cd client && npm install && cd ../backend && npm install",
     "start:frontend": "cd client && npm run serve",
