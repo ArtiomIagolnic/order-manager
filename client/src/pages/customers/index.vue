@@ -61,7 +61,7 @@
 
       <table class="w-full flex flex-row flex-no-wrap bg-white rounded-lg overflow-hidden shadow-lg my-5">
         <thead class="text-white">
-          <tr class="bg-teal-400 flex-col flex-no wrap table-row rounded-l-lg rounded-none mb-2 sm:mb-0">
+          <tr class="bg-teal-400 flex-col flex-no wrap table-row rounded-l-lg rounded-none mb-0">
             <th class="p-3 text-left">Nr</th>
             <th class="p-3 text-left">Name</th>
             <th class="p-3 text-left">Age</th>

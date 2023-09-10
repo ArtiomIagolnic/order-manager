@@ -33,10 +33,11 @@
                     class="flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                     <li v-for="link in links">
                         <router-link :to="link.path" @click="closeMobileMenu"
-                            class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700">{{
-                                link.name }}</router-link>
+                            :class="{ 'active-link': $route.path === link.path }"
+                            class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:border-gray-700 transition-colors hover:underline">
+                            {{ link.name }}
+                        </router-link>
                     </li>
-
                 </ul>
             </div>
         </div>
@@ -51,7 +52,7 @@ export default {
                 { name: 'Home', path: '/' },
                 { name: 'Customers', path: '/customers' },
                 { name: 'Products', path: '/products' },
-                { name: 'Orders', path: '/orders' },
+                { name: 'Orders', path: '/orders' }
             ],
         }
     },
@@ -62,3 +63,23 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+.active-link {
+  font-weight: bold; /* Apply your desired active link styles here */
+  color: #4a90e2; /* Change to your desired active link color */
+  text-decoration: underline; /* Add an underline effect */
+  transition: color 0.3s, text-decoration 0.3s;
+}
+
+.active-link:hover {
+  color: #2d6097; /* Change to your desired hover color */
+  /* You can adjust hover styles here if needed */
+}
+
+/* Add styles to remove underline when link is hovered */
+.active-link:hover {
+  text-decoration: none;
+}
+</style>
+
