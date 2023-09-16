@@ -7,7 +7,7 @@
         new order</button>
 
     <!-- Search Field -->
-    <Search @filtered-results="updateDisplayedOrders" :store-getter="orderStore.getOrders"
+    <SearchComponent @filtered-results="updateDisplayedOrders" :store-getter="orderStore.getOrders"
         :place-holder="'Search orders'" />
 
     <p v-if="showNoDataMessage" class="text-red-500 text-center mt-4">
@@ -33,13 +33,13 @@
 <script>
 import { useOrderStore } from '@/store/order.js';
 import OrderModal from './components/OrderModal.vue';
-import Search from '@/components/Search.vue';
+import SearchComponent from '@/components/SearchComponent.vue';
 import TableComponent from '@/components/TableComponent.vue'
 
 export default {
     components: {
         OrderModal,
-        Search,
+        SearchComponent,
         TableComponent
     },
     data() {

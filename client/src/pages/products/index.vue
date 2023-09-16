@@ -9,7 +9,7 @@
 
 
   <!-- Search field -->
-  <Search @filtered-results="updateDisplayedProducts" :store-getter="productStore.getProducts"
+  <SearchComponent @filtered-results="updateDisplayedProducts" :store-getter="productStore.getProducts"
     :place-holder="'Search products'" />
 
   <p v-if="showNoDataMessage" class="text-red-500 text-center mt-4">
@@ -32,13 +32,13 @@
 <script>
 import { useProductStore } from '@/store/product.js'
 import ProductModal from './components/ProductModal.vue'
-import Search from '@/components/Search.vue'
+import SearchComponent from '@/components/SearchComponent.vue'
 import TableComponent from '@/components/TableComponent.vue'
 
 export default {
   components: {
     ProductModal,
-    Search,
+    SearchComponent,
     TableComponent
   },
   data() {

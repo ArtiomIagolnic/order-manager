@@ -1,22 +1,22 @@
 <template>
   <div>
-    <NavBar />
+    <NavBarComponent />
     <div class="mx-auto p-8">
       <div class="container mx-auto bg-white p-8 rounded-lg shadow">
         <router-view></router-view>
       </div>
     </div>
-    <Notifications />
+    <NotificationsComponent />
   </div>
 </template>
 
 <script>
-import NavBar from '@/components/NavBar.vue'
-import Notifications from '@/components/Notifications.vue'
+import NavBarComponent from '@/components/NavBarComponent.vue'
+import NotificationsComponent from '@/components/NotificationsComponent.vue'
 export default {
   components: {
-    NavBar,
-    Notifications
+    NavBarComponent,
+    NotificationsComponent
   }
 }
 </script>

@@ -1,32 +1,34 @@
 import { createRouter, createWebHistory } from "vue-router";
+import HomeComponent from "@/pages/Home.vue";
+import CustomerComponent from "@/pages/customers/index.vue";
+import ProductComponent from "@/pages/products/index.vue";
+import OrderComponent from "@/pages/orders/index.vue";
+import E404Component from "@/components/E404Component.vue";
 
 const routes = [
   {
     name: "home",
     path: "/",
-    component: () => import(/* webpackChunkName: "home" */ "./pages/Home.vue"),
+    component: HomeComponent,
   },
   {
     name: "customers",
     path: "/customers",
-    component: () =>
-      import(/* webpackChunkName: "customers" */ "./pages/customers/index.vue"),
+    component: CustomerComponent,
   },
   {
     name: "products",
     path: "/products",
-    component: () =>
-      import(/* webpackChunkName: "products" */ "./pages/products/index.vue"),
+    component: ProductComponent,
   },
   {
     name: "orders",
     path: "/orders",
-    component: () =>
-      import(/* webpackChunkName: "orders" */ "./pages/orders/index.vue"),
+    component: OrderComponent,
   },
   {
     path: "/:any(.*)",
-    component: () => import(/* webpackChunkName: ""*/ "./components/E404.vue"),
+    component: E404Component,
   },
 ];
 

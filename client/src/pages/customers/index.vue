@@ -8,7 +8,7 @@
     new customer</button>
 
   <!-- Search Field -->
-  <Search @filtered-results="updateDisplayedCustomers" :store-getter="customerStore.getCustomers"
+  <SearchComponent @filtered-results="updateDisplayedCustomers" :store-getter="customerStore.getCustomers"
     :place-holder="'Search customers'" />
 
   <p v-if="showNoDataMessage" class="text-red-500 text-center mt-4">
@@ -35,13 +35,13 @@
 <script>
 import { useCustomerStore } from '@/store/customer.js'
 import CustomerModal from './components/CustomerModal.vue'
-import Search from '@/components/Search.vue'
+import SearchComponent from '@/components/SearchComponent.vue'
 import TableComponent from '@/components/TableComponent.vue'
 
 export default {
   components: {
     CustomerModal,
-    Search,
+    SearchComponent,
     TableComponent
   },
   data() {
