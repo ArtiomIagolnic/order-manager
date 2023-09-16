@@ -47,7 +47,7 @@ export default {
       loadedProductsCount: 0,
       showNoDataMessage: false,
       updatedProduct: {},
-      openProductModal: false,
+      openProductModal: false
     }
   },
   created() {

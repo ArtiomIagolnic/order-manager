@@ -31,7 +31,7 @@ export default {
                 const filteredOrders = await useOrderStore().getOrders()
                 this.$emit('filtered-orders', filteredOrders)
             }
-        },
+        }
     }
 }
 </script>

@@ -51,11 +51,9 @@ export default {
       showNoDataMessage: false,
       updatedCustomer: {},
       selectedProduct: {},
-      openCustomerModal: false,
-
+      openCustomerModal: false
     }
   },
-
   created() {
     this.loadCustomers()
   },
@@ -65,8 +63,7 @@ export default {
     },
     canLoadMore() {
       return this.loadedCustomersCount < this.customers.length
-    },
-
+    }
   },
   methods: {
     async loadCustomers() {

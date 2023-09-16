@@ -50,8 +50,8 @@ export default {
           {
             label: "Order total price",
             backgroundColor: "#f87979",
-            data: [],
-          },
+            data: []
+          }
         ]
       }
     }

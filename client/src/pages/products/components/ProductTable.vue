@@ -98,7 +98,7 @@ export default {
         emitDeleteProduct(product) {
             this.$emit('delete-product', product)
         }
-    },
+    }
 }
 </script>
 

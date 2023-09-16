@@ -103,6 +103,6 @@ export default {
 
     }
   },
-  emits: ['customerAdded', 'customerUpdated', 'close-modal'],
+  emits: ['customerAdded', 'customerUpdated', 'close-modal']
 }
 </script>

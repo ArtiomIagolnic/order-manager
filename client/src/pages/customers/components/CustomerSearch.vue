@@ -7,7 +7,6 @@
             Search
         </button>
     </div>
-
 </template>
 <script>
 import { useCustomerStore } from '@/store/customer.js'
@@ -34,7 +33,7 @@ export default {
                 const filteredCustomers = await useCustomerStore().getCustomers()
                 this.$emit('filtered-customers', filteredCustomers)
             }
-        },
-    },
+        }
+    }
 }
 </script>

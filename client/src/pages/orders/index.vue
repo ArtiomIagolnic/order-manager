@@ -48,8 +48,8 @@ export default {
             pageSize: 10,
             displayedOrders: [],
             loadedOrdersCount: 0,
-            showNoDataMessage: false,
-        };
+            showNoDataMessage: false
+        }
     },
     created() {
         this.loadOrders();
@@ -94,10 +94,9 @@ export default {
         deleteOrder(order) {
             this.orderStore.deleteOrder(order)
             this.loadOrders();
-        },
-
+        }
     }
-};
+}
 </script>
   
 

@@ -101,7 +101,6 @@ export default {
 }
 </script>
 
-
 <style>
 html,
 body {
