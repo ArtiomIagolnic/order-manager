@@ -9,14 +9,16 @@
 
 
   <!-- Search field -->
-  <ProductSearch @filtered-products="updateDisplayedProducts" />
+  <Search @filtered-results="updateDisplayedProducts" :store-getter="productStore.getProducts"
+    :place-holder="'Search products'" />
 
   <p v-if="showNoDataMessage" class="text-red-500 text-center mt-4">
     No data found.
   </p>
 
   <!-- Products Table -->
-  <ProductTable :displayedProducts="displayedProducts" @update-product="openModal" @delete-product="deleteProduct" />
+  <TableComponent :headers="tableHeaders" :item-props="itemProps" :items="displayedProducts" @update-item="openModal"
+    @delete-item="deleteProduct" />
 
   <!-- Load More -->
   <div class="flex justify-end">
@@ -30,17 +32,19 @@
 <script>
 import { useProductStore } from '@/store/product.js'
 import ProductModal from './components/ProductModal.vue'
-import ProductSearch from './components/ProductSearch.vue'
-import ProductTable from './components/ProductTable.vue'
+import Search from '@/components/Search.vue'
+import TableComponent from '@/components/TableComponent.vue'
 
 export default {
   components: {
     ProductModal,
-    ProductSearch,
-    ProductTable
+    Search,
+    TableComponent
   },
   data() {
     return {
+      tableHeaders: ['Name', 'Price', 'Stock', 'SKU'],
+      itemProps: ['name', 'price', 'stock', 'sku'],
       products: [],
       pageSize: 10,
       displayedProducts: [],

@@ -7,7 +7,8 @@
         new order</button>
 
     <!-- Search Field -->
-    <OrderSearch @filtered-orders="updateDisplayedOrders" />
+    <Search @filtered-results="updateDisplayedOrders" :store-getter="orderStore.getOrders"
+        :place-holder="'Search orders'" />
 
     <p v-if="showNoDataMessage" class="text-red-500 text-center mt-4">
         No data found.
@@ -17,8 +18,9 @@
     </p>
 
     <!-- Orders Table -->
-    <OrderTable :displayedOrders="displayedOrders" @update-order="openModal" @delete-order="deleteOrder" />
-    
+    <TableComponent :headers="tableHeaders" :item-props="itemProps" :items="displayedOrders" @update-item="openModal"
+        @delete-item="deleteOrder" />
+
     <!-- Load More -->
     <div class="flex justify-end">
         <button v-if="canLoadMore" @click="loadMoreOrders"
@@ -31,17 +33,19 @@
 <script>
 import { useOrderStore } from '@/store/order.js';
 import OrderModal from './components/OrderModal.vue';
-import OrderSearch from './components/OrderSearch.vue';
-import OrderTable from './components/OrderTable.vue';
+import Search from '@/components/Search.vue';
+import TableComponent from '@/components/TableComponent.vue'
 
 export default {
     components: {
         OrderModal,
-        OrderSearch,
-        OrderTable
+        Search,
+        TableComponent
     },
     data() {
         return {
+            tableHeaders: ['Order ID', 'Name', 'Date', 'Total Amount'],
+            itemProps: ['displayedId', 'customer', 'date', 'totalAmount'],
             orders: [],
             updatedOrder: {},
             openOrderModal: false,

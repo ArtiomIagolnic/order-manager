@@ -8,14 +8,16 @@
     new customer</button>
 
   <!-- Search Field -->
-  <CustomerSearch @filtered-customers="updateDisplayedCustomers" />
+  <Search @filtered-results="updateDisplayedCustomers" :store-getter="customerStore.getCustomers"
+    :place-holder="'Search customers'" />
+
   <p v-if="showNoDataMessage" class="text-red-500 text-center mt-4">
     No data found.
   </p>
 
   <!-- Displayed Table -->
-  <CustomerTable :displayedCustomers="displayedCustomers" @update-customer="openModal"
-    @delete-customer="deleteCustomer" />
+  <TableComponent :item-props="itemProps" :headers="tableHeaders" :items="displayedCustomers" @update-item="openModal"
+    @delete-item="deleteCustomer" />
 
   <p v-if="customers.length === 0" class="text-red-500 text-center mt-4">
     No customers added yet
@@ -33,17 +35,19 @@
 <script>
 import { useCustomerStore } from '@/store/customer.js'
 import CustomerModal from './components/CustomerModal.vue'
-import CustomerSearch from './components/CustomerSearch.vue'
-import CustomerTable from './components/CustomerTable.vue'
+import Search from '@/components/Search.vue'
+import TableComponent from '@/components/TableComponent.vue'
 
 export default {
   components: {
     CustomerModal,
-    CustomerSearch,
-    CustomerTable
+    Search,
+    TableComponent
   },
   data() {
     return {
+      tableHeaders: ['Name', 'Age', 'Adress'],
+      itemProps: ['fullName', 'age', 'billingAdress'],
       customers: [],
       pageSize: 10,
       displayedCustomers: [],
@@ -68,6 +72,10 @@ export default {
   methods: {
     async loadCustomers() {
       this.customers = await this.customerStore.getCustomers()
+      this.customers.forEach(customer => {
+        customer.fullName = `${customer.firstName} ${customer.lastName}`;
+      })
+
       this.displayedCustomers = this.customers.slice(0, this.pageSize)
       this.loadedCustomersCount = this.displayedCustomers.length
     },
@@ -82,8 +90,8 @@ export default {
       ]
       this.loadedCustomersCount += remainingCustomers.length
     },
-    updateDisplayedCustomers(filteredCustomers) {
-      this.displayedCustomers = filteredCustomers
+    updateDisplayedCustomers(filteredResults) {
+      this.displayedCustomers = filteredResults
       this.showNoDataMessage = this.displayedCustomers.length === 0
     },
     openModal(customer) {
