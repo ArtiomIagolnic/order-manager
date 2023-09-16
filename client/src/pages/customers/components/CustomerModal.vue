@@ -44,7 +44,7 @@
 </template>
 <script>
 import { useCustomerStore } from '@/store/customer.js'
-import { useProductStore } from '@/store/product.js'
+
 export default {
   props: {
     updatedCustomer: {
