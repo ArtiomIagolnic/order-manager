@@ -2,10 +2,10 @@
   {
     "id": "b4a4caa6-9808-4fb9-8941-88d4e5c49020",
     "age": "32",
-    "billingAdress": "cumberlandstrasse 29",
+    "billingAdress": "cumberlandstrasse",
     "firstName": "Artiom",
     "lastName": "Iagolnic",
-    "shippingAdress": "cumberlandstrasse 29",
+    "shippingAdress": "cumberlandstrasse",
     "fullName": "Artiom Iagolnic"
   },
   {
