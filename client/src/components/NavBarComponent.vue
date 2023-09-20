@@ -2,7 +2,6 @@
     <nav class="bg-white border-b border-gray-200 dark:border-gray-600 dark:bg-gray-900">
         <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4">
 
-
             <router-link :to="{ name: 'home' }">
                 <div class="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -66,20 +65,44 @@ export default {
 
 <style scoped>
 .active-link {
-  font-weight: bold; /* Apply your desired active link styles here */
-  color: #4a90e2; /* Change to your desired active link color */
-  text-decoration: underline; /* Add an underline effect */
-  transition: color 0.3s, text-decoration 0.3s;
+  font-weight: bold;
+  color: rgb(45 212 191); 
+  text-decoration: none; 
+  transition: color 0.3s ease-in-out;
 }
 
 .active-link:hover {
-  color: #2d6097; /* Change to your desired hover color */
-  /* You can adjust hover styles here if needed */
+  color: rgb(5, 184, 160); /* Darker blue color on hover */
+  text-decoration: underline; /* Add underline on hover */
 }
 
-/* Add styles to remove underline when link is hovered */
-.active-link:hover {
-  text-decoration: none;
+/* Add a subtle background color to active links */
+.active-link::before {
+  content: '';
+  display: block;
+  height: 2px; /* Underline height */
+  width: 0;
+  background-color: rgb(45 212 191); /* Same as active link color */
+  transition: width 0.3s ease-in-out;
+}
+
+.active-link:hover::before {
+  width: 100%; /* Full width on hover */
+}
+
+/* Add a subtle animation for the underline */
+.active-link::before {
+  animation: underline-grow 0.3s ease-in-out forwards;
+}
+
+@keyframes underline-grow {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
 }
 </style>
+
 

@@ -1,7 +1,7 @@
 <template>
   <div v-show="modalActive" class="fixed inset-0 flex items-center justify-center z-50">
     <div class="bg-black bg-opacity-50 fixed inset-0" @click="$emit('close-modal')"></div>
-    <div class="bg-white w-full md:w-2/3 lg:w-1/2 p-6 rounded-lg relative">
+    <div class="bg-white w-full sm:w-2/3 lg:w-1/2 p-6 rounded-lg relative">
       <h2 class="text-xl font-bold mb-4">{{ modalTitle }}</h2>
       <form @submit.prevent="saveProduct" class="space-y-4">
         <div>
