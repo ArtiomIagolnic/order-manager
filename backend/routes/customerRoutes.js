@@ -1,13 +1,15 @@
 import express from "express";
 const router = express.Router();
 import {
-  getAll,
+  getCustomers,
+  getCustomer,
   addCustomer,
   updateCustomer,
   deleteCustomer,
-} from "../controllers/customerController.js";
+} from "../controllers/CustomersController.js";
 
-router.get("/all", getAll);
+router.get("/all", getCustomers);
+router.get("/one/:id", getCustomer);
 router.post("/add", addCustomer);
 router.put("/update", updateCustomer);
 router.delete("/delete/:id", deleteCustomer);

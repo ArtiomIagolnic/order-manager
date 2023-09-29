@@ -1,13 +1,13 @@
 import express from "express";
 const router = express.Router();
 import {
-  getAll,
+  getOrders,
   addOrder,
   updateOrder,
   deleteOrder,
-} from "../controllers/orderController.js";
+} from "../controllers/OrdersController.js";
 
-router.get("/all", getAll);
+router.get("/all", getOrders);
 router.post("/add", addOrder);
 router.put("/update", updateOrder);
 router.delete("/delete/:id", deleteOrder);

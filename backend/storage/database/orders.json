@@ -1,0 +1,66 @@
+[
+  {
+    "customer": "Artiom Iagolnic",
+    "date": "2023-09-02",
+    "products": [
+      {
+        "id": "eb31e18c-a4de-4668-94d3-402482d90980",
+        "name": "tv",
+        "price": 527.99,
+        "quantity": 1,
+        "totalPrice": 527.99
+      }
+    ],
+    "totalAmount": "527.99",
+    "displayedId": "OR-b0c43",
+    "id": "8cb2774f-a098-45c4-ba89-6a6eecf03ec6"
+  },
+  {
+    "customer": "Ianina Iurii",
+    "date": "2023-09-12",
+    "products": [
+      {
+        "id": "446dc337-6dc4-412a-87fa-eccbabc3a367",
+        "name": "iphone",
+        "price": 1299.99,
+        "quantity": 1,
+        "totalPrice": 1299.99
+      }
+    ],
+    "totalAmount": "1299.99",
+    "displayedId": "OR-143e7",
+    "id": "b337ec0b-68e8-4a38-b6ed-080d99817233"
+  },
+  {
+    "customer": "Chris Steiner",
+    "date": "2023-09-23",
+    "products": [
+      {
+        "id": "446dc337-6dc4-412a-87fa-eccbabc3a367",
+        "name": "iphone",
+        "price": 1299.99,
+        "quantity": 1,
+        "totalPrice": 1299.99
+      }
+    ],
+    "totalAmount": "1299.99",
+    "displayedId": "OR-87d45",
+    "id": "026d7d47-4f7e-4419-b221-be909fa08fb8"
+  },
+  {
+    "customer": "Leonid Jardan ",
+    "date": "2023-09-25",
+    "products": [
+      {
+        "id": "eb31e18c-a4de-4668-94d3-402482d90980",
+        "name": "tv",
+        "price": 527.99,
+        "quantity": 1,
+        "totalPrice": 527.99
+      }
+    ],
+    "totalAmount": "527.99",
+    "displayedId": "OR-62918",
+    "id": "288a2041-f42a-434f-bafa-46abc0ca1887"
+  }
+]

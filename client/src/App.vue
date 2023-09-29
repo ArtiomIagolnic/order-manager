@@ -1,9 +1,9 @@
 <template>
   <div>
     <NavBarComponent />
-    <div class="mx-auto p-8">
+    <div class="w-full pt-4">
       <div class="container mx-auto bg-white p-8 rounded-lg shadow">
-        <router-view></router-view>
+        <router-view />
       </div>
     </div>
     <NotificationsComponent />
@@ -11,14 +11,12 @@
 </template>
 
 <script>
-import NavBarComponent from '@/components/NavBarComponent.vue'
-import NotificationsComponent from '@/components/NotificationsComponent.vue'
+import NavBarComponent from "@/components/NavBarComponent.vue";
+import NotificationsComponent from "@/components/NotificationsComponent.vue";
 export default {
   components: {
     NavBarComponent,
-    NotificationsComponent
-  }
-}
+    NotificationsComponent,
+  },
+};
 </script>
-
-
