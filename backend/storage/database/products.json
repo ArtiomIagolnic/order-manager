@@ -12,5 +12,12 @@
     "stock": 89,
     "sku": "ada34few",
     "id": "446dc337-6dc4-412a-87fa-eccbabc3a367"
+  },
+  {
+    "name": "test",
+    "price": 23,
+    "stock": 9,
+    "sku": "wer45325",
+    "id": "71c59ea3-5c65-4ef4-b825-c9d3c6eb4472"
   }
 ]

@@ -5,11 +5,13 @@ import {
   addOrder,
   updateOrder,
   deleteOrder,
+  exportOrder,
 } from "../controllers/OrdersController.js";
 
 router.get("/all", getOrders);
 router.post("/add", addOrder);
 router.put("/update", updateOrder);
 router.delete("/delete/:id", deleteOrder);
+router.get("/export/:id", exportOrder);
 
 export default router;

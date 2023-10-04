@@ -26,6 +26,61 @@
 
     <!-- Desktop version -->
     <div class="hidden md:block">
+      <!-- Panel with options -->
+      <div class="flex items-center justify-between mb-4">
+        <div class="text-gray-700">{{ selectedCount }} selected</div>
+
+        <!-- if clicked outside the panel, it closes -->
+        <div
+          v-show="isMenuOpen"
+          @click="isMenuOpen = false"
+          class="fixed inset-0 z-10"
+        ></div>
+
+        <div class="relative">
+          <button
+            @click="isMenuOpen = !isMenuOpen"
+            class=" bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 ml-2 rounded">
+          
+            Actions
+            <svg
+              class="w-4 h-4 inline ml-2 -mr-1"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M7.293 10.293a1 1 0 011.414 0L10 11.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414 1 1 0 010 1.414z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </button>
+          <ul
+            v-show="isMenuOpen"
+            @click.away="isMenuOpen = false"
+            class="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
+          >
+            <li>
+              <a
+                @click="deleteSelected"
+                class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+              >
+                Delete Selected
+              </a>
+            </li>
+            <li>
+              <a
+                :href="exportSelected"
+                class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+              >
+                Export Selected as Excel
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
       <table
         class="desktop-table w-full border-collapse border border-gray-200 rounded-lg overflow-hidden shadow-lg my-5"
       >
@@ -60,6 +115,11 @@
 </template>
 <script>
 export default {
+  data() {
+    return {
+      isMenuOpen: false,
+    };
+  },
   props: {
     headers: {
       type: Array,
@@ -76,13 +136,18 @@ export default {
       required: true,
       default: [],
     },
+    selectedCount: {
+      type: Number,
+      default: 0,
+    },
+    exportSelected: {
+      type: String,
+      default: "",
+    },
   },
 
   methods: {
-    emitUpdate(item) {
-      this.$emit("update-item", item);
-    },
-    emitDelete(item) {
+    deleteSelected(item) {
       this.$emit("delete-item", item);
     },
   },

@@ -46,21 +46,5 @@
     "totalAmount": "1299.99",
     "displayedId": "OR-87d45",
     "id": "026d7d47-4f7e-4419-b221-be909fa08fb8"
-  },
-  {
-    "customer": "Leonid Jardan ",
-    "date": "2023-09-25",
-    "products": [
-      {
-        "id": "eb31e18c-a4de-4668-94d3-402482d90980",
-        "name": "tv",
-        "price": 527.99,
-        "quantity": 1,
-        "totalPrice": 527.99
-      }
-    ],
-    "totalAmount": "527.99",
-    "displayedId": "OR-62918",
-    "id": "288a2041-f42a-434f-bafa-46abc0ca1887"
   }
 ]

@@ -3,7 +3,9 @@ import HomeComponent from "@/pages/Home.vue";
 import CustomerComponent from "@/pages/customers/index.vue";
 import ProductComponent from "@/pages/products/index.vue";
 import OrderComponent from "@/pages/orders/index.vue";
+import ExportComponent from "@/pages/exports/index.vue";
 import E404Component from "@/components/E404Component.vue";
+
 
 const routes = [
   {
@@ -25,6 +27,11 @@ const routes = [
     name: "orders",
     path: "/orders",
     component: OrderComponent,
+  },
+  {
+    name: "exports",
+    path: "/exports",
+    component: ExportComponent,
   },
   {
     path: "/:any(.*)",

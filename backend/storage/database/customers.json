@@ -40,5 +40,14 @@
     "billingAdress": "zennerstrasse 16",
     "id": "6d110b1b-984b-43b7-aeac-132897547f70",
     "fullName": "test update lastname"
+  },
+  {
+    "firstName": "Leonid",
+    "lastName": "Jardan ",
+    "age": 32,
+    "shippingAdress": "cumberlandstrasse 29",
+    "billingAdress": "ergerg",
+    "id": "88b4b103-95a3-4b67-a62b-dc504e9a9fea",
+    "fullName": "Leonid Jardan "
   }
 ]

@@ -85,5 +85,29 @@ export const useProductStore = defineStore("product", {
         });
       }
     },
+    async exportProduct(products) {
+      try {
+        if (products.length === 0) {
+          useNotificationStore().addNotification({
+            type: "warning",
+            message: "Nothing selected",
+          });
+        } else {
+          await axios.post(
+            `http://localhost:8000/api/products/export`,
+            products
+          );
+          useNotificationStore().addNotification({
+            type: "success",
+            message: "Products were exported successfully",
+          });
+        }
+      } catch (error) {
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while exporting product: ${error.message}`,
+        });
+      }
+    },
   },
 });

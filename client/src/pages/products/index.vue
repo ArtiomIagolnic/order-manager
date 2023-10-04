@@ -31,6 +31,8 @@
     :headers="tableHeaders"
     :item-props="itemProps"
     :items="displayedProducts"
+    :selectedCount="selectedCount"
+    :export-selected="exportLink"
     @update-item="openModal"
     @delete-item="deleteProduct"
   >
@@ -43,7 +45,7 @@
           Update
         </button>
         <button
-          @click="deleteCustomer(item)"
+          @click="deleteProduct(item)"
           class="text-red-600 hover:text-red-800 hover:font-medium cursor-pointer"
         >
           Delete
@@ -53,7 +55,13 @@
     <template #body-item="{ item, index }">
       <tr class="flex-col flex-no wrap mb-0">
         <td class="border-grey-light border hover:bg-gray-100 p-3">
-          {{ index + 1 }}
+          <input
+            :value="item.id"
+            v-model="selectedItems"
+            type="checkbox"
+            class="form-checkbox text-blue-400 h-5 w-5"
+          />
+          <span class="ml-2">{{ index + 1 }}</span>
         </td>
         <td class="border-grey-light border hover:bg-gray-100 p-3">
           {{ item.name }}
@@ -82,10 +90,20 @@
           >
             Delete
           </button>
+          <a
+            :href="`http://localhost:8000/api/products/export/${item.id}`"
+            class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer"
+          >
+            Export as Excel
+          </a>
         </td>
       </tr>
     </template>
   </TableComponent>
+
+  <p v-if="products.length === 0" class="text-red-500 text-center mt-4">
+    No products added yet
+  </p>
 
   <!-- Load More -->
   <div class="flex justify-end">
@@ -122,7 +140,19 @@ export default {
       showNoDataMessage: false,
       updatedProduct: {},
       openProductModal: false,
+      selectedItems: [],
+      exportLink: "",
     };
+  },
+  watch: {
+    selectedItems: {
+      handler: function () {
+        this.exportLink =
+          "http://localhost:8000/api/products/export/" +
+          this.selectedItems.join(",");
+      },
+      deep: true,
+    },
   },
   created() {
     this.loadProducts();
@@ -133,6 +163,9 @@ export default {
     },
     canLoadMore() {
       return this.loadedProductsCount < this.products.length;
+    },
+    selectedCount() {
+      return this.selectedItems.length;
     },
   },
   methods: {

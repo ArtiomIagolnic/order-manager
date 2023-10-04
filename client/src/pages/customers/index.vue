@@ -50,7 +50,7 @@
         </button>
       </div>
     </template>
-    
+
     <template #body-item="{ item, index }">
       <tr class="flex-col flex-no wrap mb-0">
         <td class="border-grey-light border hover:bg-gray-100 p-3">

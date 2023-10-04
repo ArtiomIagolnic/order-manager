@@ -24,9 +24,6 @@
   <p v-if="showNoDataMessage" class="text-red-500 text-center mt-4">
     No data found.
   </p>
-  <p v-if="orders.length === 0" class="text-red-500 text-center mt-4">
-    No orders added yet
-  </p>
 
   <!-- Orders Table -->
   <TableComponent
@@ -79,7 +76,7 @@
             Update
           </button>
           <button
-            @click="deleteCustomer(item)"
+            @click="deleteOrder(item)"
             class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer"
           >
             Delete
@@ -88,6 +85,9 @@
       </tr>
     </template>
   </TableComponent>
+  <p v-if="orders.length === 0" class="text-red-500 text-center mt-4">
+    No orders added yet
+  </p>
 
   <!-- Load More -->
   <div class="flex justify-end">
