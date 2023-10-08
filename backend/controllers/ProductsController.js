@@ -1,10 +1,12 @@
 import asyncHandler from "express-async-handler";
 import Product from "../models/Product.js";
 import Export from "../models/Export.js";
-import ExcelExporter from "../models/ExcelExporter.js";
+import ExcelExporter from "../modules/ExcelExporter.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
+import { v4 as uuidv4 } from "uuid";
+import timeStampFormat from "../utils/timeStampUtility.js";
 
 // @desc getting all products
 // route GET /api/products/all
@@ -39,7 +41,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 // route DELETE /api/products/delete
 // @access public
 const deleteProduct = asyncHandler(async (req, res) => {
-  const productId = req.body.id;
+  const productId = req.params.products.split(",");
   const deletedProduct = await Product.delete(productId);
   res.status(204).send(deletedProduct);
 });
@@ -51,15 +53,10 @@ const exportProduct = asyncHandler(async (req, res) => {
   try {
     const productIds = req.params.products.split(",");
 
-    let products = [];
-
-    for (const productId of productIds) {
-      const product = await Product.getById(productId);
-      if (!product) {
-        res.status(404).json({ error: "One or more products not found" });
-        return;
-      }
-      products.push(product);
+    const products = await Product.getById(productIds);
+    if (!products) {
+      res.status(404).json({ error: "One or more products not found" });
+      return;
     }
 
     const __filename = fileURLToPath(import.meta.url);
@@ -84,7 +81,8 @@ const exportProduct = asyncHandler(async (req, res) => {
 
     // create a new record in /storage/database/exports.json
     const exportRecord = {
-      timestamp: new Date().toISOString(),
+      id: uuidv4(),
+      timestamp: timeStampFormat(new Date()),
       sourceTable: "products",
       exportedFile: excelExportFilename,
     };

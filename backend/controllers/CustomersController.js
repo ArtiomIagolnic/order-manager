@@ -1,5 +1,12 @@
 import asyncHandler from "express-async-handler";
 import Customer from "../models/Customer.js";
+import Export from "../models/Export.js";
+import ExcelExporter from "../modules/ExcelExporter.js";
+import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs";
+import { v4 as uuidv4 } from "uuid";
+import timeStampFormat from "../utils/timeStampUtility.js";
 
 // @desc getting all customers
 // route GET /api/customers/all
@@ -38,8 +45,8 @@ const updateCustomer = asyncHandler(async (req, res) => {
 // route DELETE /api/customers/delete
 // @access public
 const deleteCustomer = asyncHandler(async (req, res) => {
-  const customerId = req.params.id;
-  const deletedCustomer = await Customer.delete(customerId);
+  const customerIds = req.params.customers.split(",");
+  const deletedCustomer = await Customer.delete(customerIds);
   res.status(204).send(deletedCustomer);
 });
 
@@ -49,10 +56,74 @@ const getCustomer = asyncHandler(async (req, res) => {
   res.status(200).json(customer);
 });
 
+const exportCustomer = asyncHandler(async (req, res) => {
+  try {
+    const customerIds = req.params.customers.split(",");
+
+    const customers = await Customer.getById(customerIds);
+    if (!customers) {
+      res.status(404).json({ error: "One or more customers not found" });
+      return;
+    }
+
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const exportDirectory = path.resolve(__dirname, "../storage/exports/");
+    const excelExportFilename = `customers_${Date.now()}.xlsx`;
+    const excelExportPath = path.join(exportDirectory, excelExportFilename);
+
+    // set the columns width
+    const columnWidths = {
+      A: 20,
+      B: 20,
+      C: 10,
+      D: 30,
+      E: 30,
+      F: 40,
+      G: 20,
+    };
+
+    // create a file in /storage/exports/filename
+    await ExcelExporter.exportDataToExcel(
+      customers,
+      excelExportPath,
+      columnWidths
+    );
+
+    // create a new record in /storage/database/exports.json
+
+    const exportRecord = {
+      id: uuidv4(),
+      timestamp: timeStampFormat(new Date()),
+      sourceTable: "customers",
+      exportedFile: excelExportFilename,
+    };
+    await Export.insert(exportRecord);
+
+    //send file for downloading
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=${excelExportFilename}`
+    );
+
+    const fileStream = fs.createReadStream(excelExportPath);
+
+    fileStream.pipe(res);
+  } catch (error) {
+    console.error("Export error:", error);
+    res.status(500).json({ success: false, error: "Export error" });
+  }
+});
+
 export {
   getCustomers,
   addCustomer,
   updateCustomer,
   deleteCustomer,
   getCustomer,
+  exportCustomer,
 };

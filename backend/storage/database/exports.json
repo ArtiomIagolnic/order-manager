@@ -1,7 +1,8 @@
 [
   {
-    "timestamp": "2023-10-04T18:54:38.623Z",
-    "sourceTable": "products",
-    "exportedFile": "products_1696445678576.xlsx"
+    "id": "6b7f0cd1-5d70-4087-9944-4d58dd87c574",
+    "timestamp": "2023-10-08  12:14",
+    "sourceTable": "orders",
+    "exportedFile": "orders_1696760090192.xlsx"
   }
 ]

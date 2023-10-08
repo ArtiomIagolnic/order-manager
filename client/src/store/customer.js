@@ -76,7 +76,7 @@ export const useCustomerStore = defineStore("customer", {
     async deleteCustomer(customer) {
       try {
         await axios.delete(
-          `http://localhost:8000/api/customers/delete/${customer.id}`,
+          `http://localhost:8000/api/customers/delete/${customer}`,
           customer
         );
         useNotificationStore().addNotification({

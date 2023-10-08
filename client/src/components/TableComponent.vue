@@ -27,6 +27,7 @@
     <!-- Desktop version -->
     <div class="hidden md:block">
       <!-- Panel with options -->
+
       <div class="flex items-center justify-between mb-4">
         <div class="text-gray-700">{{ selectedCount }} selected</div>
 
@@ -40,8 +41,8 @@
         <div class="relative">
           <button
             @click="isMenuOpen = !isMenuOpen"
-            class=" bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 ml-2 rounded">
-          
+            class="bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 ml-2 rounded"
+          >
             Actions
             <svg
               class="w-4 h-4 inline ml-2 -mr-1"
@@ -62,17 +63,18 @@
             class="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
           >
             <li>
-              <a
+              <button
                 @click="deleteSelected"
-                class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
               >
                 Delete Selected
-              </a>
+              </button>
             </li>
             <li>
               <a
                 :href="exportSelected"
-                class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                class="text-left block w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
+                :class="disabledClass"
               >
                 Export Selected as Excel
               </a>
@@ -96,7 +98,6 @@
             >
               {{ header }}
             </th>
-            <th class="p-3 text-center">Actions</th>
           </tr>
         </thead>
 
@@ -144,8 +145,20 @@ export default {
       type: String,
       default: "",
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
-
+  computed: {
+    disabledClass() {
+      if (this.disabled) {
+        return "disabled-link";
+      } else {
+        return "";
+      }
+    },
+  },
   methods: {
     deleteSelected(item) {
       this.$emit("delete-item", item);
@@ -155,6 +168,11 @@ export default {
 </script>
 
 <style>
+.disabled-link {
+  pointer-events: none; /* Disable pointer events */
+  color: #ccc; /* Apply a gray color to indicate it's disabled */
+  text-decoration: none; /* Remove underline */
+}
 @media (min-width: 767px) {
   .desktop-table {
     display: inline-table !important;

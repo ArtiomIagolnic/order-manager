@@ -14,6 +14,7 @@ const port = process.env.PORT || 8000;
 import customerRoutes from "./routes/customerRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
+import exportRoutes from "./routes/exportRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url); // Get the current module's filename
 const __dirname = path.dirname(__filename); // Get the directory name from the filename
@@ -29,6 +30,7 @@ app.use(express.static(path.join(__dirname, "../client/dist"))); // Go up one le
 app.use("/api/customers", customerRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/exports", exportRoutes);
 
 // Redirect all other routes to the Vue.js application
 app.get("*", (req, res) => {

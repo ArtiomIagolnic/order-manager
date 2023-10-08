@@ -11,7 +11,7 @@ import {
 router.get("/all", getOrders);
 router.post("/add", addOrder);
 router.put("/update", updateOrder);
-router.delete("/delete/:id", deleteOrder);
-router.get("/export/:id", exportOrder);
+router.delete("/delete/:orders", deleteOrder);
+router.get("/export/:orders", exportOrder);
 
 export default router;

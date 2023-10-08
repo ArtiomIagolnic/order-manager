@@ -19,17 +19,24 @@ class BaseModel {
     }
   }
 
-  async getById(id) {
+  async getById(ids) {
     try {
       const dataFile = await readFileAsync(this.dataPath);
       const records = JSON.parse(dataFile);
-      const record = records.find((record) => record.id === id);
 
-      if (!record) {
-        throw new Error("Record not found");
+      if (!Array.isArray(ids)) {
+        ids = [ids]; // Ensure `ids` is an array
+      }
+      const result = [];
+
+      for (const id of ids) {
+        const record = records.find((record) => record.id === id);
+        if (record) {
+          result.push(record);
+        }
       }
 
-      return record;
+      return result;
     } catch (err) {
       throw err;
     }
@@ -62,23 +69,38 @@ class BaseModel {
         return record;
       });
 
-      await writeFileAsync(this.dataPath, JSON.stringify(updatedRecords, null, 2));
+      await writeFileAsync(
+        this.dataPath,
+        JSON.stringify(updatedRecords, null, 2)
+      );
       return updatedRecord;
     } catch (err) {
       throw err;
     }
   }
 
-  async delete(id) {
+  async delete(ids) {
     try {
-      const record = await this.getById(id);
+      const deletedRecords = [];
+      if (Array.isArray(ids)) {
+        for (const id of ids) {
+          const record = await this.getById(id);
+          deletedRecords.push(record);
+        }
+      } else {
+        const record = await this.getById(id);
+        deletedRecords.push(record);
+      }
 
       const dataFile = await readFileAsync(this.dataPath);
       const records = JSON.parse(dataFile);
-      const updatedRecords = records.filter((r) => r.id !== id);
+      const updatedRecords = records.filter((r) => !ids.includes(r.id));
 
-      await writeFileAsync(this.dataPath, JSON.stringify(updatedRecords, null, 2));
-      return record; // Return the deleted record if needed
+      await writeFileAsync(
+        this.dataPath,
+        JSON.stringify(updatedRecords, null, 2)
+      );
+      return ids; // Return the deleted record if needed
     } catch (err) {
       throw err;
     }

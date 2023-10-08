@@ -54,7 +54,7 @@ export const useProductStore = defineStore("product", {
     async deleteProduct(product) {
       try {
         await axios.delete(
-          `http://localhost:8000/api/products/delete/${product.id}`,
+          `http://localhost:8000/api/products/delete/${product}`,
           product
         );
         useNotificationStore().addNotification({

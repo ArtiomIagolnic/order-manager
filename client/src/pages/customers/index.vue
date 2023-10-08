@@ -31,6 +31,8 @@
     :headers="tableHeaders"
     :items="displayedCustomers"
     :item-props="itemProps"
+    :selectedCount="selectedCount"
+    :export-selected="exportLink"
     @update-item="openModal"
     @delete-item="deleteCustomer"
   >
@@ -54,7 +56,13 @@
     <template #body-item="{ item, index }">
       <tr class="flex-col flex-no wrap mb-0">
         <td class="border-grey-light border hover:bg-gray-100 p-3">
-          {{ index + 1 }}
+          <input
+            :value="item.id"
+            v-model="selectedItems"
+            type="checkbox"
+            class="form-checkbox text-blue-400 h-5 w-5"
+          />
+          <span class="ml-2">{{ index + 1 }}</span>
         </td>
         <td class="border-grey-light border hover:bg-gray-100 p-3">
           {{ item.fullName }}
@@ -80,6 +88,12 @@
           >
             Delete
           </button>
+          <a
+            :href="`http://localhost:8000/api/customers/export/${item.id}`"
+            class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer"
+          >
+            Export
+          </a>
         </td>
       </tr>
     </template>
@@ -115,7 +129,7 @@ export default {
   },
   data() {
     return {
-      tableHeaders: ["Name", "Age", "Billing Address"],
+      tableHeaders: ["Name", "Age", "Billing Address", "Actions"],
       itemProps: ["fullName", "age", "billingAdress"],
       customers: [],
       pageSize: 10,
@@ -123,9 +137,20 @@ export default {
       loadedCustomersCount: 0,
       showNoDataMessage: false,
       updatedCustomer: {},
-      selectedProduct: {},
       openCustomerModal: false,
+      selectedItems: [],
+      exportLink: "",
     };
+  },
+  watch: {
+    selectedItems: {
+      handler: function () {
+        this.exportLink =
+          "http://localhost:8000/api/customers/export/" +
+          this.selectedItems.join(",");
+      },
+      deep: true,
+    },
   },
   created() {
     this.loadCustomers();
@@ -136,6 +161,9 @@ export default {
     },
     canLoadMore() {
       return this.loadedCustomersCount < this.customers.length;
+    },
+    selectedCount() {
+      return this.selectedItems.length;
     },
   },
   methods: {
@@ -175,7 +203,12 @@ export default {
       this.openCustomerModal = false;
     },
     async deleteCustomer(customer) {
-      await this.customerStore.deleteCustomer(customer);
+      if (this.selectedItems.length > 0) {
+        await this.customerStore.deleteCustomer(this.selectedItems.join(","));
+        this.selectedItems.length = 0;
+      } else {
+        await this.customerStore.deleteCustomer(customer.id);
+      }
       this.loadCustomers();
     },
   },

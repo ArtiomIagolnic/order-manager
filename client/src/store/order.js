@@ -64,7 +64,7 @@ export const useOrderStore = defineStore("order", {
     async deleteOrder(order) {
       try {
         await axios.delete(
-          `http://localhost:8000/api/orders/delete/${order.id}`,
+          `http://localhost:8000/api/orders/delete/${order}`,
           order
         );
         useNotificationStore().addNotification({

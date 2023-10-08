@@ -94,7 +94,7 @@
             :href="`http://localhost:8000/api/products/export/${item.id}`"
             class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer"
           >
-            Export as Excel
+            Export
           </a>
         </td>
       </tr>
@@ -131,7 +131,7 @@ export default {
   },
   data() {
     return {
-      tableHeaders: ["Name", "Price", "Stock", "SKU"],
+      tableHeaders: ["Name", "Price", "Stock", "SKU", "Actions"],
       itemProps: ["name", "price", "stock", "sku"],
       products: [],
       pageSize: 10,
@@ -186,7 +186,12 @@ export default {
       this.loadedProductsCount += remainingProducts.length;
     },
     async deleteProduct(product) {
-      await this.productStore.deleteProduct(product);
+      if (this.selectedItems.length > 0) {
+        await this.productStore.deleteProduct(this.selectedItems.join(","));
+        this.selectedItems.length = 0;
+      } else {
+        await this.productStore.deleteProduct(product);
+      }
       await this.loadProducts();
     },
     updateDisplayedProducts(filteredProducts) {
