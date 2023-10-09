@@ -52,6 +52,43 @@
         </button>
       </div>
     </template>
+
+    <template #table-header>
+      <th class="p-3 text-left">Nr</th>
+      <th class="p-3 text-left">
+        Name
+        <SortIconsComponent
+          column="name"
+          :sortDirections="sortDirections['name']"
+          @sort-column="sortColumn('name')"
+        />
+      </th>
+      <th class="p-3 text-left">
+        Price
+        <SortIconsComponent
+          column="price"
+          :sortDirections="sortDirections['price']"
+          @sort-column="sortColumn('price')"
+        />
+      </th>
+      <th class="p-3 text-left">
+        Stock
+        <SortIconsComponent
+          column="stock"
+          :sortDirections="sortDirections['stock']"
+          @sort-column="sortColumn('stock')"
+        />
+      </th>
+      <th class="p-3 text-left">
+        SKU
+        <SortIconsComponent
+          column="sku"
+          :sortDirections="sortDirections['sku']"
+          @sort-column="sortColumn('sku')"
+        />
+      </th>
+      <th class="p-3 text-center">Actions</th>
+    </template>
     <template #body-item="{ item, index }">
       <tr class="flex-col flex-no wrap mb-0">
         <td class="border-grey-light border hover:bg-gray-100 p-3">
@@ -122,12 +159,14 @@ import { useProductStore } from "@/store/product.js";
 import ProductModal from "./components/ProductModal.vue";
 import SearchComponent from "@/components/SearchComponent.vue";
 import TableComponent from "@/components/TableComponent.vue";
+import SortIconsComponent from "@/components/SortIconsComponent.vue";
 
 export default {
   components: {
     ProductModal,
     SearchComponent,
     TableComponent,
+    SortIconsComponent,
   },
   data() {
     return {
@@ -142,6 +181,13 @@ export default {
       openProductModal: false,
       selectedItems: [],
       exportLink: "",
+      sortDirections: {
+        name: "desc",
+        price: "desc",
+        stock: "desc",
+        sku: "desc",
+      },
+      sortHeader: "",
     };
   },
   watch: {
@@ -208,6 +254,19 @@ export default {
     },
     closeModal() {
       this.openProductModal = false;
+    },
+    async sortColumn(column) {
+      if (this.sortDirections[column] === "asc") {
+        this.sortDirections[column] = "desc";
+      } else {
+        this.sortDirections[column] = "asc";
+      }
+      this.sortHeader = column;
+      this.sortDirection = this.sortDirections[column];
+
+      await this.productStore.sortProducts(this.sortHeader, this.sortDirection);
+
+      this.displayedProducts = this.productStore.products;
     },
   },
 };

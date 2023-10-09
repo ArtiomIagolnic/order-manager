@@ -8,12 +8,40 @@ import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
 import timeStampFormat from "../utils/timeStampUtility.js";
 
-// @desc getting all customers
+// @desc getting all customers , also if were sent data for sorting , the sorting is done , according to data
 // route GET /api/customers/all
 // @access public
 
 const getCustomers = asyncHandler(async (req, res) => {
+  const { sortHeader, sortOrder } = req.query;
   const customers = await Customer.getAll();
+  if (sortHeader && sortOrder) {
+    const getColumnValue = (customer, column) => {
+      switch (column) {
+        case "firstName":
+          return customer.firstName;
+        case "lastName":
+          return customer.lastName;
+        case "age":
+          return customer.age;
+        case "billingAdress":
+          return customer.billingAdress;
+        default:
+          return "";
+      }
+    };
+
+    customers.sort((a, b) =>
+      sortOrder === "asc"
+        ? getColumnValue(a, sortHeader).localeCompare(
+            getColumnValue(b, sortHeader)
+          )
+        : getColumnValue(b, sortHeader).localeCompare(
+            getColumnValue(a, sortHeader)
+          )
+    );
+  }
+
   if (!customers) {
     res.status(404).json({ error: "Customer not found" });
   }
@@ -74,13 +102,13 @@ const exportCustomer = asyncHandler(async (req, res) => {
 
     // set the columns width
     const columnWidths = {
-      A: 20,
-      B: 20,
-      C: 10,
-      D: 30,
-      E: 30,
-      F: 40,
-      G: 20,
+      firstName: 20,
+      lastName: 20,
+      age: 10,
+      shippingAdress: 30,
+      billingAdress: 30,
+      id: 40,
+      fullName: 30,
     };
 
     // create a file in /storage/exports/filename

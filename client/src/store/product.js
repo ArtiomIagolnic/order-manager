@@ -32,6 +32,19 @@ export const useProductStore = defineStore("product", {
         });
       }
     },
+    async sortProducts(sortHeader,sortOrder){
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/products/all?sortHeader=${sortHeader}&sortOrder=${sortOrder}`
+        );
+        return (this.products = response.data || []);
+      } catch (error) {
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while sorting products: ${error.message}`,
+        });
+      }
+    },
     async addProduct(data) {
       try {
         const productId = uuidv4();

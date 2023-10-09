@@ -62,21 +62,34 @@ const exportOrder = asyncHandler(async (req, res) => {
     const excelExportFilename = `orders_${Date.now()}.xlsx`;
     const excelExportPath = path.join(exportDirectory, excelExportFilename);
 
+    //
+    const customFormatFunction = (order, row, headers) => {
+      if (headers.includes("products")) {
+        // Format the "products" column
+        let formattedProducts = "";
+        for (const product of order.products) {
+          formattedProducts += `${product.name} (Price: ${product.price}, Quantity: ${product.quantity}, Total Price: ${product.totalPrice})\n`;
+        }
+        console.log(row);
+        row[headers.indexOf("products")] = formattedProducts.trim();
+      }
+    };
     // set the columns width
     const columnWidths = {
-      A: 20,
-      B: 20,
-      C: 50,
-      D: 20,
-      E: 20,
-      F: 40,
+      customer: 20,
+      date: 20,
+      products: 50,
+      totalAmount: 20,
+      displayedId: 20,
+      id: 40,
     };
 
     // create a file in /storage/exports/filename
     await ExcelExporter.exportDataToExcel(
       orders,
       excelExportPath,
-      columnWidths
+      columnWidths,
+      customFormatFunction
     );
 
     // create a new record in /storage/database/exports.json

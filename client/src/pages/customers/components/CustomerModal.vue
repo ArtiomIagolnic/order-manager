@@ -33,7 +33,7 @@
         <div>
           <label for="age" class="text-gray-700">Age:</label>
           <input
-            type="number"
+            type="text"
             id="age"
             v-model="customer.age"
             required

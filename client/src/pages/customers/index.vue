@@ -28,7 +28,6 @@
 
   <!-- Displayed Table -->
   <TableComponent
-    :headers="tableHeaders"
     :items="displayedCustomers"
     :item-props="itemProps"
     :selectedCount="selectedCount"
@@ -36,6 +35,49 @@
     @update-item="openModal"
     @delete-item="deleteCustomer"
   >
+    <template #mobile-card-headers>
+      <div class="text-gray-700 font-extrabold">First name:</div>
+      <div class="text-gray-700 font-extrabold">Last name:</div>
+      <div class="text-gray-700 font-extrabold">Age:</div>
+      <div class="text-gray-700 font-extrabold">Billing Address:</div>
+    </template>
+    
+    <template #table-header>
+      <th class="p-3 text-left">Nr</th>
+      <th class="p-3 text-left">
+        First name
+        <SortIconsComponent
+          column="firstName"
+          :sortDirections="sortDirections['firstName']"
+          @sort-column="sortColumn('firstName')"
+        />
+      </th>
+      <th class="p-3 text-left">
+        Last name
+        <SortIconsComponent
+          column="lastName"
+          :sortDirections="sortDirections['lastName']"
+          @sort-column="sortColumn('lastName')"
+        />
+      </th>
+      <th class="p-3 text-left">
+        Age
+        <SortIconsComponent
+          column="age"
+          :sortDirections="sortDirections['age']"
+          @sort-column="sortColumn('age')"
+        />
+      </th>
+      <th class="p-3 text-left">
+        Billing Address
+        <SortIconsComponent
+          column="billingAdress"
+          :sortDirections="sortDirections['billingAdress']"
+          @sort-column="sortColumn('billingAdress')"
+        />
+      </th>
+      <th class="p-3 text-center">Actions</th>
+    </template>
     <template #mobile-card-buttons="{ item }">
       <div class="mt-3 space-x-4 flex justify-start">
         <button
@@ -65,7 +107,10 @@
           <span class="ml-2">{{ index + 1 }}</span>
         </td>
         <td class="border-grey-light border hover:bg-gray-100 p-3">
-          {{ item.fullName }}
+          {{ item.firstName }}
+        </td>
+        <td class="border-grey-light border hover:bg-gray-100 p-3">
+          {{ item.lastName }}
         </td>
         <td class="border-grey-light border hover:bg-gray-100 p-3">
           {{ item.age }}
@@ -120,16 +165,17 @@ import { useCustomerStore } from "@/store/customer.js";
 import CustomerModal from "./components/CustomerModal.vue";
 import SearchComponent from "@/components/SearchComponent.vue";
 import TableComponent from "@/components/TableComponent.vue";
+import SortIconsComponent from "@/components/SortIconsComponent.vue";
 
 export default {
   components: {
     CustomerModal,
     SearchComponent,
     TableComponent,
+    SortIconsComponent,
   },
   data() {
     return {
-      tableHeaders: ["Name", "Age", "Billing Address", "Actions"],
       itemProps: ["fullName", "age", "billingAdress"],
       customers: [],
       pageSize: 10,
@@ -140,6 +186,13 @@ export default {
       openCustomerModal: false,
       selectedItems: [],
       exportLink: "",
+      sortDirections: {
+        firstName: "desc",
+        lastName: "desc",
+        age: "desc",
+        billingAdress: "desc",
+      },
+      sortHeader: "",
     };
   },
   watch: {
@@ -169,10 +222,6 @@ export default {
   methods: {
     async loadCustomers() {
       this.customers = await this.customerStore.getCustomers();
-      this.customers.forEach((customer) => {
-        customer.fullName = `${customer.firstName} ${customer.lastName}`;
-      });
-
       this.displayedCustomers = this.customers.slice(0, this.pageSize);
       this.loadedCustomersCount = this.displayedCustomers.length;
     },
@@ -209,7 +258,24 @@ export default {
       } else {
         await this.customerStore.deleteCustomer(customer.id);
       }
+      // After deleting, load customers again
       this.loadCustomers();
+    },
+    async sortColumn(column) {
+      if (this.sortDirections[column] === "asc") {
+        this.sortDirections[column] = "desc";
+      } else {
+        this.sortDirections[column] = "asc";
+      }
+      this.sortHeader = column;
+      this.sortDirection = this.sortDirections[column];
+
+      await this.customerStore.sortCustomers(
+        this.sortHeader,
+        this.sortDirection
+      );
+
+      this.displayedCustomers = this.customerStore.customers;
     },
   },
 };

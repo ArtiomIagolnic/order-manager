@@ -13,7 +13,37 @@ import timeStampFormat from "../utils/timeStampUtility.js";
 // @access public
 
 const getProducts = asyncHandler(async (req, res) => {
+  const { sortHeader, sortOrder } = req.query;
   const products = await Product.getAll();
+
+  if (sortHeader && sortOrder) {
+    const getColumnValue = (product, column) => {
+      switch (column) {
+        case "name":
+          return product.name;
+        case "price":
+          return product.price;
+        case "stock":
+          return product.stock;
+        case "sku":
+          return product.sku;
+        default:
+          return "";
+      }
+    };
+    products.sort((a, b) =>
+      sortOrder === "asc"
+        ? getColumnValue(a, sortHeader).localeCompare(
+            getColumnValue(b, sortHeader)
+          )
+        : getColumnValue(b, sortHeader).localeCompare(
+            getColumnValue(a, sortHeader)
+          )
+    );
+  }
+  if (!products) {
+    res.status(404).json({ error: "Product not found" });
+  }
   res.status(200).json(products);
 });
 
@@ -67,9 +97,11 @@ const exportProduct = asyncHandler(async (req, res) => {
 
     // set the columns width
     const columnWidths = {
-      A: 20,
-      D: 20,
-      E: 40,
+      name: 20,
+      price: 20,
+      stock: 10,
+      sku: 20,
+      id: 40,
     };
 
     // create a file in /storage/exports/filename

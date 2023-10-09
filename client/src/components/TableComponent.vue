@@ -14,9 +14,9 @@
               <div class="text-lg font-bold text-teal-400">#{{ i + 1 }}</div>
             </div>
 
-            <div v-for="(header, index) in headers" :key="index" class="mt-2">
-              <div class="text-gray-700 font-extrabold">{{ header }}:</div>
-              <div class="text-gray-900">{{ item[itemProps[index]] }}</div>
+            <div class="mt-2">
+              <slot name="mobile-card-headers"></slot>
+              <!-- <div class="text-gray-900">{{ item[itemProps[index]] }}</div> -->
             </div>
             <slot name="mobile-card-buttons" :item="item"></slot>
           </div>
@@ -90,14 +90,7 @@
           <tr
             class="bg-teal-400 flex-col flex-no wrap table-row rounded-l-lg rounded-none mb-0"
           >
-            <th class="p-3 text-left">Nr</th>
-            <th
-              v-for="(header, index) in headers"
-              :key="index"
-              class="p-3 text-left"
-            >
-              {{ header }}
-            </th>
+            <slot name="table-header"> </slot>
           </tr>
         </thead>
 
@@ -122,11 +115,6 @@ export default {
     };
   },
   props: {
-    headers: {
-      type: Array,
-      required: true,
-      default: [],
-    },
     items: {
       type: Array,
       required: true,

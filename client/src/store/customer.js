@@ -34,6 +34,19 @@ export const useCustomerStore = defineStore("customer", {
         });
       }
     },
+    async sortCustomers(sortHeader, sortOrder) {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/customers/all?sortHeader=${sortHeader}&sortOrder=${sortOrder}`
+        );
+        return (this.customers = response.data || []);
+      } catch (error) {
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while sorting customers: ${error.message}`,
+        });
+      }
+    },
     async addCustomer(data) {
       try {
         const customerId = uuidv4();

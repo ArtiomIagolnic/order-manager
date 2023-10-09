@@ -23,13 +23,9 @@ class BaseModel {
     try {
       const dataFile = await readFileAsync(this.dataPath);
       const records = JSON.parse(dataFile);
-
-      if (!Array.isArray(ids)) {
-        ids = [ids]; // Ensure `ids` is an array
-      }
       const result = [];
 
-      for (const id of ids) {
+      for (const id of Array.isArray(ids) ? ids : [ids]) {
         const record = records.find((record) => record.id === id);
         if (record) {
           result.push(record);

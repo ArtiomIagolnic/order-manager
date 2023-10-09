@@ -1,46 +1,49 @@
 import exceljs from "exceljs";
 
 class ExcelExporter {
-  async exportDataToExcel(data, filePath, columnWidths) {
+  async exportDataToExcel(data, filePath, columnWidths, formatFunction) {
     if (!data || data.length === 0) {
       throw new Error("No data to export.");
     }
     const workbook = new exceljs.Workbook();
     const worksheet = workbook.addWorksheet("Data");
 
-    if (Array.isArray(data) && data.length > 0) {
-      const headers = Object.keys(data[0]);
-      worksheet.addRow(headers);
+    // Determine headers based on the first item in the data
+    const headers = Array.isArray(data)
+      ? Object.keys(data[0])
+      : Object.keys(data);
 
+    // Add column headers
+    const headerRow = worksheet.addRow(headers);
+
+    headerRow.eachCell((cell) => {
+      cell.font = { bold: true };
+    });
+
+    if (formatFunction && typeof formatFunction === "function") {
       data.forEach((item) => {
-        const row = [];
-        headers.forEach((header) => {
-          row.push(item[header]);
-        });
+        const row = headers.map((header) => item[header]);
+        formatFunction(item, row, headers); // Pass headers to the custom format function
         worksheet.addRow(row);
       });
-    } else if (typeof data === "object") {
-      const headers = Object.keys(data);
-      worksheet.addRow(headers);
-
-      const row = [];
-      headers.forEach((header) => {
-        row.push(data[header]);
+    } else if (data.length > 0) {
+      data.forEach((item) => {
+        const row = headers.map((header) => item[header]);
+        worksheet.addRow(row);
       });
-      worksheet.addRow(row);
     } else {
       throw new Error("Invalid data format for export.");
     }
+
+    // Set column widths if provided
     if (columnWidths && typeof columnWidths === "object") {
-      for (const columnKey in columnWidths) {
-        if (columnWidths.hasOwnProperty(columnKey)) {
-          const column = worksheet.getColumn(columnKey);
-          const width = columnWidths[columnKey];
-          if (column) {
-            column.width = width;
-          }
+      headers.forEach((header, index) => {
+        const column = worksheet.getColumn(index + 1); // Columns are 1-based
+        const width = columnWidths[header];
+        if (column) {
+          column.width = width;
         }
-      }
+      });
     }
 
     await workbook.xlsx.writeFile(filePath);
