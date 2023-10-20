@@ -8,12 +8,40 @@ import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
 import timeStampFormat from "../utils/timeStampUtility.js";
 
-// @desc getting all customers
+// @desc getting all customers and sorting them according to came data
 // route GET /api/customers/all
 // @access public
 
 const getOrders = asyncHandler(async (req, res) => {
+  const { sortHeader, sortOrder } = req.query;
   const orders = await Order.getAll();
+
+  if (sortHeader && sortOrder) {
+    const getColumnValue = (order, column) => {
+      switch (column) {
+        case "displayedId":
+        case "customer":
+        case "date":
+        case "totalAmount":
+          return order[column];
+        default:
+          return "";
+      }
+    };
+    orders.sort((a, b) => {
+      const valueA = getColumnValue(a, sortHeader);
+      const valueB = getColumnValue(b, sortHeader);
+
+      if (sortOrder === "asc") {
+        return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
+      } else {
+        return valueB < valueA ? -1 : valueB > valueA ? 1 : 0;
+      }
+    });
+  }
+  if (!orders) {
+    res.status(404).json({ error: "order not found" });
+  }
   res.status(200).json(orders);
 });
 
@@ -70,7 +98,6 @@ const exportOrder = asyncHandler(async (req, res) => {
         for (const product of order.products) {
           formattedProducts += `${product.name} (Price: ${product.price}, Quantity: ${product.quantity}, Total Price: ${product.totalPrice})\n`;
         }
-        console.log(row);
         row[headers.indexOf("products")] = formattedProducts.trim();
       }
     };

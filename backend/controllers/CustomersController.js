@@ -19,27 +19,25 @@ const getCustomers = asyncHandler(async (req, res) => {
     const getColumnValue = (customer, column) => {
       switch (column) {
         case "firstName":
-          return customer.firstName;
         case "lastName":
-          return customer.lastName;
         case "age":
-          return customer.age;
         case "billingAdress":
-          return customer.billingAdress;
+          return customer[column];
         default:
           return "";
       }
     };
 
-    customers.sort((a, b) =>
-      sortOrder === "asc"
-        ? getColumnValue(a, sortHeader).localeCompare(
-            getColumnValue(b, sortHeader)
-          )
-        : getColumnValue(b, sortHeader).localeCompare(
-            getColumnValue(a, sortHeader)
-          )
-    );
+    customers.sort((a, b) => {
+      const valueA = getColumnValue(a, sortHeader);
+      const valueB = getColumnValue(b, sortHeader);
+
+      if (sortOrder === "asc") {
+        return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
+      } else {
+        return valueB < valueA ? -1 : valueB > valueA ? 1 : 0;
+      }
+    });
   }
 
   if (!customers) {

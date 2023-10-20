@@ -35,6 +35,19 @@ export const useOrderStore = defineStore("order", {
         });
       }
     },
+    async sortOrders(sortHeader, sortOrder) {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/orders/all?sortHeader=${sortHeader}&sortOrder=${sortOrder}`
+        );
+        return (this.orders = response.data || []);
+      } catch (error) {
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while sorting orders: ${error.message}`,
+        });
+      }
+    },
     generateReadableOrderId() {
       const uuid = uuidv4();
       return `OR-${uuid.substring(0, 5)}`;
@@ -63,22 +76,29 @@ export const useOrderStore = defineStore("order", {
     },
     async deleteOrder(order) {
       try {
-        await axios.delete(
-          `http://localhost:8000/api/orders/delete/${order}`,
-          order
-        );
-        useNotificationStore().addNotification({
-          type: "success",
-          message: "Order was deleted successfully",
-        });
+        if (order) {
+          await axios.delete(
+            `http://localhost:8000/api/orders/delete/${order}`,
+            order
+          );
+          useNotificationStore().addNotification({
+            type: "success",
+            message: "Order was deleted successfully",
+          });
+        } else {
+          useNotificationStore().addNotification({
+            type: "warning",
+            message: "You din't select any orders",
+          });
+        }
       } catch (error) {
         useNotificationStore().addNotification({
           type: "failed",
           message: `An error occurred while deleting order: ${error.message}`,
         });
       }
-     
     },
+  
     async updateOrder(updatedOrder) {
       try {
         await axios.put(

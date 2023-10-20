@@ -89,6 +89,7 @@ export default {
         { name: "Products", path: "/products" },
         { name: "Orders", path: "/orders" },
         { name: "Exports", path: "/exports" },
+        { name: "Histories", path: "/histories" },
       ],
     };
   },

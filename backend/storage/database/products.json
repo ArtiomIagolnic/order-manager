@@ -1,23 +1,135 @@
 [
   {
-    "name": "tv",
+    "name": "TV",
     "price": 527.99,
+    "stock": 89,
+    "sku": "erg3453",
+    "id": "c76c8c03-fc8f-4269-b975-63bd596c6b91"
+  },
+  {
+    "name": "iPhone",
+    "price": 1299.99,
     "stock": 99,
     "sku": "fwe4234sef",
-    "id": "eb31e18c-a4de-4668-94d3-402482d90980"
+    "id": "454dedbd-04e2-4ca0-a763-73bd690dec1d"
   },
   {
-    "name": "iphone",
-    "price": 1299.99,
-    "stock": 89,
-    "sku": "ada34few",
-    "id": "446dc337-6dc4-412a-87fa-eccbabc3a367"
+    "name": "Headphones",
+    "price": 49.99,
+    "stock": 150,
+    "sku": "hds5943",
+    "id": "d5b7e03b-8739-43c9-97f6-6d62b8f8e34d"
   },
   {
-    "name": "test",
-    "price": 23,
-    "stock": 9,
-    "sku": "wer45325",
-    "id": "71c59ea3-5c65-4ef4-b825-c9d3c6eb4472"
+    "name": "Laptop",
+    "price": 999.99,
+    "stock": 75,
+    "sku": "lpt2791",
+    "id": "a9cd2d8e-752f-4f3e-952d-97e9249b19e4"
+  },
+  {
+    "name": "Washing Machine",
+    "price": 349.99,
+    "stock": 120,
+    "sku": "wm1256",
+    "id": "1f7e9d3c-2963-4d45-96cd-1dc4a75289dd"
+  },
+  {
+    "name": "Coffee Maker",
+    "price": 89.99,
+    "stock": 200,
+    "sku": "cfm8482",
+    "id": "7a7bd5ce-3e75-4e27-8a7a-4c5e6a88dd26"
+  },
+  {
+    "name": "Tablet",
+    "price": 299.99,
+    "stock": 100,
+    "sku": "tbl6721",
+    "id": "c8b1ecfd-d6c8-471d-9b67-02d3b8b1e5b8"
+  },
+  {
+    "name": "Refrigerator",
+    "price": 799.99,
+    "stock": 50,
+    "sku": "rfr9837",
+    "id": "db9c8f05-8a86-42f7-9a8b-71b8d654ea07"
+  },
+  {
+    "name": "Gaming Console",
+    "price": 399.99,
+    "stock": 60,
+    "sku": "gmc7465",
+    "id": "f87ec1b9-5f63-4a35-84f8-1db4c6f9ee4b"
+  },
+  {
+    "name": "Microwave",
+    "price": 79.99,
+    "stock": 80,
+    "sku": "mcv5849",
+    "id": "4d8b7e0f-8a52-47d6-9e7d-52b6c1f4a99e"
+  },
+  {
+    "name": "Digital Camera",
+    "price": 199.99,
+    "stock": 90,
+    "sku": "dgc3746",
+    "id": "d0b8c4c1-6f87-45b6-80d8-0f1ec1b8d9ec"
+  },
+  {
+    "name": "Toaster",
+    "price": 29.99,
+    "stock": 120,
+    "sku": "tstr3948",
+    "id": "49c0e7d3-9a9b-4a68-8c0e-7d8b31c9eaed"
+  },
+  {
+    "name": "Blender",
+    "price": 69.99,
+    "stock": 95,
+    "sku": "blnd2345",
+    "id": "1c9e0a2d-8d3e-40b9-9c0a-2d9e0c8d2e8a"
+  },
+  {
+    "name": "Vacuum Cleaner",
+    "price": 149.99,
+    "stock": 70,
+    "sku": "vcu5490",
+    "id": "4b8e7d0a-73d9-4e08-9b8e-7d0a5f39ed5b"
+  },
+  {
+    "name": "Smartwatch",
+    "price": 199.99,
+    "stock": 55,
+    "sku": "swt7698",
+    "id": "2e3d5c8b-8c21-4f95-8e3d-5c8b8c21f9d5"
+  },
+  {
+    "name": "Desk Chair",
+    "price": 79.99,
+    "stock": 110,
+    "sku": "dch8927",
+    "id": "f3d2e6a7-62fc-4ae9-b9f3-2e6a7d4e9b8c"
+  },
+  {
+    "name": "Sneakers",
+    "price": 59.99,
+    "stock": 180,
+    "sku": "snk6250",
+    "id": "6a7f2e6d-7f7c-4b3a-b2e6-d7f7c4b3a9c8"
+  },
+  {
+    "name": "Backpack",
+    "price": 39.99,
+    "stock": 120,
+    "sku": "bck3091",
+    "id": "4e3e7a9f-9d87-42e5-b3e7-a9f9d8742e5b"
+  },
+  {
+    "name": "Printer",
+    "price": 129.99,
+    "stock": 65,
+    "sku": "prt8347",
+    "id": "0f9e4a8e-7c8f-45d3-9e4a-8e7c8f45d3e7"
   }
 ]

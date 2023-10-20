@@ -35,6 +35,25 @@
     @update-item="openModal"
     @delete-item="deleteOrder"
   >
+    <template #mobile-card-headers="item">
+      <input
+        type="checkbox"
+        class="form-checkbox h-6 w-6 text-blue-400 transition duration-150 ease-in-out"
+        v-model="selectedItems"
+        :value="item.item.id"
+      />
+      <div class="text-gray-700 font-extrabold">Order ID:</div>
+      <div class="text-gray-900">{{ item.item.displayedId }}</div>
+
+      <div class="text-gray-700 font-extrabold">Customer:</div>
+      <div class="text-gray-900">{{ item.item.customer }}</div>
+
+      <div class="text-gray-700 font-extrabold">Date:</div>
+      <div class="text-gray-900">{{ item.item.date }}</div>
+
+      <div class="text-gray-700 font-extrabold">Total Amount:</div>
+      <div class="text-gray-900">{{ item.item.totalAmount }}</div>
+    </template>
     <template #mobile-card-buttons="{ item }">
       <div class="mt-3 space-x-4 flex justify-start">
         <button
@@ -49,7 +68,51 @@
         >
           Delete
         </button>
+        <a
+          :href="`http://localhost:8000/api/orders/export/${item.id}`"
+          class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer"
+        >
+          Export
+        </a>
       </div>
+    </template>
+    <template #table-header>
+      <th class="p-3 text-left">Nr</th>
+      <th class="p-3 text-left">
+        Order ID
+        <SortIconsComponent
+          column="displayedId"
+          :sortDirections="sortDirections['displayedId']"
+          @sort-column="sortColumn('displayedId')"
+        />
+      </th>
+      <th class="p-3 text-left">
+        Customer
+        <SortIconsComponent
+          column="customer"
+          :sortDirections="sortDirections['customer']"
+          @sort-column="sortColumn('customer')"
+        />
+      </th>
+
+      <th class="p-3 text-left">
+        Date
+        <SortIconsComponent
+          column="date"
+          :sortDirections="sortDirections['date']"
+          @sort-column="sortColumn('date')"
+        />
+      </th>
+      <th class="p-3 text-left">
+        Total Amount
+        <SortIconsComponent
+          column="totalAmount"
+          :sortDirections="sortDirections['totalAmount']"
+          @sort-column="sortColumn('totalAmount')"
+        />
+      </th>
+
+      <th class="p-3 text-center">Actions</th>
     </template>
     <template #body-item="{ item, index }">
       <tr class="flex-col flex-no wrap mb-0">
@@ -104,7 +167,7 @@
   </p>
 
   <!-- Load More -->
-  <div class="flex justify-end">
+  <div class="sm:flex sm:justify-end mb-5">
     <button
       v-if="canLoadMore"
       @click="loadMoreOrders"
@@ -120,16 +183,18 @@ import { useOrderStore } from "@/store/order.js";
 import OrderModal from "./components/OrderModal.vue";
 import SearchComponent from "@/components/SearchComponent.vue";
 import TableComponent from "@/components/TableComponent.vue";
+import SortIconsComponent from "@/components/SortIconsComponent.vue";
 
 export default {
   components: {
     OrderModal,
     SearchComponent,
     TableComponent,
+    SortIconsComponent,
   },
   data() {
     return {
-      tableHeaders: ["Order ID", "Name", "Date", "Total Amount","Actions"],
+      tableHeaders: ["Order ID", "Name", "Date", "Total Amount", "Actions"],
       itemProps: ["displayedId", "customer", "date", "totalAmount"],
       orders: [],
       updatedOrder: {},
@@ -140,7 +205,17 @@ export default {
       showNoDataMessage: false,
       selectedItems: [],
       exportLink: "",
+      sortDirections: {
+        displayedId: "desc",
+        customer: "desc",
+        date: "desc",
+        totalAmount: "desc",
+      },
+      sortHeader: "",
     };
+  },
+  created() {
+    this.loadOrders();
   },
   watch: {
     selectedItems: {
@@ -152,9 +227,7 @@ export default {
       deep: true,
     },
   },
-  created() {
-    this.loadOrders();
-  },
+
   computed: {
     orderStore() {
       return useOrderStore();
@@ -200,9 +273,22 @@ export default {
         await this.orderStore.deleteOrder(this.selectedItems.join(","));
         this.selectedItems.length = 0;
       } else {
-        await this.orderStore.deleteOrder(order.id)
+        await this.orderStore.deleteOrder(order.id);
       }
       this.loadOrders();
+    },
+    async sortColumn(column) {
+      if (this.sortDirections[column] === "asc") {
+        this.sortDirections[column] = "desc";
+      } else {
+        this.sortDirections[column] = "asc";
+      }
+      this.sortHeader = column;
+      this.sortDirection = this.sortDirections[column];
+
+      await this.orderStore.sortOrders(this.sortHeader, this.sortDirection);
+
+      this.displayedOrders = this.orderStore.orders;
     },
   },
 };

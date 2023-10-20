@@ -8,7 +8,7 @@ import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
 import timeStampFormat from "../utils/timeStampUtility.js";
 
-// @desc getting all products
+// @desc getting all products and sorting them according to came data
 // route GET /api/products/all
 // @access public
 
@@ -20,26 +20,24 @@ const getProducts = asyncHandler(async (req, res) => {
     const getColumnValue = (product, column) => {
       switch (column) {
         case "name":
-          return product.name;
         case "price":
-          return product.price;
         case "stock":
-          return product.stock;
         case "sku":
-          return product.sku;
+          return product[column];
         default:
           return "";
       }
     };
-    products.sort((a, b) =>
-      sortOrder === "asc"
-        ? getColumnValue(a, sortHeader).localeCompare(
-            getColumnValue(b, sortHeader)
-          )
-        : getColumnValue(b, sortHeader).localeCompare(
-            getColumnValue(a, sortHeader)
-          )
-    );
+    products.sort((a, b) => {
+      const valueA = getColumnValue(a, sortHeader);
+      const valueB = getColumnValue(b, sortHeader);
+
+      if (sortOrder === "asc") {
+        return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
+      } else {
+        return valueB < valueA ? -1 : valueB > valueA ? 1 : 0;
+      }
+    });
   }
   if (!products) {
     res.status(404).json({ error: "Product not found" });

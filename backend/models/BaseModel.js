@@ -1,5 +1,6 @@
 import fs from "fs";
 import util from "util";
+import eventEmitter from "../modules/EventEmmiter.js";
 
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
@@ -45,6 +46,8 @@ class BaseModel {
       records.push(data);
 
       await writeFileAsync(this.dataPath, JSON.stringify(records, null, 2));
+      this.emitEntityCreated(data);
+
       return data;
     } catch (err) {
       throw err;
@@ -53,23 +56,19 @@ class BaseModel {
 
   async update(id, newData) {
     try {
-      const existingRecord = await this.getById(id);
-      const updatedRecord = { ...existingRecord, ...newData };
-
       const dataFile = await readFileAsync(this.dataPath);
-      const records = JSON.parse(dataFile);
-      const updatedRecords = records.map((record) => {
-        if (record.id === id) {
-          return updatedRecord;
+      let records = JSON.parse(dataFile);
+      for (let i = 0; i < records.length; i++) {
+        if (records[i].id === id) {
+          records[i] = { ...records[i], ...newData };
+          break;
         }
-        return record;
-      });
+      }
 
-      await writeFileAsync(
-        this.dataPath,
-        JSON.stringify(updatedRecords, null, 2)
-      );
-      return updatedRecord;
+      await writeFileAsync(this.dataPath, JSON.stringify(records, null, 2));
+      this.emitEntityUpdated(newData);
+
+      return records.find((record) => record.id === id);
     } catch (err) {
       throw err;
     }
@@ -96,10 +95,31 @@ class BaseModel {
         this.dataPath,
         JSON.stringify(updatedRecords, null, 2)
       );
+      this.emitEntityDeleted(ids);
+
       return ids; // Return the deleted record if needed
     } catch (err) {
       throw err;
     }
+  }
+
+  emitEntityCreated(entity) {
+    eventEmitter.emit("EntityCreated", {
+      entityName: this.constructor.name,
+      entityData: entity,
+    });
+  }
+  async emitEntityUpdated(entity) {
+    eventEmitter.emit("EntityUpdated", {
+      entityName: this.constructor.name,
+      entityData: entity,
+    });
+  }
+  emitEntityDeleted(entity) {
+    eventEmitter.emit("EntityDeleted", {
+      entityName: this.constructor.name,
+      entityData: entity,
+    });
   }
 }
 

@@ -3,6 +3,41 @@
     <!-- mobile version -->
     <div class="bg-white md:hidden">
       <div class="space-y-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="sticky-header" :style="{ top: stickyHeaderTop }">
+          <div class="px-6 py-4 flex items-center justify-between">
+            <div class="text-gray-600">{{ selectedCount }} selected</div>
+            <button
+              @click="isMenuOpen = !isMenuOpen"
+              class="px-3 py-1 text-white bg-gray-700 hover:bg-gray-800 rounded-md text-sm"
+            >
+              Button Actions
+            </button>
+            <div
+              v-show="isMenuOpen"
+              class="dropdown-menu right-0 absolute mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-20"
+            >
+              <ul>
+                <li>
+                  <button
+                    @click="deleteSelected"
+                    class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                  >
+                    Delete Selected
+                  </button>
+                </li>
+                <li>
+                  <a
+                    :href="exportSelected"
+                    class="text-left block w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    :class="disabledClass"
+                  >
+                    Export Selected as Excel
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
         <!-- Loop Through Items -->
         <div
           v-for="(item, i) in items"
@@ -15,9 +50,9 @@
             </div>
 
             <div class="mt-2">
-              <slot name="mobile-card-headers"></slot>
-              <!-- <div class="text-gray-900">{{ item[itemProps[index]] }}</div> -->
+              <slot name="mobile-card-headers" :item="item"></slot>
             </div>
+
             <slot name="mobile-card-buttons" :item="item"></slot>
           </div>
         </div>
@@ -27,16 +62,14 @@
     <!-- Desktop version -->
     <div class="hidden md:block">
       <!-- Panel with options -->
-
+      <!-- if clicked outside the panel, it closes -->
+      <div
+        v-show="isMenuOpen"
+        @click="isMenuOpen = false"
+        class="fixed inset-0 z-10"
+      ></div>
       <div class="flex items-center justify-between mb-4">
         <div class="text-gray-700">{{ selectedCount }} selected</div>
-
-        <!-- if clicked outside the panel, it closes -->
-        <div
-          v-show="isMenuOpen"
-          @click="isMenuOpen = false"
-          class="fixed inset-0 z-10"
-        ></div>
 
         <div class="relative">
           <button
@@ -59,7 +92,6 @@
           </button>
           <ul
             v-show="isMenuOpen"
-            @click.away="isMenuOpen = false"
             class="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
           >
             <li>
@@ -77,7 +109,7 @@
                 :class="disabledClass"
               >
                 Export Selected as Excel
-              </a>
+            </a>
             </li>
           </ul>
         </div>
@@ -112,6 +144,7 @@ export default {
   data() {
     return {
       isMenuOpen: false,
+      stickyHeaderTop: 0,
     };
   },
   props: {
@@ -125,18 +158,27 @@ export default {
       required: true,
       default: [],
     },
-    selectedCount: {
-      type: Number,
-      default: 0,
-    },
     exportSelected: {
       type: String,
       default: "",
+    },
+
+    selectedCount: {
+      type: Number,
+      default: 0,
     },
     disabled: {
       type: Boolean,
       default: false,
     },
+  },
+  mounted() {
+    // Listen for the scroll event
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  beforeDestroy() {
+    // Clean up the event listener when the component is destroyed
+    window.removeEventListener("scroll", this.handleScroll);
   },
   computed: {
     disabledClass() {
@@ -150,12 +192,28 @@ export default {
   methods: {
     deleteSelected(item) {
       this.$emit("delete-item", item);
+      this.isMenuOpen = false;
+    },
+
+    handleScroll() {
+      const scrollY = window.scrollY;
+      // Adjust the top value as needed, e.g., to avoid covering the navbar
+      this.stickyButtonTop = scrollY > 100 ? "0" : "100px";
     },
   },
 };
 </script>
 
 <style>
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1; /* Ensure it's above the content */
+}
+.dropdown-menu {
+  top: 100%; /* Position the dropdown below the button */
+}
 .disabled-link {
   pointer-events: none; /* Disable pointer events */
   color: #ccc; /* Apply a gray color to indicate it's disabled */

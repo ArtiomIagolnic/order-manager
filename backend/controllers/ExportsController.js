@@ -8,11 +8,37 @@ import { fileURLToPath } from "url";
 // @access public
 
 const getExports = asyncHandler(async (req, res) => {
-  const exports = await Export.getAll();
-  if (!exports) {
+  const { sortHeader, sortOrder } = req.query;
+
+  const exportsData = await Export.getAll();
+
+  if (sortHeader && sortOrder) {
+    const getColumnValue = (exportData, column) => {
+      switch (column) {
+        case "timestamp":
+        case "sourceTable":
+        case "date":
+        case "exportedFile":
+          return exportData[column];
+        default:
+          return "";
+      }
+    };
+    exportsData.sort((a, b) => {
+      const valueA = getColumnValue(a, sortHeader);
+      const valueB = getColumnValue(b, sortHeader);
+
+      if (sortOrder === "asc") {
+        return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
+      } else {
+        return valueB < valueA ? -1 : valueB > valueA ? 1 : 0;
+      }
+    });
+  }
+  if (!exportsData) {
     res.status(404).json({ error: "Export not found" });
   }
-  res.status(200).json(exports);
+  res.status(200).json(exportsData);
 });
 
 // @desc delete customer

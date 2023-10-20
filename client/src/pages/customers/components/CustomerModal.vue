@@ -33,30 +33,34 @@
         <div>
           <label for="age" class="text-gray-700">Age:</label>
           <input
-            type="text"
+            type="number"
             id="age"
+            min="14"
+            max="99"
             v-model="customer.age"
             required
             class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
           />
         </div>
         <div>
-          <label for="shippAdress" class="text-gray-700"
+          <label for="shippingAdress" class="text-gray-700"
             >Shipping Adress:</label
           >
           <input
             type="text"
-            id="shippAdress"
+            id="shippingAdress"
             v-model="customer.shippingAdress"
             required
             class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
           />
         </div>
         <div>
-          <label for="billAdress" class="text-gray-700">Billing Adress:</label>
+          <label for="billingAdress" class="text-gray-700"
+            >Billing Adress:</label
+          >
           <input
             type="text"
-            id="billAdress"
+            id="billingAdress"
             v-model="customer.billingAdress"
             required
             class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"

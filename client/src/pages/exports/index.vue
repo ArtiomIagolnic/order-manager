@@ -19,6 +19,24 @@
     :disabled="true"
     @delete-item="deleteExport"
   >
+    <template #mobile-card-headers="item">
+   
+      <input
+        type="checkbox"
+        class="form-checkbox h-6 w-6 text-blue-400 transition duration-150 ease-in-out"
+        v-model="selectedItems"
+        :value="item.item.id"
+      />
+
+      <div class="text-gray-700 font-extrabold">Date:</div>
+      <div class="text-gray-900">{{ item.item.timestamp }}</div>
+
+      <div class="text-gray-700 font-extrabold">Source table:</div>
+      <div class="text-gray-900">{{ item.item.sourceTable }}</div>
+
+      <div class="text-gray-700 font-extrabold">File:</div>
+      <div class="text-gray-900">{{ item.item.exportedFile }}</div>
+    </template>
     <template #mobile-card-buttons="{ item }">
       <div class="mt-3 space-x-4 flex justify-start">
         <button
@@ -30,6 +48,36 @@
       </div>
     </template>
 
+    <template #table-header>
+      <th class="p-3 text-left">Nr</th>
+      <th class="p-3 text-left">
+        Date
+        <SortIconsComponent
+          column="timestamp"
+          :sortDirections="sortDirections['timestamp']"
+          @sort-column="sortColumn('timestamp')"
+        />
+      </th>
+      <th class="p-3 text-left">
+        Source table
+        <SortIconsComponent
+          column="sourceTable"
+          :sortDirections="sortDirections['sourceTable']"
+          @sort-column="sortColumn('sourceTable')"
+        />
+      </th>
+
+      <th class="p-3 text-left">
+        Exported File
+        <SortIconsComponent
+          column="exportedFile"
+          :sortDirections="sortDirections['exportedFile']"
+          @sort-column="sortColumn('exportedFile')"
+        />
+      </th>
+
+      <th class="p-3 text-center">Actions</th>
+    </template>
     <template #body-item="{ item, index }">
       <tr class="flex-col flex-no wrap mb-0">
         <td class="border-grey-light border hover:bg-gray-100 p-3">
@@ -37,8 +85,9 @@
             :value="item.id"
             v-model="selectedItems"
             type="checkbox"
-            class="form-checkbox text-blue-400 h-5 w-5"
+            class="form-checkbox form-checkbox h-6 w-6 text-blue-400 transition duration-150 ease-in-out"
           />
+
           <span class="ml-2">{{ index + 1 }}</span>
         </td>
         <td class="border-grey-light border hover:bg-gray-100 p-3">
@@ -67,7 +116,7 @@
     No export files exported yet
   </p>
   <!-- Load More -->
-  <div class="flex justify-end">
+  <div class="sm:flex sm:justify-end mb-5">
     <button
       v-if="canLoadMore"
       @click="loadMoreExports"
@@ -81,10 +130,12 @@
 import { useExportStore } from "@/store/export.js";
 import SearchComponent from "@/components/SearchComponent.vue";
 import TableComponent from "@/components/TableComponent.vue";
+import SortIconsComponent from "@/components/SortIconsComponent.vue";
 export default {
   components: {
     SearchComponent,
     TableComponent,
+    SortIconsComponent,
   },
   data() {
     return {
@@ -96,6 +147,12 @@ export default {
       loadedExportsCount: 0,
       showNoDataMessage: false,
       selectedItems: [],
+      sortDirections: {
+        timestamp: "desc",
+        sourceTable: "desc",
+        exportedFile: "desc",
+      },
+      sortHeader: "",
     };
   },
   created() {
@@ -138,6 +195,19 @@ export default {
         await this.exportStore.deleteExport(item.id);
       }
       this.loadExports();
+    },
+    async sortColumn(column) {
+      if (this.sortDirections[column] === "asc") {
+        this.sortDirections[column] = "desc";
+      } else {
+        this.sortDirections[column] = "asc";
+      }
+      this.sortHeader = column;
+      this.sortDirection = this.sortDirections[column];
+
+      await this.exportStore.sortExports(this.sortHeader, this.sortDirection);
+
+      this.displayedExports = this.exportStore.excelExports;
     },
   },
 };

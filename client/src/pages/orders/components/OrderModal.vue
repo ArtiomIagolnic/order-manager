@@ -73,7 +73,7 @@
             v-model="quantityToAdd"
             required
             class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-            min="0"
+            min="1"
             :max="selectedProductStock"
           />
           <p class="text-gray-700">Total Price: €{{ totalProductPrice }}</p>

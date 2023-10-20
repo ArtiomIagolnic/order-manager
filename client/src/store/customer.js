@@ -88,18 +88,48 @@ export const useCustomerStore = defineStore("customer", {
     },
     async deleteCustomer(customer) {
       try {
-        await axios.delete(
-          `http://localhost:8000/api/customers/delete/${customer}`,
-          customer
-        );
-        useNotificationStore().addNotification({
-          type: "success",
-          message: "Customer was deleted successfully",
-        });
+        if (customer) {
+          await axios.delete(
+            `http://localhost:8000/api/customers/delete/${customer}`,
+            customer
+          );
+          useNotificationStore().addNotification({
+            type: "success",
+            message: "Customer was deleted successfully",
+          });
+        } else {
+          useNotificationStore().addNotification({
+            type: "warning",
+            message: "You didn't select any customer",
+          });
+        }
       } catch (error) {
         useNotificationStore().addNotification({
           type: "failed",
           message: `An error occurred while deleting customer: ${error.message}`,
+        });
+      }
+    },
+    async exportSelected(customer) {
+      try {
+        if (customer) {
+          await axios.get(
+            "http://localhost:8000/api/customers/export/" + customer
+          );
+          useNotificationStore().addNotification({
+            type: "success",
+            message: "Customer was exported successfully",
+          });
+        } else {
+          useNotificationStore().addNotification({
+            type: "warning",
+            message: "You didn't select any customer",
+          });
+        }
+      } catch (error) {
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while exporting customer: ${error.message}`,
         });
       }
     },

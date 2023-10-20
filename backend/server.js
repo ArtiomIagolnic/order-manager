@@ -5,6 +5,8 @@ import bodyParser from "body-parser";
 import { fileURLToPath } from "url"; // Import the 'fileURLToPath' function
 import path from "path";
 
+import eventListeners from "./modules/EventListeners.js";
+
 dotenv.config();
 
 import { notFound } from "./middleware/errorMiddleware.js";
@@ -15,6 +17,7 @@ import customerRoutes from "./routes/customerRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import exportRoutes from "./routes/exportRoutes.js";
+import logsRoutes from "./routes/logsRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url); // Get the current module's filename
 const __dirname = path.dirname(__filename); // Get the directory name from the filename
@@ -24,6 +27,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+eventListeners.entityUpdatedListener();
+eventListeners.entityCreatedListener();
+eventListeners.entityDeletedListener();
+
 // Serve static files from the "client/dist" directory
 app.use(express.static(path.join(__dirname, "../client/dist"))); // Go up one level to access the client folder
 
@@ -31,6 +38,7 @@ app.use("/api/customers", customerRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/exports", exportRoutes);
+app.use("/api/logs", logsRoutes);
 
 // Redirect all other routes to the Vue.js application
 app.get("*", (req, res) => {

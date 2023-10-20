@@ -36,6 +36,25 @@
     @update-item="openModal"
     @delete-item="deleteProduct"
   >
+    <template #mobile-card-headers="item">
+      <input
+        type="checkbox"
+        class="form-checkbox h-6 w-6 text-blue-400 transition duration-150 ease-in-out"
+        v-model="selectedItems"
+        :value="item.item.id"
+      />
+      <div class="text-gray-700 font-extrabold">Name:</div>
+      <div class="text-gray-900">{{ item.item.name }}</div>
+
+      <div class="text-gray-700 font-extrabold">Price:</div>
+      <div class="text-gray-900">{{ item.item.price }}</div>
+
+      <div class="text-gray-700 font-extrabold">Stock:</div>
+      <div class="text-gray-900">{{ item.item.stock }}</div>
+
+      <div class="text-gray-700 font-extrabold">SKU:</div>
+      <div class="text-gray-900">{{ item.item.sku }}</div>
+    </template>
     <template #mobile-card-buttons="{ item }">
       <div class="mt-3 space-x-4 flex justify-start">
         <button
@@ -50,6 +69,12 @@
         >
           Delete
         </button>
+        <a
+          :href="`http://localhost:8000/api/products/export/${item.id}`"
+          class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer"
+        >
+          Export
+        </a>
       </div>
     </template>
 
@@ -143,7 +168,7 @@
   </p>
 
   <!-- Load More -->
-  <div class="flex justify-end">
+  <div class="sm:flex sm:justify-end mb-5">
     <button
       v-if="canLoadMore"
       @click="loadMoreProducts"
@@ -190,6 +215,10 @@ export default {
       sortHeader: "",
     };
   },
+
+  created() {
+    this.loadProducts();
+  },
   watch: {
     selectedItems: {
       handler: function () {
@@ -200,9 +229,7 @@ export default {
       deep: true,
     },
   },
-  created() {
-    this.loadProducts();
-  },
+
   computed: {
     productStore() {
       return useProductStore();
@@ -236,9 +263,9 @@ export default {
         await this.productStore.deleteProduct(this.selectedItems.join(","));
         this.selectedItems.length = 0;
       } else {
-        await this.productStore.deleteProduct(product);
+        await this.productStore.deleteProduct(product.id);
       }
-      await this.loadProducts();
+      this.loadProducts();
     },
     updateDisplayedProducts(filteredProducts) {
       this.displayedProducts = filteredProducts;
@@ -255,6 +282,7 @@ export default {
     closeModal() {
       this.openProductModal = false;
     },
+
     async sortColumn(column) {
       if (this.sortDirections[column] === "asc") {
         this.sortDirections[column] = "desc";

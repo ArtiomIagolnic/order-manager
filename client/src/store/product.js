@@ -32,7 +32,7 @@ export const useProductStore = defineStore("product", {
         });
       }
     },
-    async sortProducts(sortHeader,sortOrder){
+    async sortProducts(sortHeader, sortOrder) {
       try {
         const response = await axios.get(
           `http://localhost:8000/api/products/all?sortHeader=${sortHeader}&sortOrder=${sortOrder}`
@@ -66,14 +66,22 @@ export const useProductStore = defineStore("product", {
     },
     async deleteProduct(product) {
       try {
-        await axios.delete(
-          `http://localhost:8000/api/products/delete/${product}`,
-          product
-        );
-        useNotificationStore().addNotification({
-          type: "success",
-          message: "Product was deleted successfully",
-        });
+        console.log(product);
+        if (product) {
+          await axios.delete(
+            `http://localhost:8000/api/products/delete/${product}`,
+            product
+          );
+          useNotificationStore().addNotification({
+            type: "success",
+            message: "Product was deleted successfully",
+          });
+        } else {
+          useNotificationStore().addNotification({
+            type: "warning",
+            message: "You didn't select any product",
+          });
+        }
       } catch (error) {
         useNotificationStore().addNotification({
           type: "failed",
@@ -95,30 +103,6 @@ export const useProductStore = defineStore("product", {
         useNotificationStore().addNotification({
           type: "failed",
           message: `An error occurred while updating product: ${error.message}`,
-        });
-      }
-    },
-    async exportProduct(products) {
-      try {
-        if (products.length === 0) {
-          useNotificationStore().addNotification({
-            type: "warning",
-            message: "Nothing selected",
-          });
-        } else {
-          await axios.post(
-            `http://localhost:8000/api/products/export`,
-            products
-          );
-          useNotificationStore().addNotification({
-            type: "success",
-            message: "Products were exported successfully",
-          });
-        }
-      } catch (error) {
-        useNotificationStore().addNotification({
-          type: "failed",
-          message: `An error occurred while exporting product: ${error.message}`,
         });
       }
     },

@@ -35,13 +35,45 @@
     @update-item="openModal"
     @delete-item="deleteCustomer"
   >
-    <template #mobile-card-headers>
+    <template #mobile-card-headers="item">
+      <input
+        type="checkbox"
+        class="form-checkbox h-6 w-6 text-blue-400 transition duration-150 ease-in-out"
+        v-model="selectedItems"
+        :value="item.item.id"
+      />
       <div class="text-gray-700 font-extrabold">First name:</div>
+      <div class="text-gray-900">{{ item.item.firstName }}</div>
       <div class="text-gray-700 font-extrabold">Last name:</div>
+      <div class="text-gray-900">{{ item.item.lastName }}</div>
       <div class="text-gray-700 font-extrabold">Age:</div>
+      <div class="text-gray-900">{{ item.item.age }}</div>
       <div class="text-gray-700 font-extrabold">Billing Address:</div>
+      <div class="text-gray-900">{{ item.item.billingAdress }}</div>
     </template>
-    
+    <template #mobile-card-buttons="{ item }">
+      <div class="mt-3 space-x-4 flex justify-start">
+        <button
+          @click="openModal(item)"
+          class="text-blue-600 hover:text-blue-800 hover:font-medium cursor-pointer"
+        >
+          Update
+        </button>
+        <button
+          @click="deleteCustomer(item)"
+          class="text-red-600 hover:text-red-800 hover:font-medium cursor-pointer"
+        >
+          Delete
+        </button>
+        <a
+          :href="`http://localhost:8000/api/customers/export/${item.id}`"
+          class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer"
+        >
+          Export
+        </a>
+      </div>
+    </template>
+
     <template #table-header>
       <th class="p-3 text-left">Nr</th>
       <th class="p-3 text-left">
@@ -77,22 +109,6 @@
         />
       </th>
       <th class="p-3 text-center">Actions</th>
-    </template>
-    <template #mobile-card-buttons="{ item }">
-      <div class="mt-3 space-x-4 flex justify-start">
-        <button
-          @click="openModal(item)"
-          class="text-blue-600 hover:text-blue-800 hover:font-medium cursor-pointer"
-        >
-          Update
-        </button>
-        <button
-          @click="deleteCustomer(item)"
-          class="text-red-600 hover:text-red-800 hover:font-medium cursor-pointer"
-        >
-          Delete
-        </button>
-      </div>
     </template>
 
     <template #body-item="{ item, index }">
@@ -149,7 +165,7 @@
   </p>
 
   <!-- Load More -->
-  <div class="sm:flex sm:justify-end">
+  <div class="sm:flex sm:justify-end mb-5">
     <button
       v-if="canLoadMore"
       @click="loadMoreCustomers"
@@ -195,6 +211,9 @@ export default {
       sortHeader: "",
     };
   },
+  created() {
+    this.loadCustomers();
+  },
   watch: {
     selectedItems: {
       handler: function () {
@@ -205,9 +224,7 @@ export default {
       deep: true,
     },
   },
-  created() {
-    this.loadCustomers();
-  },
+
   computed: {
     customerStore() {
       return useCustomerStore();
@@ -258,7 +275,6 @@ export default {
       } else {
         await this.customerStore.deleteCustomer(customer.id);
       }
-      // After deleting, load customers again
       this.loadCustomers();
     },
     async sortColumn(column) {
