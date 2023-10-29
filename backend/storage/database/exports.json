@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "id": "e3a6ea1a-064f-47a2-b16c-b3777171b96c",
+    "timestamp": "2023-10-29  18:52",
+    "sourceTable": "orders",
+    "exportedFile": "orders_1698601922680.xlsx"
+  }
+]

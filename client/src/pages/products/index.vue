@@ -33,6 +33,7 @@
     @update-item="openModal"
     @delete-item="deleteProduct"
   >
+    <!-- Mobile cards -->
     <template #mobile-sort-menu>
       <div class="w-full text-left px-4 py-2 text-gray-800">
         <SortIconsComponent
@@ -113,6 +114,7 @@
       </div>
     </template>
 
+    <!-- Desktop table -->
     <template #table-header>
       <div class="w-8 text-left">Nr</div>
       <div class="text-left flex-1">
