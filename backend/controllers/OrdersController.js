@@ -18,9 +18,12 @@ const getOrders = asyncHandler(async (req, res) => {
 
   if (sortHeader && sortOrder) {
     const getColumnValue = (order, column) => {
+      if (column === "customer") {
+        // Extract the customer name from the order object
+        return order.customer.name;
+      }
       switch (column) {
         case "displayedId":
-        case "customer":
         case "date":
         case "totalAmount":
           return order[column];
@@ -61,6 +64,7 @@ const addOrder = asyncHandler(async (req, res) => {
 const updateOrder = asyncHandler(async (req, res) => {
   const orderId = req.body.id;
   const orderToUpdate = req.body;
+
   const updatedOrder = await Order.update(orderId, orderToUpdate);
   res.status(200).json(updatedOrder);
 });
@@ -100,12 +104,16 @@ const exportOrder = asyncHandler(async (req, res) => {
         }
         row[headers.indexOf("products")] = formattedProducts.trim();
       }
+      if (headers.includes("customer")) {
+        row[headers.indexOf("customer")] =
+          `Name: ${order.customer.name}\nId: ${order.customer.id}`.trim();
+      }
     };
     // set the columns width
     const columnWidths = {
-      customer: 20,
+      customer: 40,
       date: 20,
-      products: 50,
+      products: 55,
       totalAmount: 20,
       displayedId: 20,
       id: 40,

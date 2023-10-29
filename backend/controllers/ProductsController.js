@@ -70,6 +70,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 // @access public
 const deleteProduct = asyncHandler(async (req, res) => {
   const productId = req.params.products.split(",");
+  console.log(productId)
   const deletedProduct = await Product.delete(productId);
   res.status(204).send(deletedProduct);
 });

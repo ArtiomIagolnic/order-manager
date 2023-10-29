@@ -14,13 +14,6 @@
     "id": "454dedbd-04e2-4ca0-a763-73bd690dec1d"
   },
   {
-    "name": "Headphones",
-    "price": 49.99,
-    "stock": 150,
-    "sku": "hds5943",
-    "id": "d5b7e03b-8739-43c9-97f6-6d62b8f8e34d"
-  },
-  {
     "name": "Laptop",
     "price": 999.99,
     "stock": 75,
@@ -117,19 +110,5 @@
     "stock": 180,
     "sku": "snk6250",
     "id": "6a7f2e6d-7f7c-4b3a-b2e6-d7f7c4b3a9c8"
-  },
-  {
-    "name": "Backpack",
-    "price": 39.99,
-    "stock": 120,
-    "sku": "bck3091",
-    "id": "4e3e7a9f-9d87-42e5-b3e7-a9f9d8742e5b"
-  },
-  {
-    "name": "Printer",
-    "price": 129.99,
-    "stock": 65,
-    "sku": "prt8347",
-    "id": "0f9e4a8e-7c8f-45d3-9e4a-8e7c8f45d3e7"
   }
 ]

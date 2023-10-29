@@ -14,7 +14,7 @@
           <label for="customer" class="text-gray-700">Chose a Customer</label>
           <select
             id="customer"
-            v-model="order.customer"
+            v-model="order.customer.id"
             required
             class="block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
           >
@@ -22,7 +22,7 @@
             <option
               v-for="customer in customers"
               :key="customer.id"
-              :value="customer.firstName + ' ' + customer.lastName"
+              :value="customer.id"
             >
               {{ customer.firstName + " " + customer.lastName }}
             </option>
@@ -157,7 +157,7 @@ export default {
         return this.updatedOrder;
       } else {
         return {
-          customer: "",
+          customer: {},
           date: "",
           products: [],
         };
@@ -242,12 +242,26 @@ export default {
         .toFixed(2);
     },
     async saveOrder() {
+      const selectedCustomer = this.customers.find(
+        (customer) => customer.id === this.order.customer.id
+      );
       if (Object.keys(this.updatedOrder).length > 0) {
+        if (selectedCustomer) {
+          this.order.customer.name = `${selectedCustomer.firstName} ${selectedCustomer.lastName}`;
+        }
         await this.orderStore.updateOrder(this.order);
         this.$emit("orderUpdated");
       } else {
-        await this.orderStore.addOrder(this.order);
-        this.$emit("orderAdded");
+        if (selectedCustomer) {
+          this.order.customer = {
+            id: selectedCustomer.id,
+            name: `${selectedCustomer.firstName} ${selectedCustomer.lastName}`,
+          };
+          await this.orderStore.addOrder(this.order);
+          this.$emit("orderAdded");
+        } else {
+          console.error("Invalid customer selected");
+        }
       }
       this.$emit("close-modal");
     },

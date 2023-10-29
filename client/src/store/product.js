@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import { useNotificationStore } from "@/store/notifications";
+import { useOrderStore } from "./order";
 import axios from "axios";
 
 export const useProductStore = defineStore("product", {
@@ -66,16 +67,35 @@ export const useProductStore = defineStore("product", {
     },
     async deleteProduct(product) {
       try {
-        console.log(product);
         if (product) {
-          await axios.delete(
-            `http://localhost:8000/api/products/delete/${product}`,
-            product
+          const existingOrders = await useOrderStore().getOrders();
+          const productsInOrders = [].concat(
+            ...existingOrders.map((order) =>
+              order.products.map((product) => product.id)
+            )
           );
-          useNotificationStore().addNotification({
-            type: "success",
-            message: "Product was deleted successfully",
-          });
+
+          const productsToDelete = Array.isArray(product) ? product : [product];
+          const productsInOrdersSet = new Set(productsInOrders);
+          const commonProducts = productsToDelete.filter((productId) =>
+            productsInOrdersSet.has(productId)
+          );
+          if (commonProducts.length > 0) {
+            useNotificationStore().addNotification({
+              type: "warning",
+              message:
+                "One or more products are already in orders, so you can't delete them.",
+            });
+          } else {
+            await axios.delete(
+              `http://localhost:8000/api/products/delete/${product}`,
+              product
+            );
+            useNotificationStore().addNotification({
+              type: "success",
+              message: "Product(s) were deleted successfully",
+            });
+          }
         } else {
           useNotificationStore().addNotification({
             type: "warning",

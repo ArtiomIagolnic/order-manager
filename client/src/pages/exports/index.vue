@@ -2,7 +2,6 @@
   <!-- Search Field -->
   <SearchComponent
     @filtered-results="updateDisplayedExports"
-    :store-getter="exportStore.getExports"
     :place-holder="'Search exports'"
   />
 
@@ -13,14 +12,40 @@
   <!-- Displayed Table -->
   <TableComponent
     :selected-count="selectedCount"
-    :headers="tableHeaders"
-    :item-props="itemProps"
     :items="displayedExports"
     :disabled="true"
     @delete-item="deleteExport"
   >
+    <template #mobile-sort-menu>
+      <div class="w-full text-left px-4 py-2 text-gray-800">
+        <SortIconsComponent
+          column="timestamp"
+          :sortDirections="sortDirections['timestamp']"
+          @sort-column="sortColumn('timestamp')"
+        >
+          <template #sort-button> Date </template>
+        </SortIconsComponent>
+      </div>
+      <div class="w-full text-left px-4 py-2 text-gray-800">
+        <SortIconsComponent
+          column="sourceTable"
+          :sortDirections="sortDirections['sourceTable']"
+          @sort-column="sortColumn('sourceTable')"
+        >
+          <template #sort-button>Source table</template>
+        </SortIconsComponent>
+      </div>
+      <div class="w-full text-left px-4 py-2 text-gray-800">
+        <SortIconsComponent
+          column="exportedFile"
+          :sortDirections="sortDirections['exportedFile']"
+          @sort-column="sortColumn('exportedFile')"
+        >
+          <template #sort-button> Exported file</template>
+        </SortIconsComponent>
+      </div>
+    </template>
     <template #mobile-card-headers="item">
-   
       <input
         type="checkbox"
         class="form-checkbox h-6 w-6 text-blue-400 transition duration-150 ease-in-out"
@@ -49,38 +74,41 @@
     </template>
 
     <template #table-header>
-      <th class="p-3 text-left">Nr</th>
-      <th class="p-3 text-left">
-        Date
+      <div class="w-8 text-left">Nr</div>
+      <div class="text-left flex-1">
         <SortIconsComponent
           column="timestamp"
           :sortDirections="sortDirections['timestamp']"
           @sort-column="sortColumn('timestamp')"
-        />
-      </th>
-      <th class="p-3 text-left">
-        Source table
+        >
+          <template #sort-button> Date </template>
+        </SortIconsComponent>
+      </div>
+      <div class="text-left flex-1">
         <SortIconsComponent
           column="sourceTable"
           :sortDirections="sortDirections['sourceTable']"
           @sort-column="sortColumn('sourceTable')"
-        />
-      </th>
+        >
+          <template #sort-button> Source table </template>
+        </SortIconsComponent>
+      </div>
 
-      <th class="p-3 text-left">
-        Exported File
+      <div class="text-left flex-1">
         <SortIconsComponent
           column="exportedFile"
           :sortDirections="sortDirections['exportedFile']"
           @sort-column="sortColumn('exportedFile')"
-        />
-      </th>
+        >
+          <template #sort-button> Exported File </template>
+        </SortIconsComponent>
+      </div>
 
-      <th class="p-3 text-center">Actions</th>
+      <div class="text-center flex-1">Actions</div>
     </template>
     <template #body-item="{ item, index }">
-      <tr class="flex-col flex-no wrap mb-0">
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+      <div class="flex items-center p-3 border-b hover:bg-gray-100">
+        <div class="w-8 flex items-center">
           <input
             :value="item.id"
             v-model="selectedItems"
@@ -88,28 +116,26 @@
             class="form-checkbox form-checkbox h-6 w-6 text-blue-400 transition duration-150 ease-in-out"
           />
 
-          <span class="ml-2">{{ index + 1 }}</span>
-        </td>
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+          <span class="ml-1">{{ index + 1 }}</span>
+        </div>
+        <div class="flex-1 p-3">
           {{ item.timestamp }}
-        </td>
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+        </div>
+        <div class="flex-1 p-3">
           {{ item.sourceTable }}
-        </td>
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+        </div>
+        <div class="flex-1 p-3">
           {{ item.exportedFile }}
-        </td>
-        <td
-          class="border-grey-light border hover:bg-gray-100 py-6 flex justify-around"
-        >
+        </div>
+        <div class="flex-1 flex justify-around">
           <button
             @click="deleteExport(item)"
             class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer"
           >
             Delete
           </button>
-        </td>
-      </tr>
+        </div>
+      </div>
     </template>
   </TableComponent>
   <p v-if="exports.length === 0" class="text-red-500 text-center mt-4">
@@ -139,13 +165,10 @@ export default {
   },
   data() {
     return {
-      tableHeaders: ["Date", "Source table", "Exported file", "Ations"],
-      itemProps: ["timestamp", "sourceTable", "exportedFile"],
       exports: [],
       pageSize: 10,
       displayedExports: [],
       loadedExportsCount: 0,
-      showNoDataMessage: false,
       selectedItems: [],
       sortDirections: {
         timestamp: "desc",
@@ -153,6 +176,7 @@ export default {
         exportedFile: "desc",
       },
       sortHeader: "",
+      searchActive: false,
     };
   },
   created() {
@@ -163,10 +187,15 @@ export default {
       return useExportStore();
     },
     canLoadMore() {
-      return this.loadedExportsCount < this.exports.length;
+      return (
+        this.loadedExportsCount < this.exports.length && !this.searchActive
+      );
     },
     selectedCount() {
       return this.selectedItems.length;
+    },
+    showNoDataMessage() {
+      return this.displayedExports.length === 0;
     },
   },
   methods: {
@@ -183,9 +212,15 @@ export default {
       this.displayedExports = [...this.displayedExports, ...remainingExports];
       this.loadedExportsCount += remainingExports.length;
     },
-    updateDisplayedExports(filteredExports) {
-      this.displayedExports = filteredExports;
-      this.showNoDataMessage = this.displayedExports.length === 0;
+    async updateDisplayedExports(searchFilter) {
+      if (searchFilter) {
+        const searchValue = searchFilter.toLowerCase();
+        this.displayedExports = await this.exportStore.getExports(searchValue);
+        this.searchActive = true;
+      } else {
+        this.loadExports();
+        this.searchActive = false;
+      }
     },
     async deleteExport(item) {
       if (this.selectedItems.length > 0) {

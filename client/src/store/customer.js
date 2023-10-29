@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import { useNotificationStore } from "@/store/notifications";
+import { useOrderStore } from "./order";
 import axios from "axios";
 
 export const useCustomerStore = defineStore("customer", {
@@ -10,28 +11,31 @@ export const useCustomerStore = defineStore("customer", {
 
   actions: {
     async getCustomers(filters) {
-      if (!filters) {
-        try {
-          const response = await axios.get(
-            "http://localhost:8000/api/customers/all"
-          );
-          return (this.customers = response.data || []);
-        } catch (error) {
-          useNotificationStore().addNotification({
-            type: "failed",
-            message: `An error occurred while getting customers: ${error.message}`,
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/customers/all"
+        );
+        this.customers = response.data || [];
+
+        if (filters) {
+          const searchValue = filters.toLowerCase().trim();
+
+          this.customers = this.customers.filter((customer) => {
+            const { firstName, lastName } = customer;
+
+            return (
+              firstName.toString().toLowerCase().includes(searchValue) ||
+              lastName.toString().toLowerCase().includes(searchValue)
+            );
           });
         }
-      } else {
-        return this.customers.filter((customer) => {
-          const searchValue = filters.toLowerCase().trim();
-          const { firstName, lastName } = customer;
-
-          return (
-            firstName.toString().toLowerCase().includes(searchValue) ||
-            lastName.toString().toLowerCase().includes(searchValue)
-          );
+        return this.customers;
+      } catch (error) {
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while getting customers: ${error.message}`,
         });
+        return [];
       }
     },
     async sortCustomers(sortHeader, sortOrder) {
@@ -89,14 +93,36 @@ export const useCustomerStore = defineStore("customer", {
     async deleteCustomer(customer) {
       try {
         if (customer) {
-          await axios.delete(
-            `http://localhost:8000/api/customers/delete/${customer}`,
-            customer
+          const existingOrders = await useOrderStore().getOrders();
+          const customersOrdered = [].concat(
+            ...existingOrders.map((order) => order.customer.id)
           );
-          useNotificationStore().addNotification({
-            type: "success",
-            message: "Customer was deleted successfully",
-          });
+
+          const customersToDelete = Array.isArray(customer)
+            ? customer
+            : [customer];
+
+          const customersInOrderSet = new Set(customersOrdered);
+          const commonCustomers = customersToDelete.filter((customerId) =>
+            customersInOrderSet.has(customerId)
+          );
+
+          if (commonCustomers.length > 0) {
+            useNotificationStore().addNotification({
+              type: "warning",
+              message:
+                "One or more customers are already in orders, so you can't delete them.",
+            });
+          } else {
+            await axios.delete(
+              `http://localhost:8000/api/customers/delete/${customer}`,
+              customer
+            );
+            useNotificationStore().addNotification({
+              type: "success",
+              message: "Customer was deleted successfully",
+            });
+          }
         } else {
           useNotificationStore().addNotification({
             type: "warning",

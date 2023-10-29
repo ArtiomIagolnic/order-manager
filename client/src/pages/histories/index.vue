@@ -2,9 +2,9 @@
   <div class="container mx-auto p-4">
     <div>
       <h2 class="text-2xl font-bold mb-4">Log Entries</h2>
+
       <SearchComponent
         @filtered-results="updateDisplayedLogs"
-        :store-getter="logsStore.getLogs"
         :place-holder="'Search logs'"
       />
     </div>
@@ -14,6 +14,16 @@
     <div v-if="logs.length === 0" class="mt-4">
       <p class="text-red-500 text-center">No logs yet</p>
     </div>
+
+    <th class="p-3 text-left">
+      <SortIconsComponent
+        column="timestamp"
+        :sortDirections="sortDirections['timestamp']"
+        @sort-column="sortColumn('timestamp')"
+      >
+        <template #sort-button>Sort by date</template>
+      </SortIconsComponent>
+    </th>
 
     <ul class="mt-4">
       <li
@@ -42,11 +52,13 @@
 
 <script>
 import SearchComponent from "@/components/SearchComponent.vue";
+import SortIconsComponent from "@/components/SortIconsComponent.vue";
 import { useLogsStore } from "@/store/logs.js";
 
 export default {
   components: {
     SearchComponent,
+    SortIconsComponent,
   },
   data() {
     return {
@@ -54,8 +66,11 @@ export default {
       pageSize: 10,
       displayedLogs: [],
       loadedLogsCount: 0,
-
-      showNoDataMessage: false,
+      sortDirections: {
+        timestamp: "desc",
+      },
+      sortHeader: "",
+      searchActive: false,
     };
   },
   created() {
@@ -66,7 +81,10 @@ export default {
       return useLogsStore();
     },
     canLoadMore() {
-      return this.loadedLogsCount < this.logs.length;
+      return this.loadedLogsCount < this.logs.length && !this.searchActive;
+    },
+    showNoDataMessage() {
+      return this.displayedLogs.length === 0;
     },
   },
   methods: {
@@ -83,9 +101,29 @@ export default {
       this.displayedLogs = [...this.displayedLogs, ...remainingLogs];
       this.loadedLogsCount += remainingLogs.length;
     },
-    updateDisplayedLogs(filteredLogs) {
-      this.displayedLogs = filteredLogs;
-      this.showNoDataMessage = this.displayedLogs.length === 0;
+    async updateDisplayedLogs(searchFilter) {
+      if (searchFilter) {
+        const searchValue = searchFilter.toLowerCase();
+        this.displayedLogs = await this.logsStore.getLogs(searchValue);
+        this.searchActive = true;
+      } else {
+        this.loadLogs();
+        this.searchActive = false;
+      }
+    },
+
+    async sortColumn(column) {
+      if (this.sortDirections[column] === "asc") {
+        this.sortDirections[column] = "desc";
+      } else {
+        this.sortDirections[column] = "asc";
+      }
+      this.sortHeader = column;
+      this.sortDirection = this.sortDirections[column];
+
+      await this.logsStore.sortLogs(this.sortHeader, this.sortDirection);
+
+      this.displayedLogs = this.logsStore.logs;
     },
   },
 };

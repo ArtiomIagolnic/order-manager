@@ -1,8 +1,8 @@
 <template>
   <div>
     <NavBarComponent />
-    <div class="w-full pt-4">
-      <div class="container mx-auto bg-white p-8 rounded-lg shadow">
+    <div class="md:w-full pt-4">
+      <div class=" container mx-auto bg-white p-8 rounded-lg shadow">
         <router-view />
       </div>
     </div>

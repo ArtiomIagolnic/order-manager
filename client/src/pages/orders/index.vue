@@ -17,7 +17,6 @@
   <!-- Search Field -->
   <SearchComponent
     @filtered-results="updateDisplayedOrders"
-    :store-getter="orderStore.getOrders"
     :place-holder="'Search orders'"
   />
 
@@ -27,14 +26,50 @@
 
   <!-- Orders Table -->
   <TableComponent
-    :headers="tableHeaders"
-    :item-props="itemProps"
     :items="displayedOrders"
     :selectedCount="selectedCount"
     :export-selected="exportLink"
     @update-item="openModal"
     @delete-item="deleteOrder"
   >
+    <template #mobile-sort-menu>
+      <div class="w-full text-left px-4 py-2 text-gray-800">
+        <SortIconsComponent
+          column="displayedId"
+          :sortDirections="getSortDirection('displayedId')"
+          @sort-column="sortColumn('displayedId')"
+        >
+          <template #sort-button> Order ID </template>
+        </SortIconsComponent>
+      </div>
+      <div class="w-full text-left px-4 py-2 text-gray-800">
+        <SortIconsComponent
+          column="customer"
+          :sortDirections="getSortDirection('customer.name')"
+          @sort-column="sortColumn('customer')"
+        >
+          <template #sort-button>Customer</template>
+        </SortIconsComponent>
+      </div>
+      <div class="w-full text-left px-4 py-2 text-gray-800">
+        <SortIconsComponent
+          column="date"
+          :sortDirections="getSortDirection('date')"
+          @sort-column="sortColumn('date')"
+        >
+          <template #sort-button> Date</template>
+        </SortIconsComponent>
+      </div>
+      <div class="w-full text-left px-4 py-2 text-gray-800">
+        <SortIconsComponent
+          column="totalAmount"
+          :sortDirections="getSortDirection('totalAmount')"
+          @sort-column="sortColumn('totalAmount')"
+        >
+          <template #sort-button> Total amount</template>
+        </SortIconsComponent>
+      </div>
+    </template>
     <template #mobile-card-headers="item">
       <input
         type="checkbox"
@@ -46,7 +81,7 @@
       <div class="text-gray-900">{{ item.item.displayedId }}</div>
 
       <div class="text-gray-700 font-extrabold">Customer:</div>
-      <div class="text-gray-900">{{ item.item.customer }}</div>
+      <div class="text-gray-900">{{ item.item.customer.name }}</div>
 
       <div class="text-gray-700 font-extrabold">Date:</div>
       <div class="text-gray-900">{{ item.item.date }}</div>
@@ -77,69 +112,70 @@
       </div>
     </template>
     <template #table-header>
-      <th class="p-3 text-left">Nr</th>
-      <th class="p-3 text-left">
-        Order ID
+      <div class="w-8 text-left">Nr</div>
+      <div class="text-left flex-1">
         <SortIconsComponent
           column="displayedId"
-          :sortDirections="sortDirections['displayedId']"
+          :sortDirections="getSortDirection('displayedId')"
           @sort-column="sortColumn('displayedId')"
-        />
-      </th>
-      <th class="p-3 text-left">
-        Customer
+        >
+          <template #sort-button> Order ID </template>
+        </SortIconsComponent>
+      </div>
+      <div class="text-left flex-1">
         <SortIconsComponent
-          column="customer"
-          :sortDirections="sortDirections['customer']"
-          @sort-column="sortColumn('customer')"
-        />
-      </th>
-
-      <th class="p-3 text-left">
-        Date
+          column="customer.name"
+          :sortDirections="getSortDirection('customer.name')"
+          @sort-column="sortColumn('customer.name')"
+        >
+          <template #sort-button> Customer </template>
+        </SortIconsComponent>
+      </div>
+      <div class="text-left flex-1">
         <SortIconsComponent
           column="date"
-          :sortDirections="sortDirections['date']"
+          :sortDirections="getSortDirection('date')"
           @sort-column="sortColumn('date')"
-        />
-      </th>
-      <th class="p-3 text-left">
-        Total Amount
+        >
+          <template #sort-button> Date </template>
+        </SortIconsComponent>
+      </div>
+      <div class="text-left flex-1">
         <SortIconsComponent
           column="totalAmount"
-          :sortDirections="sortDirections['totalAmount']"
+          :sortDirections="getSortDirection('totalAmount')"
           @sort-column="sortColumn('totalAmount')"
-        />
-      </th>
+        >
+          <template #sort-button> Total amount </template>
+        </SortIconsComponent>
+      </div>
 
-      <th class="p-3 text-center">Actions</th>
+      <div class="text-center flex-1">Actions</div>
     </template>
     <template #body-item="{ item, index }">
-      <tr class="flex-col flex-no wrap mb-0">
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+      <div class="flex items-center p-3 border-b hover:bg-gray-100">
+        <div class="w-8 flex items-center">
           <input
             :value="item.id"
             v-model="selectedItems"
             type="checkbox"
             class="form-checkbox text-blue-400 h-5 w-5"
           />
-          <span class="ml-2">{{ index + 1 }}</span>
-        </td>
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+          <span class="ml-1">{{ index + 1 }}</span>
+        </div>
+        <div class="flex-1 p-3">
           {{ item.displayedId }}
-        </td>
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
-          {{ item.customer }}
-        </td>
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+        </div>
+        <div class="flex-1 p-3">
+          {{ item.customer.name }}
+        </div>
+        <div class="flex-1 p-3 text-left">
           {{ item.date }}
-        </td>
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+        </div>
+        <div class="flex-1 p-3">
           {{ item.totalAmount }}
-        </td>
-        <td
-          class="border-grey-light border hover:bg-gray-100 p-3 flex justify-around"
-        >
+        </div>
+        <div class="flex-1 flex justify-around">
           <button
             @click="openModal(item)"
             class="text-blue-400 hover:text-blue-600 hover:font-medium cursor-pointer"
@@ -148,18 +184,18 @@
           </button>
           <button
             @click="deleteOrder(item)"
-            class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer"
+            class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer ml-1"
           >
             Delete
           </button>
           <a
             :href="`http://localhost:8000/api/orders/export/${item.id}`"
-            class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer"
+            class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer ml-1"
           >
             Export
           </a>
-        </td>
-      </tr>
+        </div>
+      </div>
     </template>
   </TableComponent>
   <p v-if="orders.length === 0" class="text-red-500 text-center mt-4">
@@ -194,49 +230,57 @@ export default {
   },
   data() {
     return {
-      tableHeaders: ["Order ID", "Name", "Date", "Total Amount", "Actions"],
-      itemProps: ["displayedId", "customer", "date", "totalAmount"],
       orders: [],
       updatedOrder: {},
       openOrderModal: false,
       pageSize: 10,
       displayedOrders: [],
       loadedOrdersCount: 0,
-      showNoDataMessage: false,
       selectedItems: [],
-      exportLink: "",
       sortDirections: {
         displayedId: "desc",
-        customer: "desc",
+        customer: {
+          name: "desc",
+        },
         date: "desc",
         totalAmount: "desc",
       },
       sortHeader: "",
+      searchActive: false,
     };
   },
   created() {
     this.loadOrders();
   },
-  watch: {
-    selectedItems: {
-      handler: function () {
-        this.exportLink =
-          "http://localhost:8000/api/orders/export/" +
-          this.selectedItems.join(",");
-      },
-      deep: true,
-    },
-  },
-
   computed: {
     orderStore() {
       return useOrderStore();
     },
     canLoadMore() {
-      return this.loadedOrdersCount < this.orders.length;
+      return this.loadedOrdersCount < this.orders.length && !this.searchActive;
     },
     selectedCount() {
       return this.selectedItems.length;
+    },
+    exportLink() {
+      return this.selectedItems.length > 0
+        ? `http://localhost:8000/api/orders/export/${this.selectedItems.join(
+            ","
+          )}`
+        : "";
+    },
+    getSortDirection() {
+      return (column) => {
+        if (column.includes(".")) {
+          const [nestedKey, nestedProperty] = column.split(".");
+          return this.sortDirections[nestedKey][nestedProperty];
+        } else {
+          return this.sortDirections[column];
+        }
+      };
+    },
+    showNoDataMessage() {
+      return this.displayedOrders.length === 0;
     },
   },
   methods: {
@@ -253,9 +297,15 @@ export default {
       this.displayedOrders = [...this.displayedOrders, ...remainingOrders];
       this.loadedOrdersCount += remainingOrders.length;
     },
-    updateDisplayedOrders(filteredOrders) {
-      this.displayedOrders = filteredOrders;
-      this.showNoDataMessage = this.displayedOrders.length === 0;
+    async updateDisplayedOrders(searchFilter) {
+      if (searchFilter) {
+        const searchValue = searchFilter.toLowerCase();
+        this.displayedOrders = await this.orderStore.getOrders(searchValue);
+        this.searchActive = true;
+      } else {
+        this.loadOrders();
+        this.searchActive = false;
+      }
     },
     openModal(order) {
       if (order) {
@@ -278,16 +328,35 @@ export default {
       this.loadOrders();
     },
     async sortColumn(column) {
-      if (this.sortDirections[column] === "asc") {
-        this.sortDirections[column] = "desc";
+      let sortKey = column;
+      let sortDirection = "asc";
+
+      if (column.includes(".")) {
+        const [mainKey, nestedProperty] = column.split(".");
+        sortKey = mainKey;
+        sortDirection = this.sortDirections[mainKey][nestedProperty];
       } else {
-        this.sortDirections[column] = "asc";
+        sortDirection = this.sortDirections[column];
       }
-      this.sortHeader = column;
-      this.sortDirection = this.sortDirections[column];
 
-      await this.orderStore.sortOrders(this.sortHeader, this.sortDirection);
+      if (sortDirection === "asc") {
+        sortDirection = "desc";
+      } else {
+        sortDirection = "asc";
+      }
 
+      // Update the sorting direction in your sortDirections object
+      if (column.includes(".")) {
+        const [mainKey, nestedProperty] = column.split(".");
+        this.sortDirections[mainKey][nestedProperty] = sortDirection;
+      } else {
+        this.sortDirections[column] = sortDirection;
+      }
+
+      // Perform sorting based on the selected column and direction
+      await this.orderStore.sortOrders(sortKey, sortDirection);
+
+      // Update the displayed data
       this.displayedOrders = this.orderStore.orders;
     },
   },

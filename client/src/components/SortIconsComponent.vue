@@ -1,14 +1,18 @@
 <template>
   <span class="ml-1">
-    <button @click="emitSortColumn" v-if="sortDirections === 'asc'">
-      <font-awesome-icon icon="fa-solid fa-sort-up" />
-    </button>
-
-    <button @click="emitSortColumn" v-if="sortDirections === 'desc'">
-      <font-awesome-icon icon="fa-solid fa-sort-down" />
-    </button>
-    <button v-if="sortDirections === ''">
-      <font-awesome-icon icon="fa-solid fa-sort" />
+    <button @click="emitSortColumn">
+      <slot name="sort-button"></slot>
+      <font-awesome-icon
+        v-if="sortDirections === 'asc'"
+        icon="fa-solid fa-sort-up"
+        class="ml-1"
+      />
+      <font-awesome-icon
+        v-else-if="sortDirections === 'desc'"
+        icon="fa-solid fa-sort-down"
+        class="ml-1"
+      />
+      <font-awesome-icon v-else icon="fa-solid fa-sort" />
     </button>
   </span>
 </template>

@@ -6,7 +6,29 @@ import Log from "../models/Log.js";
 // @access public
 
 const getLogs = asyncHandler(async (req, res) => {
+  const { sortHeader, sortOrder } = req.query;
   const logs = await Log.getAll();
+  if (sortHeader && sortOrder) {
+    const getColumnValue = (log, column) => {
+      switch (column) {
+        case "timestamp":
+          return log[column];
+        default:
+          return "";
+      }
+    };
+
+    logs.sort((a, b) => {
+      const valueA = getColumnValue(a, sortHeader);
+      const valueB = getColumnValue(b, sortHeader);
+
+      if (sortOrder === "asc") {
+        return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
+      } else {
+        return valueB < valueA ? -1 : valueB > valueA ? 1 : 0;
+      }
+    });
+  }
 
   if (!logs) {
     res.status(404).json({ error: "Log not found" });

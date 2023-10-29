@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import { useNotificationStore } from "@/store/notifications";
-import { useProductStore } from "@/store/product";
 import axios from "axios";
 
 export const useOrderStore = defineStore("order", {
@@ -25,12 +24,14 @@ export const useOrderStore = defineStore("order", {
       } else {
         return this.orders.filter((order) => {
           const searchValue = filters.toLowerCase().trim();
-          const { customer, date, displayedId } = order;
+          const customerName = order.customer.name;
+          const { date, displayedId, totalAmount } = order;
 
           return (
-            customer.toString().toLowerCase().includes(searchValue) ||
+            customerName.toString().toLowerCase().includes(searchValue) ||
             date.toString().includes(searchValue) ||
-            displayedId.toString().toLowerCase().includes(searchValue)
+            displayedId.toString().toLowerCase().includes(searchValue) ||
+            totalAmount.toString().toLowerCase().includes(searchValue)
           );
         });
       }
@@ -55,7 +56,6 @@ export const useOrderStore = defineStore("order", {
     async addOrder(data) {
       try {
         const orderId = uuidv4();
-
         const newOrder = {
           ...data,
           displayedId: this.generateReadableOrderId(),
@@ -98,7 +98,7 @@ export const useOrderStore = defineStore("order", {
         });
       }
     },
-  
+
     async updateOrder(updatedOrder) {
       try {
         await axios.put(

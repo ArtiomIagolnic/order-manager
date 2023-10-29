@@ -33,5 +33,18 @@ export const useLogsStore = defineStore("logs", {
         });
       }
     },
+    async sortLogs(sortHeader, sortOrder) {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/logs/all?sortHeader=${sortHeader}&sortOrder=${sortOrder}`
+        );
+        return (this.logs = response.data || []);
+      } catch (error) {
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while sorting customers: ${error.message}`,
+        });
+      }
+    },
   },
 });

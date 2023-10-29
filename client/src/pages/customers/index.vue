@@ -18,7 +18,6 @@
   <!-- Search Field -->
   <SearchComponent
     @filtered-results="updateDisplayedCustomers"
-    :store-getter="customerStore.getCustomers"
     :place-holder="'Search customers'"
   />
 
@@ -29,28 +28,70 @@
   <!-- Displayed Table -->
   <TableComponent
     :items="displayedCustomers"
-    :item-props="itemProps"
     :selectedCount="selectedCount"
     :export-selected="exportLink"
     @update-item="openModal"
     @delete-item="deleteCustomer"
   >
+    <!-- Mobile Sorting Menu -->
+    <template #mobile-sort-menu>
+      <div class="w-full text-left px-4 py-2 text-gray-800">
+        <SortIconsComponent
+          column="firstName"
+          :sortDirections="sortDirections['firstName']"
+          @sort-column="sortColumn('firstName')"
+        >
+          <template #sort-button> First name </template>
+        </SortIconsComponent>
+      </div>
+      <div class="w-full text-left px-4 py-2 text-gray-800">
+        <SortIconsComponent
+          column="lastName"
+          :sortDirections="sortDirections['lastName']"
+          @sort-column="sortColumn('lastName')"
+        >
+          <template #sort-button> Last name</template>
+        </SortIconsComponent>
+      </div>
+      <div class="w-full text-left px-4 py-2 text-gray-800">
+        <SortIconsComponent
+          column="age"
+          :sortDirections="sortDirections['age']"
+          @sort-column="sortColumn('age')"
+        >
+          <template #sort-button> Age</template>
+        </SortIconsComponent>
+      </div>
+      <div class="w-full text-left px-4 py-2 text-gray-800">
+        <SortIconsComponent
+          column="billingAdress"
+          :sortDirections="sortDirections['billingAdress']"
+          @sort-column="sortColumn('billingAdress')"
+        >
+          <template #sort-button> Billing Adress</template>
+        </SortIconsComponent>
+      </div>
+    </template>
+    <!-- Mobile Card Headers -->
     <template #mobile-card-headers="item">
-      <input
-        type="checkbox"
-        class="form-checkbox h-6 w-6 text-blue-400 transition duration-150 ease-in-out"
-        v-model="selectedItems"
-        :value="item.item.id"
-      />
-      <div class="text-gray-700 font-extrabold">First name:</div>
+      <div class="mb-3">
+        <input
+          type="checkbox"
+          class="form-checkbox h-6 w-6 text-blue-400 transition duration-150 ease-in-out"
+          v-model="selectedItems"
+          :value="item.item.id"
+        />
+      </div>
+      <div class="text-gray-700 font-extrabold mb-1">First name:</div>
       <div class="text-gray-900">{{ item.item.firstName }}</div>
-      <div class="text-gray-700 font-extrabold">Last name:</div>
+      <div class="text-gray-700 font-extrabold mb-1">Last name:</div>
       <div class="text-gray-900">{{ item.item.lastName }}</div>
-      <div class="text-gray-700 font-extrabold">Age:</div>
+      <div class="text-gray-700 font-extrabold mb-1">Age:</div>
       <div class="text-gray-900">{{ item.item.age }}</div>
-      <div class="text-gray-700 font-extrabold">Billing Address:</div>
+      <div class="text-gray-700 font-extrabold mb-1">Billing Address:</div>
       <div class="text-gray-900">{{ item.item.billingAdress }}</div>
     </template>
+    <!-- Mobile Card Buttons -->
     <template #mobile-card-buttons="{ item }">
       <div class="mt-3 space-x-4 flex justify-start">
         <button
@@ -74,69 +115,74 @@
       </div>
     </template>
 
+    <!-- Table Header -->
     <template #table-header>
-      <th class="p-3 text-left">Nr</th>
-      <th class="p-3 text-left">
-        First name
+      <div class="w-8 text-left">Nr</div>
+      <div class="text-left flex-1">
         <SortIconsComponent
           column="firstName"
           :sortDirections="sortDirections['firstName']"
           @sort-column="sortColumn('firstName')"
-        />
-      </th>
-      <th class="p-3 text-left">
-        Last name
+        >
+          <template #sort-button>First name</template>
+        </SortIconsComponent>
+      </div>
+      <div class="text-left flex-1">
         <SortIconsComponent
           column="lastName"
           :sortDirections="sortDirections['lastName']"
           @sort-column="sortColumn('lastName')"
-        />
-      </th>
-      <th class="p-3 text-left">
-        Age
+        >
+          <template #sort-button>Last name</template>
+        </SortIconsComponent>
+      </div>
+      <div class="text-left flex-1">
         <SortIconsComponent
           column="age"
           :sortDirections="sortDirections['age']"
           @sort-column="sortColumn('age')"
-        />
-      </th>
-      <th class="p-3 text-left">
-        Billing Address
+        >
+          <template #sort-button>Age</template>
+        </SortIconsComponent>
+      </div>
+      <div class="text-left flex-1">
         <SortIconsComponent
           column="billingAdress"
           :sortDirections="sortDirections['billingAdress']"
           @sort-column="sortColumn('billingAdress')"
-        />
-      </th>
-      <th class="p-3 text-center">Actions</th>
+        >
+          <template #sort-button>Billing address</template>
+        </SortIconsComponent>
+      </div>
+
+      <div class="text-center flex-1">Actions</div>
     </template>
 
+    <!-- Body Item -->
     <template #body-item="{ item, index }">
-      <tr class="flex-col flex-no wrap mb-0">
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+      <div class="flex items-center p-3 border-b hover:bg-gray-100">
+        <div class="w-8 flex items-center">
           <input
             :value="item.id"
             v-model="selectedItems"
             type="checkbox"
             class="form-checkbox text-blue-400 h-5 w-5"
           />
-          <span class="ml-2">{{ index + 1 }}</span>
-        </td>
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+          <span class="ml-1">{{ index + 1 }}</span>
+        </div>
+        <div class="flex-1 p-3">
           {{ item.firstName }}
-        </td>
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+        </div>
+        <div class="flex-1 p-3">
           {{ item.lastName }}
-        </td>
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+        </div>
+        <div class="flex-1 p-3">
           {{ item.age }}
-        </td>
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+        </div>
+        <div class="flex-1 p-3">
           {{ item.billingAdress }}
-        </td>
-        <td
-          class="border-grey-light border hover:bg-gray-100 p-3 flex justify-around"
-        >
+        </div>
+        <div class="flex-1 flex justify-around">
           <button
             @click="openModal(item)"
             class="text-blue-400 hover:text-blue-600 hover:font-medium cursor-pointer"
@@ -145,18 +191,18 @@
           </button>
           <button
             @click="deleteCustomer(item)"
-            class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer"
+            class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer ml-1"
           >
             Delete
           </button>
           <a
             :href="`http://localhost:8000/api/customers/export/${item.id}`"
-            class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer"
+            class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer ml-1"
           >
             Export
           </a>
-        </td>
-      </tr>
+        </div>
+      </div>
     </template>
   </TableComponent>
 
@@ -192,16 +238,13 @@ export default {
   },
   data() {
     return {
-      itemProps: ["fullName", "age", "billingAdress"],
       customers: [],
       pageSize: 10,
       displayedCustomers: [],
       loadedCustomersCount: 0,
-      showNoDataMessage: false,
       updatedCustomer: {},
       openCustomerModal: false,
       selectedItems: [],
-      exportLink: "",
       sortDirections: {
         firstName: "desc",
         lastName: "desc",
@@ -209,40 +252,49 @@ export default {
         billingAdress: "desc",
       },
       sortHeader: "",
+      searchActive: false,
     };
   },
+  // Load initial customer data
   created() {
     this.loadCustomers();
   },
-  watch: {
-    selectedItems: {
-      handler: function () {
-        this.exportLink =
-          "http://localhost:8000/api/customers/export/" +
-          this.selectedItems.join(",");
-      },
-      deep: true,
-    },
-  },
-
   computed: {
     customerStore() {
       return useCustomerStore();
     },
+    // Check if more customers can be loaded
     canLoadMore() {
-      return this.loadedCustomersCount < this.customers.length;
+      return (
+        this.loadedCustomersCount < this.customers.length && !this.searchActive
+      );
     },
     selectedCount() {
+      // Count of selected items
       return this.selectedItems.length;
+    },
+    exportLink() {
+      // Generate export link based on selected items
+      return this.selectedItems.length > 0
+        ? `http://localhost:8000/api/customers/export/${this.selectedItems.join(
+            ","
+          )}`
+        : "";
+    },
+    showNoDataMessage() {
+      // Determine if a "No data found" message should be displayed
+      return this.displayedCustomers.length === 0;
     },
   },
   methods: {
+    // Function to load customers from the API
     async loadCustomers() {
       this.customers = await this.customerStore.getCustomers();
       this.displayedCustomers = this.customers.slice(0, this.pageSize);
       this.loadedCustomersCount = this.displayedCustomers.length;
     },
     loadMoreCustomers() {
+      // Load more customers as the user requests
       const remainingCustomers = this.customers.slice(
         this.loadedCustomersCount,
         this.loadedCustomersCount + this.pageSize
@@ -253,11 +305,21 @@ export default {
       ];
       this.loadedCustomersCount += remainingCustomers.length;
     },
-    updateDisplayedCustomers(filteredResults) {
-      this.displayedCustomers = filteredResults;
-      this.showNoDataMessage = this.displayedCustomers.length === 0;
+    // Update displayed customers based on search filter
+    async updateDisplayedCustomers(searchFilter) {
+      if (searchFilter) {
+        const searchValue = searchFilter.toLowerCase();
+        this.displayedCustomers = await this.customerStore.getCustomers(
+          searchValue
+        );
+        this.searchActive = true;
+      } else {
+        this.loadCustomers();
+        this.searchActive = false;
+      }
     },
     openModal(customer) {
+      // Open the modal to add or update a customer
       if (customer) {
         this.updatedCustomer = customer;
       } else {
@@ -266,11 +328,13 @@ export default {
       this.openCustomerModal = true;
     },
     closeModal() {
+      // Close the customer modal
       this.openCustomerModal = false;
     },
+    // Delete customer(s)
     async deleteCustomer(customer) {
       if (this.selectedItems.length > 0) {
-        await this.customerStore.deleteCustomer(this.selectedItems.join(","));
+        await this.customerStore.deleteCustomer(this.selectedItems);
         this.selectedItems.length = 0;
       } else {
         await this.customerStore.deleteCustomer(customer.id);
@@ -278,6 +342,7 @@ export default {
       this.loadCustomers();
     },
     async sortColumn(column) {
+      // Sort the customers based on the selected column
       if (this.sortDirections[column] === "asc") {
         this.sortDirections[column] = "desc";
       } else {
@@ -291,7 +356,10 @@ export default {
         this.sortDirection
       );
 
-      this.displayedCustomers = this.customerStore.customers;
+      this.filteredCustomers = this.customerStore.customers;
+      // Update displayed customers from filtered customers
+      this.displayedCustomers = this.filteredCustomers.slice(0, this.pageSize);
+      this.loadedCustomersCount = this.displayedCustomers.length;
     },
   },
 };

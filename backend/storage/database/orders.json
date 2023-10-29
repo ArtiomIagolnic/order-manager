@@ -1,7 +1,273 @@
 [
   {
-    "customer": "John Doe",
-    "date": "2023-10-05",
+    "customer": {
+      "id": "6a62b1eb-1073-4d12-b2b8-6ec47366bf54",
+      "name": "John Doe"
+    },
+    "date": "2023-10-06",
+    "products": [
+      {
+        "id": "a9cd2d8e-752f-4f3e-952d-97e9249b19e4",
+        "name": "Laptop",
+        "price": 999.99,
+        "quantity": 2,
+        "totalPrice": 1999.98
+      }
+    ],
+    "totalAmount": "1999.98",
+    "displayedId": "OR-7215d",
+    "id": "b5523c39-fef7-4a75-a0a8-c8687088ed03"
+  },
+  {
+    "customer": {
+      "id": "84f7435f-af22-4f4d-b062-62f2a34692f3",
+      "name": "Emma Davis"
+    },
+    "date": "2023-10-13",
+    "products": [
+      {
+        "id": "db9c8f05-8a86-42f7-9a8b-71b8d654ea07",
+        "name": "Refrigerator",
+        "price": 799.99,
+        "quantity": 2,
+        "totalPrice": 1599.98
+      }
+    ],
+    "totalAmount": "1599.98",
+    "displayedId": "OR-464ec",
+    "id": "355e6333-9063-43b3-a998-439ad7c4ed7d"
+  },
+  {
+    "customer": {
+      "id": "eddb89ea-5c14-4379-9ef2-3b8c970a4c36",
+      "name": "Olivia Wright"
+    },
+    "date": "2023-10-13",
+    "products": [
+      {
+        "id": "7a7bd5ce-3e75-4e27-8a7a-4c5e6a88dd26",
+        "name": "Coffee Maker",
+        "price": 89.99,
+        "quantity": 2,
+        "totalPrice": 179.98
+      }
+    ],
+    "totalAmount": "179.98",
+    "displayedId": "OR-a744c",
+    "id": "33da12b6-8aea-4643-960b-0c545f44ec63"
+  },
+  {
+    "customer": {
+      "id": "c231149e-1e44-472b-8b74-2ce5eb0a8265",
+      "name": "Mia Taylor"
+    },
+    "date": "2023-10-15",
+    "products": [
+      {
+        "id": "c8b1ecfd-d6c8-471d-9b67-02d3b8b1e5b8",
+        "name": "Tablet",
+        "price": 299.99,
+        "quantity": 1,
+        "totalPrice": 299.99
+      },
+      {
+        "id": "f3d2e6a7-62fc-4ae9-b9f3-2e6a7d4e9b8c",
+        "name": "Desk Chair",
+        "price": 79.99,
+        "quantity": 4,
+        "totalPrice": 319.96
+      }
+    ],
+    "totalAmount": "619.95",
+    "displayedId": "OR-cc947",
+    "id": "9f1b3e2c-5c7d-49e1-9b3e-2c5d7e9e1b3d"
+  },
+  {
+    "customer": {
+      "id": "d0cd117b-5e9c-4962-a628-36c8deac5413",
+      "name": "James Wilson"
+    },
+    "date": "2023-10-18",
+    "products": [
+      {
+        "id": "f87ec1b9-5f63-4a35-84f8-1db4c6f9ee4b",
+        "name": "Gaming Console",
+        "price": 399.99,
+        "quantity": 1,
+        "totalPrice": 399.99
+      },
+      {
+        "id": "2e3d5c8b-8c21-4f95-8e3d-5c8b8c21f9d5",
+        "name": "Smartwatch",
+        "price": 199.99,
+        "quantity": 2,
+        "totalPrice": 399.98
+      }
+    ],
+    "totalAmount": "799.97",
+    "displayedId": "OR-38dca",
+    "id": "8c2f9a3b-6c75-47f8-9a3a-3b6c5d7f8a3a"
+  },
+  {
+    "customer": {
+      "id": "7fb0c9d5-1d02-46d4-8e07-11db8b1de13c",
+      "name": "James Robinson"
+    },
+    "date": "2023-10-20",
+    "products": [
+      {
+        "id": "c8b1ecfd-d6c8-471d-9b67-02d3b8b1e5b8",
+        "name": "Desk Chair",
+        "price": 79.99,
+        "quantity": 3,
+        "totalPrice": 239.97
+      },
+      {
+        "id": "49c0e7d3-9a9b-4a68-8c0e-7d8b31c9eaed",
+        "name": "Toaster",
+        "price": 29.99,
+        "quantity": 1,
+        "totalPrice": 29.99
+      }
+    ],
+    "totalAmount": "269.96",
+    "displayedId": "OR-8f28a",
+    "id": "ac8e8b0f-7d52-4d76-8e8b-072a8e8b0f7d"
+  },
+  {
+    "customer": {
+      "id": "4d8b7e0f-8a52-47d6-9e7d-52b6c1f4a99e",
+      "name": "Digital Camera"
+    },
+    "date": "2023-10-22",
+    "products": [
+      {
+        "id": "6a7f2e6d-7f7c-4b3a-b2e6-d7f7c4b3a9c8",
+        "name": "Sneakers",
+        "price": 59.99,
+        "quantity": 2,
+        "totalPrice": 119.98
+      },
+      {
+        "id": "1f7e9d3c-2963-4d45-96cd-1dc4a75289dd",
+        "name": "Washing Machine",
+        "price": 349.99,
+        "quantity": 1,
+        "totalPrice": 349.99
+      }
+    ],
+    "totalAmount": "469.97",
+    "displayedId": "OR-6f75a",
+    "id": "9d0a6c8e-0f2c-4a37-8d0a-6c8e0f2c4a37"
+  },
+  {
+    "customer": {
+      "id": "2d1df498-398e-4b2b-9c2b-8dd88b080cb1",
+      "name": "Joseph Harris"
+    },
+    "date": "2023-10-24",
+    "products": [
+      {
+        "id": "c76c8c03-fc8f-4269-b975-63bd596c6b91",
+        "name": "TV",
+        "price": 527.99,
+        "quantity": 3,
+        "totalPrice": 1583.97
+      }
+    ],
+    "totalAmount": "1583.97",
+    "displayedId": "OR-29f39",
+    "id": "9e7c9e8a-4b52-4a59-9c9e-8a4b529a9c9e"
+  },
+  {
+    "customer": {
+      "id": "94b3ec76-26d5-49d0-92f0-177b54121c02",
+      "name": "William Hall"
+    },
+    "date": "2023-10-25",
+    "products": [
+      {
+        "id": "454dedbd-04e2-4ca0-a763-73bd690dec1d",
+        "name": "iPhone",
+        "price": 1299.99,
+        "quantity": 1,
+        "totalPrice": 1299.99
+      }
+    ],
+    "totalAmount": "1299.99",
+    "displayedId": "OR-8a7c1",
+    "id": "ab9b0d5e-4d62-4b9a-9b0d-5e4d629a9b0d"
+  },
+  {
+    "customer": {
+      "id": "79574d04-c487-45c3-bae3-df34e37c3c26",
+      "name": "Olivia Moore"
+    },
+    "date": "2023-10-27",
+    "products": [
+      {
+        "id": "1c9e0a2d-8d3e-40b9-9c0a-2d9e0c8d2e8a",
+        "name": "Blender",
+        "price": 69.99,
+        "quantity": 2,
+        "totalPrice": 139.98
+      }
+    ],
+    "totalAmount": "139.98",
+    "displayedId": "OR-3c8b1",
+    "id": "cd4a4b8c-0a7e-4a79-8a4b-8c0a7e4a79e4"
+  },
+  {
+    "customer": {
+      "id": "b221f8d7-ae38-46bf-aa01-f042d7dd5a48",
+      "name": "Sophia Lee"
+    },
+    "date": "2023-10-28",
+    "products": [
+      {
+        "id": "4d8b7e0f-8a52-47d6-9e7d-52b6c1f4a99e",
+        "name": "Digital Camera",
+        "price": 199.99,
+        "quantity": 3,
+        "totalPrice": 599.97
+      }
+    ],
+    "totalAmount": "599.97",
+    "displayedId": "OR-8f84e",
+    "id": "9f0b7d1a-2e9d-4a86-8b7d-1a2e9d4a86b7"
+  },
+  {
+    "customer": {
+      "id": "6e3f0ff6-d19d-46a0-82e4-18bfa24f5d67",
+      "name": "Sofia Allen"
+    },
+    "date": "2023-10-30",
+    "products": [
+      {
+        "id": "a9cd2d8e-752f-4f3e-952d-97e9249b19e4",
+        "name": "Laptop",
+        "price": 999.99,
+        "quantity": 1,
+        "totalPrice": 999.99
+      },
+      {
+        "id": "c8b1ecfd-d6c8-471d-9b67-02d3b8b1e5b8",
+        "name": "Tablet",
+        "price": 299.99,
+        "quantity": 2,
+        "totalPrice": 599.98
+      }
+    ],
+    "totalAmount": "1599.97",
+    "displayedId": "OR-2f46a",
+    "id": "cf4e8f1a-9b4c-49f6-8e8f-1a9b4c49f6e8"
+  },
+  {
+    "customer": {
+      "id": "79574d04-c487-45c3-bae3-df34e37c3c26",
+      "name": "Olivia Moore"
+    },
+    "date": "2023-10-21",
     "products": [
       {
         "id": "c76c8c03-fc8f-4269-b975-63bd596c6b91",
@@ -11,22 +277,200 @@
         "totalPrice": 527.99
       },
       {
+        "id": "f87ec1b9-5f63-4a35-84f8-1db4c6f9ee4b",
+        "name": "Gaming Console",
+        "price": 399.99,
+        "quantity": 1,
+        "totalPrice": 399.99
+      }
+    ],
+    "totalAmount": "927.98",
+    "displayedId": "OR-7d7e1",
+    "id": "d7d7d7d7-d7d7-d7d7-d7d7-d7d7d7d7d7d7"
+  },
+  {
+    "customer": {
+      "id": "b221f8d7-ae38-46bf-aa01-f042d7dd5a48",
+      "name": "Sophia Lee"
+    },
+    "date": "2023-10-14",
+    "products": [
+      {
+        "id": "7a7bd5ce-3e75-4e27-8a7a-4c5e6a88dd26",
+        "name": "Coffee Maker",
+        "price": 89.99,
+        "quantity": 3,
+        "totalPrice": 269.97
+      }
+    ],
+    "totalAmount": "269.97",
+    "displayedId": "OR-4aa6b",
+    "id": "4aa6b4aa-6b4a-4aa6-b4aa-6b4a4aa6b4aa"
+  },
+  {
+    "customer": {
+      "id": "d0cd117b-5e9c-4962-a628-36c8deac5413",
+      "name": "James Wilson"
+    },
+    "date": "2023-10-10",
+    "products": [
+      {
+        "id": "c76c8c03-fc8f-4269-b975-63bd596c6b91",
+        "name": "TV",
+        "price": 527.99,
+        "quantity": 2,
+        "totalPrice": 1055.98
+      }
+    ],
+    "totalAmount": "1055.98",
+    "displayedId": "OR-6f4f9",
+    "id": "6f4f96f4-f9f6-6f4f-9f6f-6f4f9f6f4f9f"
+  },
+  {
+    "customer": {
+      "id": "84f7435f-af22-4f4d-b062-62f2a34692f3",
+      "name": "Emma Davis"
+    },
+    "date": "2023-10-16",
+    "products": [
+      {
         "id": "454dedbd-04e2-4ca0-a763-73bd690dec1d",
         "name": "iPhone",
         "price": 1299.99,
         "quantity": 1,
         "totalPrice": 1299.99
-      },
-      {
-        "id": "04fa04d5-2460-4a10-8a99-1ee8137e54b8",
-        "name": "Notebook",
-        "price": 1999.99,
-        "quantity": 1,
-        "totalPrice": 1999.99
       }
     ],
-    "totalAmount": "3827.97",
-    "displayedId": "OR-4e1aa",
-    "id": "d34da1da-d373-4ea0-afef-46a68f43d6c3"
+    "totalAmount": "1299.99",
+    "displayedId": "OR-9e9c5",
+    "id": "9e9c59e9-c5c9-9e9c-5c9e-9e9c5c9e9c5c"
+  },
+  {
+    "customer": {
+      "id": "2d1df498-398e-4b2b-9c2b-8dd88b080cb1",
+      "name": "Joseph Harris"
+    },
+    "date": "2023-10-20",
+    "products": [
+      {
+        "id": "f3d2e6a7-62fc-4ae9-b9f3-2e6a7d4e9b8c",
+        "name": "Desk Chair",
+        "price": 79.99,
+        "quantity": 2,
+        "totalPrice": 159.98
+      }
+    ],
+    "totalAmount": "159.98",
+    "displayedId": "OR-aa7ab",
+    "id": "aa7abaa7-baaa-aa7a-baaa-aa7abaa7baaa"
+  },
+  {
+    "customer": {
+      "id": "c231149e-1e44-472b-8b74-2ce5eb0a8265",
+      "name": "Mia Taylor"
+    },
+    "date": "2023-10-18",
+    "products": [
+      {
+        "id": "7a7bd5ce-3e75-4e27-8a7a-4c5e6a88dd26",
+        "name": "Coffee Maker",
+        "price": 89.99,
+        "quantity": 4,
+        "totalPrice": 359.96
+      }
+    ],
+    "totalAmount": "359.96",
+    "displayedId": "OR-2b2e5",
+    "id": "2b2e52b2-5e2b-2b2e-5e2b-2b2e52b2e52b"
+  },
+  {
+    "customer": {
+      "id": "6e3f0ff6-d19d-46a0-82e4-18bfa24f5d67",
+      "name": "Sofia Allen"
+    },
+    "date": "2023-10-11",
+    "products": [
+      {
+        "id": "dgc3746-4d8b7e0f-8a52-47d6-9e7d-52b6c1f4a99e",
+        "name": "Digital Camera",
+        "price": 199.99,
+        "quantity": 1,
+        "totalPrice": 199.99
+      },
+      {
+        "id": "a9cd2d8e-752f-4f3e-952d-97e9249b19e4",
+        "name": "Laptop",
+        "price": 999.99,
+        "quantity": 2,
+        "totalPrice": 1999.98
+      },
+      {
+        "id": "1c9e0a2d-8d3e-40b9-9c0a-2d9e0c8d2e8a",
+        "name": "Blender",
+        "price": 69.99,
+        "quantity": 4,
+        "totalPrice": 279.96
+      }
+    ],
+    "totalAmount": "2479.93",
+    "displayedId": "OR-38c6f",
+    "id": "38c6f38c-6f38-38c6-f38c-6f38c38c6f38c"
+  },
+  {
+    "customer": {
+      "id": "7fb0c9d5-1d02-46d4-8e07-11db8b1de13c",
+      "name": "James Robinson"
+    },
+    "date": "2023-10-19",
+    "products": [
+      {
+        "id": "1f7e9d3c-2963-4d45-96cd-1dc4a75289dd",
+        "name": "Washing Machine",
+        "price": 349.99,
+        "quantity": 1,
+        "totalPrice": 349.99
+      }
+    ],
+    "totalAmount": "349.99",
+    "displayedId": "OR-11b8b",
+    "id": "11b8b11b-8b11-11b8-b11b-8b11b11b8b11b"
+  },
+  {
+    "customer": {
+      "id": "eddb89ea-5c14-4379-9ef2-3b8c970a4c36",
+      "name": "Olivia Wright"
+    },
+    "date": "2023-10-25",
+    "products": [
+      {
+        "id": "f87ec1b9-5f63-4a35-84f8-1db4c6f9ee4b",
+        "name": "Gaming Console",
+        "price": 399.99,
+        "quantity": 1,
+        "totalPrice": 399.99
+      }
+    ],
+    "totalAmount": "399.99",
+    "displayedId": "OR-26d5c",
+    "id": "26d5c26d-5c26-26d5-c26d-5c26d26d5c26d"
+  },
+  {
+    "customer": {
+      "id": "51f3ab9a-173f-4c9a-b282-8495ca50e431",
+      "name": "William Young"
+    },
+    "date": "2023-10-22",
+    "products": [
+      {
+        "id": "c8b1ecfd-d6c8-471d-9b67-02d3b8b1e5b8",
+        "name": "Tablet",
+        "price": 299.99,
+        "quantity": 1,
+        "totalPrice": 299.99
+      }
+    ],
+    "totalAmount": "299.99",
+    "displayedId": "OR-4295c",
+    "id": "4295c429-5c42-4295-c429-5c42954295c42"
   }
 ]

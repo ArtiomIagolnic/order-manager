@@ -18,7 +18,6 @@
   <!-- Search field -->
   <SearchComponent
     @filtered-results="updateDisplayedProducts"
-    :store-getter="productStore.getProducts"
     :place-holder="'Search products'"
   />
 
@@ -28,14 +27,50 @@
 
   <!-- Products Table -->
   <TableComponent
-    :headers="tableHeaders"
-    :item-props="itemProps"
     :items="displayedProducts"
     :selectedCount="selectedCount"
     :export-selected="exportLink"
     @update-item="openModal"
     @delete-item="deleteProduct"
   >
+    <template #mobile-sort-menu>
+      <div class="w-full text-left px-4 py-2 text-gray-800">
+        <SortIconsComponent
+          column="name"
+          :sortDirections="sortDirections['name']"
+          @sort-column="sortColumn('name')"
+        >
+          <template #sort-button>Name </template>
+        </SortIconsComponent>
+      </div>
+      <div class="w-full text-left px-4 py-2 text-gray-800">
+        <SortIconsComponent
+          column="price"
+          :sortDirections="sortDirections['price']"
+          @sort-column="sortColumn('price')"
+        >
+          <template #sort-button>Price</template>
+        </SortIconsComponent>
+      </div>
+      <div class="w-full text-left px-4 py-2 text-gray-800">
+        <SortIconsComponent
+          column="stock"
+          :sortDirections="sortDirections['stock']"
+          @sort-column="sortColumn('stock')"
+        >
+          <template #sort-button> Stock</template>
+        </SortIconsComponent>
+      </div>
+      <div class="w-full text-left px-4 py-2 text-gray-800">
+        <SortIconsComponent
+          column="sku"
+          :sortDirections="sortDirections['sku']"
+          @sort-column="sortColumn('sku')"
+        >
+          <template #sort-button> SKU</template>
+        </SortIconsComponent>
+      </div>
+    </template>
     <template #mobile-card-headers="item">
       <input
         type="checkbox"
@@ -79,67 +114,69 @@
     </template>
 
     <template #table-header>
-      <th class="p-3 text-left">Nr</th>
-      <th class="p-3 text-left">
-        Name
+      <div class="w-8 text-left">Nr</div>
+      <div class="text-left flex-1">
         <SortIconsComponent
           column="name"
           :sortDirections="sortDirections['name']"
           @sort-column="sortColumn('name')"
-        />
-      </th>
-      <th class="p-3 text-left">
-        Price
+        >
+          <template #sort-button> Name</template>
+        </SortIconsComponent>
+      </div>
+      <div class="text-left flex-1">
         <SortIconsComponent
           column="price"
           :sortDirections="sortDirections['price']"
           @sort-column="sortColumn('price')"
-        />
-      </th>
-      <th class="p-3 text-left">
-        Stock
+        >
+          <template #sort-button> Price</template>
+        </SortIconsComponent>
+      </div>
+      <div class="text-left flex-1">
         <SortIconsComponent
           column="stock"
           :sortDirections="sortDirections['stock']"
           @sort-column="sortColumn('stock')"
-        />
-      </th>
-      <th class="p-3 text-left">
-        SKU
+        >
+          <template #sort-button> Stock</template>
+        </SortIconsComponent>
+      </div>
+      <div class="text-left flex-1">
         <SortIconsComponent
           column="sku"
           :sortDirections="sortDirections['sku']"
           @sort-column="sortColumn('sku')"
-        />
-      </th>
-      <th class="p-3 text-center">Actions</th>
+        >
+          <template #sort-button> SKU</template>
+        </SortIconsComponent>
+      </div>
+      <div class="text-center flex-1">Actions</div>
     </template>
     <template #body-item="{ item, index }">
-      <tr class="flex-col flex-no wrap mb-0">
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+      <div class="flex items-center p-3 border-b hover:bg-gray-100">
+        <div class="w-8 flex items-center">
           <input
             :value="item.id"
             v-model="selectedItems"
             type="checkbox"
             class="form-checkbox text-blue-400 h-5 w-5"
           />
-          <span class="ml-2">{{ index + 1 }}</span>
-        </td>
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+          <span class="ml-1">{{ index + 1 }}</span>
+        </div>
+        <div class="flex-1 p-3">
           {{ item.name }}
-        </td>
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+        </div>
+        <div class="flex-1 p-3">
           {{ item.price }}
-        </td>
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+        </div>
+        <div class="flex-1 p-3">
           {{ item.stock }}
-        </td>
-        <td class="border-grey-light border hover:bg-gray-100 p-3">
+        </div>
+        <div class="flex-1 p-3">
           {{ item.sku }}
-        </td>
-        <td
-          class="border-grey-light border hover:bg-gray-100 p-3 flex justify-around"
-        >
+        </div>
+        <div class="flex-1 flex justify-around">
           <button
             @click="openModal(item)"
             class="text-blue-400 hover:text-blue-600 hover:font-medium cursor-pointer"
@@ -147,19 +184,19 @@
             Update
           </button>
           <button
-            @click="deleteCustomer(item)"
-            class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer"
+            @click="deleteProduct(item)"
+            class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer ml-1"
           >
             Delete
           </button>
           <a
             :href="`http://localhost:8000/api/products/export/${item.id}`"
-            class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer"
+            class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer ml-1"
           >
             Export
           </a>
-        </td>
-      </tr>
+        </div>
+      </div>
     </template>
   </TableComponent>
 
@@ -195,17 +232,13 @@ export default {
   },
   data() {
     return {
-      tableHeaders: ["Name", "Price", "Stock", "SKU", "Actions"],
-      itemProps: ["name", "price", "stock", "sku"],
       products: [],
       pageSize: 10,
       displayedProducts: [],
       loadedProductsCount: 0,
-      showNoDataMessage: false,
       updatedProduct: {},
       openProductModal: false,
       selectedItems: [],
-      exportLink: "",
       sortDirections: {
         name: "desc",
         price: "desc",
@@ -213,32 +246,33 @@ export default {
         sku: "desc",
       },
       sortHeader: "",
+      searchActive: false,
     };
   },
-
   created() {
     this.loadProducts();
   },
-  watch: {
-    selectedItems: {
-      handler: function () {
-        this.exportLink =
-          "http://localhost:8000/api/products/export/" +
-          this.selectedItems.join(",");
-      },
-      deep: true,
-    },
-  },
-
   computed: {
     productStore() {
       return useProductStore();
     },
     canLoadMore() {
-      return this.loadedProductsCount < this.products.length;
+      return (
+        this.loadedProductsCount < this.products.length && !this.searchActive
+      );
     },
     selectedCount() {
       return this.selectedItems.length;
+    },
+    exportLink() {
+      return this.selectedItems.length > 0
+        ? `http://localhost:8000/api/products/export/${this.selectedItems.join(
+            ","
+          )}`
+        : "";
+    },
+    showNoDataMessage() {
+      return this.displayedProducts.length === 0;
     },
   },
   methods: {
@@ -260,16 +294,24 @@ export default {
     },
     async deleteProduct(product) {
       if (this.selectedItems.length > 0) {
-        await this.productStore.deleteProduct(this.selectedItems.join(","));
+        await this.productStore.deleteProduct(this.selectedItems);
         this.selectedItems.length = 0;
       } else {
         await this.productStore.deleteProduct(product.id);
       }
       this.loadProducts();
     },
-    updateDisplayedProducts(filteredProducts) {
-      this.displayedProducts = filteredProducts;
-      this.showNoDataMessage = this.displayedProducts.length === 0;
+    async updateDisplayedProducts(searchFilter) {
+      if (searchFilter) {
+        const searchValue = searchFilter.toLowerCase();
+        this.displayedProducts = await this.productStore.getProducts(
+          searchValue
+        );
+        this.searchActive = true;
+      } else {
+        this.loadProducts();
+        this.searchActive = false;
+      }
     },
     openModal(product) {
       if (product) {

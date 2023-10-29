@@ -14,7 +14,7 @@ export const useExportStore = defineStore("export", {
           const response = await axios.get(
             "http://localhost:8000/api/exports/all"
           );
-          return (this.exports = response.data || []);
+          return (this.excelExports = response.data || []);
         } catch (error) {
           useNotificationStore().addNotification({
             type: "failed",

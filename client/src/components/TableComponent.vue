@@ -2,39 +2,57 @@
   <div class="container">
     <!-- mobile version -->
     <div class="bg-white md:hidden">
-      <div class="space-y-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div class="sticky-header" :style="{ top: stickyHeaderTop }">
           <div class="px-6 py-4 flex items-center justify-between">
-            <div class="text-gray-600">{{ selectedCount }} selected</div>
-            <button
-              @click="isMenuOpen = !isMenuOpen"
-              class="px-3 py-1 text-white bg-gray-700 hover:bg-gray-800 rounded-md text-sm"
-            >
-              Button Actions
-            </button>
-            <div
-              v-show="isMenuOpen"
-              class="dropdown-menu right-0 absolute mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-20"
-            >
-              <ul>
-                <li>
-                  <button
-                    @click="deleteSelected"
-                    class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
-                  >
-                    Delete Selected
-                  </button>
-                </li>
-                <li>
-                  <a
-                    :href="exportSelected"
-                    class="text-left block w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
-                    :class="disabledClass"
-                  >
-                    Export Selected as Excel
-                  </a>
-                </li>
-              </ul>
+            <div class="text-gray-600 text-sm">
+              {{ selectedCount }} selected
+            </div>
+            <div class="flex space-x-4">
+              <button
+                @click="toggleSortMenu"
+                class="px-3 ml-2 py-1 text-white bg-gray-700 hover:bg-gray-800 rounded-md text-sm"
+              >
+                Sort by
+              </button>
+              <div
+                v-show="isSortMenuOpen"
+                class="dropdown-menu right-0 absolute mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-20"
+              >
+                <slot name="mobile-sort-menu"></slot>
+              </div>
+
+              <button
+                @click="toggleActionsMenu"
+                class="px-3 ml-2 py-1 text-white bg-gray-700 hover:bg-gray-800 rounded-md text-sm"
+              >
+                Button Actions
+              </button>
+
+              <div
+                v-show="isMenuOpen"
+                class="dropdown-menu right-0 absolute mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-20"
+              >
+                <ul>
+                  <li>
+                    <button
+                      @click="deleteSelected"
+                      class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    >
+                      Delete Selected
+                    </button>
+                  </li>
+                  <li>
+                    <a
+                      :href="exportSelected"
+                      class="text-left block w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
+                      :class="disabledClass"
+                    >
+                      Export Selected as Excel
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -61,7 +79,6 @@
 
     <!-- Desktop version -->
     <div class="hidden md:block">
-      <!-- Panel with options -->
       <!-- if clicked outside the panel, it closes -->
       <div
         v-show="isMenuOpen"
@@ -109,33 +126,31 @@
                 :class="disabledClass"
               >
                 Export Selected as Excel
-            </a>
+              </a>
             </li>
           </ul>
         </div>
       </div>
 
-      <table
-        class="desktop-table w-full border-collapse border border-gray-200 rounded-lg overflow-hidden shadow-lg my-5"
+      <div
+        class="desktop-table w-full rounded-lg overflow-hidden shadow-lg my-5"
       >
-        <thead class="text-white">
-          <tr
-            class="bg-teal-400 flex-col flex-no wrap table-row rounded-l-lg rounded-none mb-0"
-          >
-            <slot name="table-header"> </slot>
-          </tr>
-        </thead>
+        <!-- Table Header -->
+        <div class="bg-teal-400 flex justify-between p-3 flex-no-wrap rounded-l-lg mb-0 text-white">
+          <slot name="table-header"></slot>
+        </div>
 
-        <tbody class="flex-none">
+        <!-- Table Body -->
+        <div class="flex-none ">
           <slot
             name="body-item"
             v-for="(item, i) in items"
             :key="item.id"
             :item="item"
             :index="i"
-          />
-        </tbody>
-      </table>
+          ></slot>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -144,6 +159,7 @@ export default {
   data() {
     return {
       isMenuOpen: false,
+      isSortMenuOpen: false,
       stickyHeaderTop: 0,
     };
   },
@@ -153,11 +169,7 @@ export default {
       required: true,
       default: [],
     },
-    itemProps: {
-      type: Array,
-      required: true,
-      default: [],
-    },
+
     exportSelected: {
       type: String,
       default: "",
@@ -190,14 +202,20 @@ export default {
     },
   },
   methods: {
+    toggleSortMenu() {
+      this.isSortMenuOpen = !this.isSortMenuOpen;
+      this.isMenuOpen = false;
+    },
+    toggleActionsMenu() {
+      this.isMenuOpen = !this.isMenuOpen;
+      this.isSortMenuOpen = false;
+    },
     deleteSelected(item) {
       this.$emit("delete-item", item);
       this.isMenuOpen = false;
     },
-
     handleScroll() {
       const scrollY = window.scrollY;
-      // Adjust the top value as needed, e.g., to avoid covering the navbar
       this.stickyButtonTop = scrollY > 100 ? "0" : "100px";
     },
   },
