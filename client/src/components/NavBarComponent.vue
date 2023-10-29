@@ -68,7 +68,7 @@
               :to="link.path"
               @click="closeMobileMenu"
               :class="{ 'active-link': $route.path === link.path }"
-              class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:border-gray-700 transition-colors hover:underline"
+              class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white  dark:hover:bg-gray-700 dark:border-gray-700 transition-colors hover:underline"
             >
               {{ link.name }}
             </router-link>
