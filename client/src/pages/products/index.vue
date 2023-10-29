@@ -272,7 +272,7 @@ export default {
         : "";
     },
     showNoDataMessage() {
-      return this.displayedProducts.length === 0;
+      return this.displayedProducts.length === 0 && this.searchActive;
     },
   },
   methods: {

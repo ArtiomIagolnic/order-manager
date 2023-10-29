@@ -84,7 +84,7 @@ export default {
       return this.loadedLogsCount < this.logs.length && !this.searchActive;
     },
     showNoDataMessage() {
-      return this.displayedLogs.length === 0;
+      return this.displayedLogs.length === 0 && this.searchActive;
     },
   },
   methods: {

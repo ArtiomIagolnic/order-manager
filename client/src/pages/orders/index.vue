@@ -280,7 +280,7 @@ export default {
       };
     },
     showNoDataMessage() {
-      return this.displayedOrders.length === 0;
+      return this.displayedOrders.length === 0 && this.searchActive;
     },
   },
   methods: {

@@ -283,7 +283,7 @@ export default {
     },
     showNoDataMessage() {
       // Determine if a "No data found" message should be displayed
-      return this.displayedCustomers.length === 0;
+      return this.displayedCustomers.length === 0 && this.searchActive;
     },
   },
   methods: {

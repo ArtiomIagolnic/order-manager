@@ -842,5 +842,9 @@
   {
     "event": "Customer has been updated",
     "timestamp": "2023-10-29  18:31"
+  },
+  {
+    "event": "Export has been deleted",
+    "timestamp": "2023-10-29  18:44"
   }
 ]

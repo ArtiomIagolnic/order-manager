@@ -195,7 +195,7 @@ export default {
       return this.selectedItems.length;
     },
     showNoDataMessage() {
-      return this.displayedExports.length === 0;
+      return this.displayedExports.length === 0 && this.searchActive;
     },
   },
   methods: {
