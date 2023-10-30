@@ -75,7 +75,7 @@
 
     <template #table-header>
       <div
-        class="bg-teal-400 p-3 flex-no-wrap rounded-l-lg mb-0 text-white grid grid-cols-11 divide-x divide-gray-300"
+        class="bg-teal-400 p-3 flex-no-wrap rounded-l-lg mb-0 text-white grid grid-cols-10 divide-x divide-gray-300"
       >
         <div class="p-2 text-left font-bold col-span-1">Nr</div>
         <div class="p-2 text-left font-bold col-span-2">
@@ -107,12 +107,12 @@
           </SortIconsComponent>
         </div>
 
-        <div class="p-2 text-center font-bold col-span-3">Actions</div>
+        <div class="p-2 text-center font-bold col-span-2">Actions</div>
       </div>
     </template>
     <template #body-item="{ item, index }">
       <div
-        class="grid grid-cols-11 divide-x divide-gray-300 p-3 border-b hover:bg-gray-100"
+        class="grid grid-cols-10 divide-x divide-gray-300 p-3 border-b hover:bg-gray-100"
       >
         <div class="p-2 text-left col-span-1">
           <input
@@ -131,9 +131,11 @@
           {{ item.sourceTable }}
         </div>
         <div class="p-2 text-left col-span-3 overflow-x-auto">
-          {{ item.exportedFile }}
+          <a :href="item.exportedFileUrl">
+            {{ item.exportedFile }}
+          </a>
         </div>
-        <div class="p-2 text-center col-span-3">
+        <div class="p-2 text-center col-span-2">
           <button
             @click="deleteExport(item)"
             class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer"

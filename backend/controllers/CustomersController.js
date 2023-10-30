@@ -117,12 +117,16 @@ const exportCustomer = asyncHandler(async (req, res) => {
     );
 
     // create a new record in /storage/database/exports.json
+    const baseUrl = "http://localhost:8000/exports/";
+    //create a link to download export file
+    const fileUrl = `${baseUrl}${excelExportFilename}`;
 
     const exportRecord = {
       id: uuidv4(),
       timestamp: timeStampFormat(new Date()),
       sourceTable: "customers",
       exportedFile: excelExportFilename,
+      exportedFileUrl: fileUrl,
     };
     await Export.insert(exportRecord);
 

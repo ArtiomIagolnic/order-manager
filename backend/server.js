@@ -33,6 +33,8 @@ eventListeners.entityDeletedListener();
 
 // Serve static files from the "client/dist" directory
 app.use(express.static(path.join(__dirname, "../client/dist"))); // Go up one level to access the client folder
+// Serve static files from the "storage/exports" directory
+app.use("/exports", express.static(path.join(__dirname, "storage/exports")));
 
 app.use("/api/customers", customerRoutes);
 app.use("/api/products", productRoutes);

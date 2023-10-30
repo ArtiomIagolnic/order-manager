@@ -70,7 +70,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 // @access public
 const deleteProduct = asyncHandler(async (req, res) => {
   const productId = req.params.products.split(",");
-  console.log(productId)
+  console.log(productId);
   const deletedProduct = await Product.delete(productId);
   res.status(204).send(deletedProduct);
 });
@@ -111,11 +111,17 @@ const exportProduct = asyncHandler(async (req, res) => {
     );
 
     // create a new record in /storage/database/exports.json
+    const baseUrl = "http://localhost:8000/exports/";
+    //create a link to download export file
+    const fileUrl = `${baseUrl}${excelExportFilename}`;
+
+    // create a new record in /storage/database/exports.json
     const exportRecord = {
       id: uuidv4(),
       timestamp: timeStampFormat(new Date()),
       sourceTable: "products",
       exportedFile: excelExportFilename,
+      exportedFileUrl: fileUrl,
     };
     await Export.insert(exportRecord);
 

@@ -1,8 +1,23 @@
 [
   {
-    "id": "e3a6ea1a-064f-47a2-b16c-b3777171b96c",
-    "timestamp": "2023-10-29  18:52",
+    "id": "07e9a367-81f6-489a-921a-3d34a588ab14",
+    "timestamp": "2023-10-30  12:46",
+    "sourceTable": "customers",
+    "exportedFile": "customers_1698666385761.xlsx",
+    "exportedFileUrl": "http://localhost:8000/exports/customers_1698666385761.xlsx"
+  },
+  {
+    "id": "f7c827d6-1b6c-4dd3-bbea-6e6cb9c34c1d",
+    "timestamp": "2023-10-30  12:46",
+    "sourceTable": "products",
+    "exportedFile": "products_1698666411652.xlsx",
+    "exportedFileUrl": "http://localhost:8000/exports/products_1698666411652.xlsx"
+  },
+  {
+    "id": "ccbe9d16-a47b-4810-9ce4-5f4c1b46e0bb",
+    "timestamp": "2023-10-30  12:47",
     "sourceTable": "orders",
-    "exportedFile": "orders_1698601922680.xlsx"
+    "exportedFile": "orders_1698666476083.xlsx",
+    "exportedFileUrl": "http://localhost:8000/exports/orders_1698666476083.xlsx"
   }
 ]
