@@ -116,48 +116,54 @@
 
     <!-- Desktop table -->
     <template #table-header>
-      <div class="w-8 text-left">Nr</div>
-      <div class="text-left flex-1">
-        <SortIconsComponent
-          column="name"
-          :sortDirections="sortDirections['name']"
-          @sort-column="sortColumn('name')"
-        >
-          <template #sort-button> Name</template>
-        </SortIconsComponent>
+      <div
+        class="bg-teal-400 p-3 flex-no-wrap rounded-l-lg mb-0 text-white grid grid-cols-12 divide-x divide-gray-300"
+      >
+        <div class="p-2 text-left font-bold col-span-1">Nr</div>
+        <div class="p-2 text-left font-bold col-span-2">
+          <SortIconsComponent
+            column="name"
+            :sortDirections="sortDirections['name']"
+            @sort-column="sortColumn('name')"
+          >
+            <template #sort-button> Name</template>
+          </SortIconsComponent>
+        </div>
+        <div class="p-2 text-left font-bold col-span-2">
+          <SortIconsComponent
+            column="price"
+            :sortDirections="sortDirections['price']"
+            @sort-column="sortColumn('price')"
+          >
+            <template #sort-button> Price</template>
+          </SortIconsComponent>
+        </div>
+        <div class="p-2 text-left font-bold col-span-2">
+          <SortIconsComponent
+            column="stock"
+            :sortDirections="sortDirections['stock']"
+            @sort-column="sortColumn('stock')"
+          >
+            <template #sort-button> Stock</template>
+          </SortIconsComponent>
+        </div>
+        <div class="p-2 text-left font-bold col-span-2">
+          <SortIconsComponent
+            column="sku"
+            :sortDirections="sortDirections['sku']"
+            @sort-column="sortColumn('sku')"
+          >
+            <template #sort-button> SKU</template>
+          </SortIconsComponent>
+        </div>
+        <div class="p-2 text-center font-bold col-span-3">Actions</div>
       </div>
-      <div class="text-left flex-1">
-        <SortIconsComponent
-          column="price"
-          :sortDirections="sortDirections['price']"
-          @sort-column="sortColumn('price')"
-        >
-          <template #sort-button> Price</template>
-        </SortIconsComponent>
-      </div>
-      <div class="text-left flex-1">
-        <SortIconsComponent
-          column="stock"
-          :sortDirections="sortDirections['stock']"
-          @sort-column="sortColumn('stock')"
-        >
-          <template #sort-button> Stock</template>
-        </SortIconsComponent>
-      </div>
-      <div class="text-left flex-1">
-        <SortIconsComponent
-          column="sku"
-          :sortDirections="sortDirections['sku']"
-          @sort-column="sortColumn('sku')"
-        >
-          <template #sort-button> SKU</template>
-        </SortIconsComponent>
-      </div>
-      <div class="text-center flex-1">Actions</div>
     </template>
     <template #body-item="{ item, index }">
-      <div class="flex items-center p-3 border-b hover:bg-gray-100">
-        <div class="w-8 flex items-center">
+      <div
+        class="grid grid-cols-12 divide-x divide-gray-300 p-3 border-b hover:bg-gray-100"
+      >
+        <div class="p-2 text-left col-span-1">
           <input
             :value="item.id"
             v-model="selectedItems"
@@ -166,19 +172,19 @@
           />
           <span class="ml-1">{{ index + 1 }}</span>
         </div>
-        <div class="flex-1 p-3">
+        <div class="p-2 text-left col-span-2">
           {{ item.name }}
         </div>
-        <div class="flex-1 p-3">
+        <div class="p-2 text-left col-span-2">
           {{ item.price }}
         </div>
-        <div class="flex-1 p-3">
+        <div class="p-2 text-left col-span-2">
           {{ item.stock }}
         </div>
-        <div class="flex-1 p-3">
+        <div class="p-2 text-left col-span-2">
           {{ item.sku }}
         </div>
-        <div class="flex-1 flex justify-around">
+        <div class="p-2 text-center col-span-3">
           <button
             @click="openModal(item)"
             class="text-blue-400 hover:text-blue-600 hover:font-medium cursor-pointer"

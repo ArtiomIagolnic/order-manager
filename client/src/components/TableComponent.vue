@@ -136,9 +136,8 @@
         class="desktop-table w-full rounded-lg overflow-hidden shadow-lg my-5"
       >
         <!-- Table Header -->
-        <div class="bg-teal-400 flex justify-between p-3 flex-no-wrap rounded-l-lg mb-0 text-white">
-          <slot name="table-header"></slot>
-        </div>
+        <slot name="table-header"></slot>
+       
 
         <!-- Table Body -->
         <div class="flex-none ">

@@ -116,52 +116,59 @@
     </template>
 
     <!-- Table Header -->
-    <template #table-header>
-      <div class="w-8 text-left">Nr</div>
-      <div class="text-left flex-1">
-        <SortIconsComponent
-          column="firstName"
-          :sortDirections="sortDirections['firstName']"
-          @sort-column="sortColumn('firstName')"
-        >
-          <template #sort-button>First name</template>
-        </SortIconsComponent>
-      </div>
-      <div class="text-left flex-1">
-        <SortIconsComponent
-          column="lastName"
-          :sortDirections="sortDirections['lastName']"
-          @sort-column="sortColumn('lastName')"
-        >
-          <template #sort-button>Last name</template>
-        </SortIconsComponent>
-      </div>
-      <div class="text-left flex-1">
-        <SortIconsComponent
-          column="age"
-          :sortDirections="sortDirections['age']"
-          @sort-column="sortColumn('age')"
-        >
-          <template #sort-button>Age</template>
-        </SortIconsComponent>
-      </div>
-      <div class="text-left flex-1">
-        <SortIconsComponent
-          column="billingAdress"
-          :sortDirections="sortDirections['billingAdress']"
-          @sort-column="sortColumn('billingAdress')"
-        >
-          <template #sort-button>Billing address</template>
-        </SortIconsComponent>
-      </div>
 
-      <div class="text-center flex-1">Actions</div>
+    <template #table-header>
+      <div
+        class="bg-teal-400 p-3 flex-no-wrap rounded-l-lg mb-0 text-white grid grid-cols-12 divide-x divide-gray-300"
+      >
+        <div class="p-2 text-left font-bold col-span-1">Nr</div>
+        <div class="p-2 text-left font-bold col-span-2">
+          <SortIconsComponent
+            column="firstName"
+            :sortDirections="sortDirections['firstName']"
+            @sort-column="sortColumn('firstName')"
+          >
+            <template #sort-button>First name</template>
+          </SortIconsComponent>
+        </div>
+        <div class="p-2 text-left font-bold col-span-2">
+          <SortIconsComponent
+            column="lastName"
+            :sortDirections="sortDirections['lastName']"
+            @sort-column="sortColumn('lastName')"
+          >
+            <template #sort-button>Last name</template>
+          </SortIconsComponent>
+        </div>
+        <div class="p-2 text-left font-bold col-span-2">
+          <SortIconsComponent
+            column="age"
+            :sortDirections="sortDirections['age']"
+            @sort-column="sortColumn('age')"
+          >
+            <template #sort-button>Age</template>
+          </SortIconsComponent>
+        </div>
+        <div class="p-2 text-left font-bold col-span-2">
+          <SortIconsComponent
+            column="billingAdress"
+            :sortDirections="sortDirections['billingAdress']"
+            @sort-column="sortColumn('billingAdress')"
+          >
+            <template #sort-button>Billing address</template>
+          </SortIconsComponent>
+        </div>
+
+        <div class="p-2 text-center font-bold col-span-3">Actions</div>
+      </div>
     </template>
 
     <!-- Body Item -->
     <template #body-item="{ item, index }">
-      <div class="flex items-center p-3 border-b hover:bg-gray-100">
-        <div class="w-8 flex items-center">
+      <div
+        class="grid grid-cols-12 divide-x divide-gray-300 p-3 border-b hover:bg-gray-100"
+      >
+        <div class="p-2 text-left col-span-1">
           <input
             :value="item.id"
             v-model="selectedItems"
@@ -170,19 +177,19 @@
           />
           <span class="ml-1">{{ index + 1 }}</span>
         </div>
-        <div class="flex-1 p-3">
+        <div class="p-2 text-left col-span-2">
           {{ item.firstName }}
         </div>
-        <div class="flex-1 p-3">
+        <div class="p-2 text-left col-span-2">
           {{ item.lastName }}
         </div>
-        <div class="flex-1 p-3">
+        <div class="p-2 text-left col-span-2">
           {{ item.age }}
         </div>
-        <div class="flex-1 p-3">
+        <div class="p-2 text-left col-span-2">
           {{ item.billingAdress }}
         </div>
-        <div class="flex-1 flex justify-around">
+        <div class="p-2 text-center col-span-3">
           <button
             @click="openModal(item)"
             class="text-blue-400 hover:text-blue-600 hover:font-medium cursor-pointer"

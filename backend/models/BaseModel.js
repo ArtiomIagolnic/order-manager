@@ -7,13 +7,12 @@ const writeFileAsync = util.promisify(fs.writeFile);
 
 class BaseModel {
   constructor(dataPath) {
-    this.dataPath = dataPath;
+    this.dataPath = dataPath; // The path to the JSON data file for this model.
   }
 
   async getAll() {
     try {
-      const dataFile = await readFileAsync(this.dataPath);
-      const records = JSON.parse(dataFile);
+      const records = JSON.parse(await readFileAsync(this.dataPath));
       return records;
     } catch (err) {
       throw err;
@@ -64,7 +63,6 @@ class BaseModel {
           break;
         }
       }
-
       await writeFileAsync(this.dataPath, JSON.stringify(records, null, 2));
       this.emitEntityUpdated(newData);
 
@@ -76,15 +74,8 @@ class BaseModel {
 
   async delete(ids) {
     try {
-      const deletedRecords = [];
-      if (Array.isArray(ids)) {
-        for (const id of ids) {
-          const record = await this.getById(id);
-          deletedRecords.push(record);
-        }
-      } else {
-        const record = await this.getById(id);
-        deletedRecords.push(record);
+      if (!Array.isArray(ids)) {
+        ids = [ids];
       }
 
       const dataFile = await readFileAsync(this.dataPath);
@@ -97,7 +88,7 @@ class BaseModel {
       );
       this.emitEntityDeleted(ids);
 
-      return ids; // Return the deleted record if needed
+      return ids;
     } catch (err) {
       throw err;
     }

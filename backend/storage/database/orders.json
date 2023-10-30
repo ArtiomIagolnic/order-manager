@@ -1,25 +1,6 @@
 [
   {
     "customer": {
-      "id": "6a62b1eb-1073-4d12-b2b8-6ec47366bf54",
-      "name": "John Doe"
-    },
-    "date": "2023-10-06",
-    "products": [
-      {
-        "id": "a9cd2d8e-752f-4f3e-952d-97e9249b19e4",
-        "name": "Laptop",
-        "price": 999.99,
-        "quantity": 2,
-        "totalPrice": 1999.98
-      }
-    ],
-    "totalAmount": "1999.98",
-    "displayedId": "OR-7215d",
-    "id": "b5523c39-fef7-4a75-a0a8-c8687088ed03"
-  },
-  {
-    "customer": {
       "id": "84f7435f-af22-4f4d-b062-62f2a34692f3",
       "name": "Emma Davis"
     },

@@ -850,5 +850,9 @@
   {
     "event": "Export has been created",
     "timestamp": "2023-10-29  18:52"
+  },
+  {
+    "event": "Order has been deleted",
+    "timestamp": "2023-10-30  08:40"
   }
 ]
