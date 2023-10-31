@@ -13,10 +13,36 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
   faSortUp,
   faSortDown,
-  faSort
+  faSort,
+  faTrash,
+  faFileExport,
+  faUserPlus,
+  faPlus,
+  faCartPlus,
+  faMagnifyingGlass,
+  faHouse,
+  faUserGroup,
+  faStore,
+  faCartShopping,
+  faBook
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faSortUp, faSortDown,faSort);
+library.add(
+  faSortUp,
+  faSortDown,
+  faSort,
+  faTrash,
+  faFileExport,
+  faUserPlus,
+  faPlus,
+  faCartPlus,
+  faMagnifyingGlass,
+  faHouse,
+  faUserGroup,
+  faStore,
+  faCartShopping,
+  faBook
+);
 const pinia = createPinia();
 const app = createApp(App);
 

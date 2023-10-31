@@ -2,60 +2,60 @@
   <div class="container">
     <!-- mobile version -->
     <div class="bg-white md:hidden">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div class="sticky-header" :style="{ top: stickyHeaderTop }">
-          <div class="px-6 py-4 flex items-center justify-between">
-            <div class="text-gray-600 text-sm">
-              {{ selectedCount }} selected
+      <div class="sticky-header" :style="{ top: stickyHeaderTop }">
+        <div class="px-6 py-4 flex items-center justify-between">
+          <div class="text-gray-600 text-sm">{{ selectedCount }} selected</div>
+          <div class="flex space-x-4">
+            <button
+              @click="toggleSortMenu"
+              class="px-3 ml-2 py-1 text-white bg-gray-700 hover:bg-gray-800 rounded-md text-sm"
+            >
+              Sort by
+            </button>
+            <div
+              v-show="isSortMenuOpen"
+              class="dropdown-menu right-0 absolute mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-20"
+            >
+              <slot name="mobile-sort-menu"></slot>
             </div>
-            <div class="flex space-x-4">
-              <button
-                @click="toggleSortMenu"
-                class="px-3 ml-2 py-1 text-white bg-gray-700 hover:bg-gray-800 rounded-md text-sm"
-              >
-                Sort by
-              </button>
-              <div
-                v-show="isSortMenuOpen"
-                class="dropdown-menu right-0 absolute mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-20"
-              >
-                <slot name="mobile-sort-menu"></slot>
-              </div>
 
-              <button
-                @click="toggleActionsMenu"
-                class="px-3 ml-2 py-1 text-white bg-gray-700 hover:bg-gray-800 rounded-md text-sm"
-              >
-                Button Actions
-              </button>
+            <button
+              @click="toggleActionsMenu"
+              class="px-3 ml-2 py-1 text-white bg-gray-700 hover:bg-gray-800 rounded-md text-sm"
+            >
+              Button Actions
+            </button>
 
-              <div
-                v-show="isMenuOpen"
-                class="dropdown-menu right-0 absolute mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-20"
-              >
-                <ul>
-                  <li>
-                    <button
-                      @click="deleteSelected"
-                      class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
-                    >
-                      Delete Selected
-                    </button>
-                  </li>
-                  <li>
-                    <a
-                      :href="exportSelected"
-                      class="text-left block w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
-                      :class="disabledClass"
-                    >
-                      Export Selected as Excel
-                    </a>
-                  </li>
-                </ul>
-              </div>
+            <div
+              v-show="isMenuOpen"
+              class="dropdown-menu right-0 absolute mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-20"
+            >
+              <ul>
+                <li>
+                  <button
+                    @click="deleteSelected"
+                    class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                  >
+                    <font-awesome-icon icon="fa-solid fa-trash" />
+                    Delete Selected
+                  </button>
+                </li>
+                <li>
+                  <a
+                    :href="exportSelected"
+                    class="text-left block w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    :class="disabledClass"
+                  >
+                    <font-awesome-icon icon="fa-solid fa-file-export" />
+                    Export Selected as Excel
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <!-- Loop Through Items -->
         <div
           v-for="(item, i) in items"
@@ -116,6 +116,7 @@
                 @click="deleteSelected"
                 class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
               >
+                <font-awesome-icon icon="fa-solid fa-trash" />
                 Delete Selected
               </button>
             </li>
@@ -125,6 +126,7 @@
                 class="text-left block w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
                 :class="disabledClass"
               >
+                <font-awesome-icon icon="fa-solid fa-file-export" />
                 Export Selected as Excel
               </a>
             </li>
@@ -137,10 +139,9 @@
       >
         <!-- Table Header -->
         <slot name="table-header"></slot>
-       
 
         <!-- Table Body -->
-        <div class="flex-none ">
+        <div class="flex-none">
           <slot
             name="body-item"
             v-for="(item, i) in items"

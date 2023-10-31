@@ -10,7 +10,7 @@
   <button
     @click="openModal()"
     class="w-full md:w-2/5 bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 mb-4 rounded"
-  >
+  ><font-awesome-icon icon="fa-solid fa-cart-plus" />
     Add new order
   </button>
 
@@ -46,7 +46,7 @@
         <SortIconsComponent
           column="customer"
           :sortDirections="getSortDirection('customer.name')"
-          @sort-column="sortColumn('customer')"
+          @sort-column="sortColumn('customer.name')"
         >
           <template #sort-button>Customer</template>
         </SortIconsComponent>

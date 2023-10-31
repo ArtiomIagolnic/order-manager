@@ -68,9 +68,9 @@
               :to="link.path"
               @click="closeMobileMenu"
               :class="{ 'active-link': $route.path === link.path }"
-              class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white  dark:hover:bg-gray-700 dark:border-gray-700 transition-colors hover:underline"
+              class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-white dark:hover:bg-gray-700 dark:border-gray-700 transition-colors hover:underline"
             >
-              {{ link.name }}
+              <font-awesome-icon :icon="link.icon" /> {{ link.name }}
             </router-link>
           </li>
         </ul>
@@ -84,12 +84,12 @@ export default {
     return {
       isMobileMenuOpen: false,
       links: [
-        { name: "Home", path: "/" },
-        { name: "Customers", path: "/customers" },
-        { name: "Products", path: "/products" },
-        { name: "Orders", path: "/orders" },
-        { name: "Exports", path: "/exports" },
-        { name: "Histories", path: "/histories" },
+        { name: "Home", path: "/", icon: "fa-solid fa-house" },
+        { name: "Customers", path: "/customers", icon: " fa-user-group" },
+        { name: "Products", path: "/products", icon: "fa-store" },
+        { name: "Orders", path: "/orders", icon: "fa-cart-shopping" },
+        { name: "Exports", path: "/exports", icon: "fa-file-export" },
+        { name: "Histories", path: "/histories", icon: "fa-book" },
       ],
     };
   },
