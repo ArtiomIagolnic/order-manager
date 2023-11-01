@@ -109,7 +109,7 @@
           Update
         </button>
         <button
-          @click="deleteCustomer(item)"
+          @click="confirmDelete(item)"
           class="text-red-600 hover:text-red-800 hover:font-medium cursor-pointer"
         >
           Delete

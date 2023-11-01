@@ -7,17 +7,19 @@
       <div
         class="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg p-6 shadow-md text-center transition-transform"
       >
-        <p class="text-lg">Are you sure you want to delete {{ entity }}?</p>
-        <div class="flex justify-around mt-4">
+        <p class="text-sm md:text-lg">
+          Are you sure you want to delete {{ entity }}?
+        </p>
+        <div class="flex justify-between md:justify-around mt-4">
           <button
             @click="confirmAction"
-            class="w-2/5 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            class="text-sm md:text-lg w-5/12 md:w-2/5 py-1 md:px-4 md:py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
             Confirm
           </button>
           <button
             @click="$emit('close-alert')"
-            class="w-2/5 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+            class="text-sm md:text-lg w-5/12 md:w-2/5 py-1 md:px-4 md:py-2 bg-red-500 text-white rounded hover:bg-red-600"
           >
             Cancel
           </button>
