@@ -24,7 +24,9 @@ import {
   faUserGroup,
   faStore,
   faCartShopping,
-  faBook
+  faBook,
+  faMobileButton,
+  faSquareCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -41,7 +43,9 @@ library.add(
   faUserGroup,
   faStore,
   faCartShopping,
-  faBook
+  faBook,
+  faMobileButton,
+  faSquareCheck
 );
 const pinia = createPinia();
 const app = createApp(App);

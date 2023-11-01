@@ -898,5 +898,49 @@
   {
     "event": "Export has been created",
     "timestamp": "2023-10-30  12:47"
+  },
+  {
+    "event": "Customer has been created",
+    "timestamp": "2023-10-31  12:11"
+  },
+  {
+    "event": "Customer has been deleted",
+    "timestamp": "2023-10-31  12:11"
+  },
+  {
+    "event": "Customer has been created",
+    "timestamp": "2023-10-31  12:37"
+  },
+  {
+    "event": "Customer has been deleted",
+    "timestamp": "2023-10-31  12:43"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-10-31  23:05"
+  },
+  {
+    "event": "Customer has been deleted",
+    "timestamp": "2023-11-01  10:13"
+  },
+  {
+    "event": "Customer has been deleted",
+    "timestamp": "2023-11-01  10:15"
+  },
+  {
+    "event": "Export has been deleted",
+    "timestamp": "2023-11-01  10:52"
+  },
+  {
+    "event": "Export has been deleted",
+    "timestamp": "2023-11-01  10:53"
+  },
+  {
+    "event": "Order has been deleted",
+    "timestamp": "2023-11-01  10:57"
+  },
+  {
+    "event": "Order has been deleted",
+    "timestamp": "2023-11-01  10:57"
   }
 ]

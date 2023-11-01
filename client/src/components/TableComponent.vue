@@ -4,13 +4,13 @@
     <div class="bg-white md:hidden">
       <div class="sticky-header" :style="{ top: stickyHeaderTop }">
         <div class="px-6 py-4 flex items-center justify-between">
-          <div class="text-gray-600 text-sm">{{ selectedCount }} selected</div>
+          <div class="text-gray-700">{{ selectedCount }} selected</div>
           <div class="flex space-x-4">
             <button
               @click="toggleSortMenu"
-              class="px-3 ml-2 py-1 text-white bg-gray-700 hover:bg-gray-800 rounded-md text-sm"
+              class="px-3 ml-2 py-1 text-white bg-gray-700 hover:bg-gray-800 rounded-md"
             >
-              Sort by
+            <font-awesome-icon icon="fa-solid fa-sort" />
             </button>
             <div
               v-show="isSortMenuOpen"
@@ -21,9 +21,9 @@
 
             <button
               @click="toggleActionsMenu"
-              class="px-3 ml-2 py-1 text-white bg-gray-700 hover:bg-gray-800 rounded-md text-sm"
+              class="px-3 ml-2 py-1 text-white bg-gray-700 hover:bg-gray-800 rounded-md"
             >
-              Button Actions
+            <font-awesome-icon icon="fa-solid fa-mobile-button" />
             </button>
 
             <div

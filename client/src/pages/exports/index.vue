@@ -1,4 +1,11 @@
 <template>
+  <!-- Alert -->
+  <AlertComponent
+    :alert-active="showDeleteAlert"
+    :entity="'export(s)'"
+    :on-confirm="deleteExport"
+    @close-alert="closeAlert"
+  />
   <!-- Search Field -->
   <SearchComponent
     @filtered-results="updateDisplayedExports"
@@ -14,7 +21,7 @@
     :selected-count="selectedCount"
     :items="displayedExports"
     :disabled="true"
-    @delete-item="deleteExport"
+    @delete-item="confirmDelete"
   >
     <template #mobile-sort-menu>
       <div class="w-full text-left px-4 py-2 text-gray-800">
@@ -60,12 +67,16 @@
       <div class="text-gray-900">{{ item.item.sourceTable }}</div>
 
       <div class="text-gray-700 font-extrabold">File:</div>
-      <div class="text-gray-900">{{ item.item.exportedFile }}</div>
+      <div class="text-gray-900">
+        <a :href="item.item.exportedFileUrl">
+          {{ item.item.exportedFile }}
+        </a>
+      </div>
     </template>
     <template #mobile-card-buttons="{ item }">
       <div class="mt-3 space-x-4 flex justify-start">
         <button
-          @click="deleteCustomer(item)"
+          @click="confirmDelete(item)"
           class="text-red-600 hover:text-red-800 hover:font-medium cursor-pointer"
         >
           Delete
@@ -137,7 +148,7 @@
         </div>
         <div class="p-2 text-center col-span-2">
           <button
-            @click="deleteExport(item)"
+            @click="confirmDelete(item)"
             class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer"
           >
             Delete
@@ -161,6 +172,7 @@
   </div>
 </template>
 <script>
+import AlertComponent from "@/components/AlertComponet.vue";
 import { useExportStore } from "@/store/export.js";
 import SearchComponent from "@/components/SearchComponent.vue";
 import TableComponent from "@/components/TableComponent.vue";
@@ -170,9 +182,11 @@ export default {
     SearchComponent,
     TableComponent,
     SortIconsComponent,
+    AlertComponent,
   },
   data() {
     return {
+      showDeleteAlert: false,
       exports: [],
       pageSize: 10,
       displayedExports: [],
@@ -185,6 +199,7 @@ export default {
       },
       sortHeader: "",
       searchActive: false,
+      itemToDelete: null,
     };
   },
   created() {
@@ -230,12 +245,23 @@ export default {
         this.searchActive = false;
       }
     },
-    async deleteExport(item) {
-      if (this.selectedItems.length > 0) {
-        await this.exportStore.deleteExport(this.selectedItems.join(","));
-        this.selectedItems.length = 0;
-      } else {
-        await this.exportStore.deleteExport(item.id);
+    closeAlert() {
+      this.showDeleteAlert = false;
+    },
+    confirmDelete(item) {
+      this.itemToDelete = item;
+      this.showDeleteAlert = true;
+    },
+    async deleteExport() {
+      if (this.itemToDelete) {
+        if (this.selectedItems.length > 0) {
+          await this.exportStore.deleteExport(this.selectedItems.join(","));
+          this.selectedItems.length = 0;
+        } else {
+          await this.exportStore.deleteExport(this.itemToDelete.id);
+        }
+        this.itemToDelete = null;
+        this.showDeleteAlert = false;
       }
       this.loadExports();
     },

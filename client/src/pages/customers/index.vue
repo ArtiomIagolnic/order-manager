@@ -1,4 +1,11 @@
 <template>
+  <!-- Alert -->
+  <AlertComponent
+    :alert-active="showDeleteAlert"
+    :entity="'customer(s)'"
+    :on-confirm="deleteCustomer"
+    @close-alert="closeAlert"
+  />
   <!-- Modal -->
   <CustomerModal
     :updatedCustomer="updatedCustomer"
@@ -11,7 +18,8 @@
   <button
     @click="openModal()"
     class="w-full md:w-2/5 bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 mb-4 rounded"
-  ><font-awesome-icon icon="fa-solid fa-user-plus" />
+  >
+    <font-awesome-icon icon="fa-solid fa-user-plus" />
     Add new customer
   </button>
 
@@ -31,7 +39,7 @@
     :selectedCount="selectedCount"
     :export-selected="exportLink"
     @update-item="openModal"
-    @delete-item="deleteCustomer"
+    @delete-item="confirmDelete"
   >
     <!-- Mobile Sorting Menu -->
     <template #mobile-sort-menu>
@@ -197,7 +205,7 @@
             Update
           </button>
           <button
-            @click="deleteCustomer(item)"
+            @click="confirmDelete(item)"
             class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer ml-1"
           >
             Delete
@@ -230,6 +238,7 @@
 </template>
 
 <script>
+import AlertComponent from "@/components/AlertComponet.vue";
 import { useCustomerStore } from "@/store/customer.js";
 import CustomerModal from "./components/CustomerModal.vue";
 import SearchComponent from "@/components/SearchComponent.vue";
@@ -238,6 +247,7 @@ import SortIconsComponent from "@/components/SortIconsComponent.vue";
 
 export default {
   components: {
+    AlertComponent,
     CustomerModal,
     SearchComponent,
     TableComponent,
@@ -245,6 +255,7 @@ export default {
   },
   data() {
     return {
+      showDeleteAlert: false,
       customers: [],
       pageSize: 10,
       displayedCustomers: [],
@@ -260,6 +271,7 @@ export default {
       },
       sortHeader: "",
       searchActive: false,
+      itemToDelete: null,
     };
   },
   // Load initial customer data
@@ -338,14 +350,26 @@ export default {
       // Close the customer modal
       this.openCustomerModal = false;
     },
+    closeAlert() {
+      this.showDeleteAlert = false;
+    },
+    confirmDelete(item) {
+      this.itemToDelete = item;
+      this.showDeleteAlert = true;
+    },
     // Delete customer(s)
-    async deleteCustomer(customer) {
-      if (this.selectedItems.length > 0) {
-        await this.customerStore.deleteCustomer(this.selectedItems);
-        this.selectedItems.length = 0;
-      } else {
-        await this.customerStore.deleteCustomer(customer.id);
+    async deleteCustomer() {
+      if (this.itemToDelete) {
+        if (this.selectedItems.length > 0) {
+          await this.customerStore.deleteCustomer(this.selectedItems);
+          this.selectedItems.length = 0;
+        } else {
+          await this.customerStore.deleteCustomer(this.itemToDelete.id);
+        }
+        this.itemToDelete = null;
+        this.showDeleteAlert = false;
       }
+
       this.loadCustomers();
     },
     async sortColumn(column) {
