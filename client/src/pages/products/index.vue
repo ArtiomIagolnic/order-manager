@@ -120,22 +120,24 @@
       <div class="text-gray-900">{{ item.item.sku }}</div>
     </template>
     <template #mobile-card-buttons="{ item }">
-      <div class="mt-3 space-x-4 flex justify-start">
+      <div
+        class="bg-gray-200 text-sm py-1 px-1 rounded select-none text-gray-700 inline-block mt-2"
+      >
         <button
           @click="openModal(item)"
-          class="text-blue-600 hover:text-blue-800 hover:font-medium cursor-pointer"
+          class="rounded px-2 py-1 hover:bg-white hover:shadow focus:outline-none"
         >
           Update
         </button>
         <button
           @click="submitDeleting(item)"
-          class="text-red-600 hover:text-red-800 hover:font-medium cursor-pointer"
+          class="rounded px-2 py-1 bg-white shadow font-medium focus:outline-none text-red-400"
         >
           Delete
         </button>
         <button
           @click="exportProduct(item.id)"
-          class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer"
+          class="rounded px-2 py-1 hover:bg-white hover:shadow focus:outline-none"
         >
           Export
         </button>
@@ -212,25 +214,34 @@
         <div class="p-2 text-left col-span-2">
           {{ item.sku }}
         </div>
-        <div class="p-2 text-center col-span-3">
-          <button
-            @click="openModal(item)"
-            class="text-blue-400 hover:text-blue-600 hover:font-medium cursor-pointer"
-          >
-            Update
-          </button>
-          <button
-            @click="submitDeleting(item)"
-            class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer ml-1"
-          >
-            Delete
-          </button>
-          <button
-            @click="exportProduct(item.id)"
-            class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer ml-1"
-          >
-            Export
-          </button>
+
+        <div class="col-span-3">
+          <div class="flex justify-center">
+            <div
+              class="bg-gray-200 text-sm py-1 px-1 rounded select-none text-gray-700 inline-block"
+            >
+              <button
+                @click="openModal(item)"
+                class="rounded px-2 py-1 hover:bg-white hover:shadow focus:outline-none"
+              >
+                Update
+              </button>
+
+              <button
+                @click="submitDeleting(item)"
+                class="rounded px-2 py-1 bg-white shadow font-medium focus:outline-none text-red-400"
+              >
+                Delete
+              </button>
+
+              <button
+                @click="exportProduct(item.id)"
+                class="rounded px-2 py-1 hover:bg-white hover:shadow focus:outline-none"
+              >
+                Export
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </template>

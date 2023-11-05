@@ -92,10 +92,12 @@
       </div>
     </template>
     <template #mobile-card-buttons="{ item }">
-      <div class="mt-3 space-x-4 flex justify-start">
+      <div
+        class="bg-gray-200 text-sm py-1 px-1 rounded select-none text-gray-700 inline-block mt-2"
+      >
         <button
           @click="submitDeleting(item)"
-          class="text-red-600 hover:text-red-800 hover:font-medium cursor-pointer"
+          class="rounded px-2 py-1 bg-white shadow font-medium focus:outline-none text-red-400"
         >
           Delete
         </button>
@@ -164,13 +166,19 @@
             {{ item.exportedFile }}
           </a>
         </div>
-        <div class="p-2 text-center col-span-2">
-          <button
-            @click="submitDeleting(item)"
-            class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer"
-          >
-            Delete
-          </button>
+        <div class="col-span-2">
+          <div class="flex justify-center">
+            <div
+              class="bg-gray-200 text-sm py-1 px-1 rounded select-none text-gray-700 inline-block"
+            >
+              <button
+                @click="submitDeleting(item)"
+                class="rounded px-2 py-1 bg-white shadow font-medium focus:outline-none text-red-400"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </template>
