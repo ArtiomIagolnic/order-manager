@@ -23,7 +23,11 @@ const __filename = fileURLToPath(import.meta.url); // Get the current module's f
 const __dirname = path.dirname(__filename); // Get the directory name from the filename
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    exposedHeaders: "Content-Disposition", // Add Content-Disposition to the list of exposed headers
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

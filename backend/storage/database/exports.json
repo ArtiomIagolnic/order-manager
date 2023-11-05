@@ -1,72 +1,16 @@
 [
   {
-    "id": "91174ec1-6892-403d-8a94-c8e9bb4d3f28",
-    "timestamp": "2023-11-05  21:04",
-    "sourceTable": "products",
-    "exportedFile": "products_1699214656719.xlsx",
-    "exportedFileUrl": "http://localhost:8000/exports/products_1699214656719.xlsx"
-  },
-  {
-    "id": "607c64e4-85d2-4706-8dc2-4c6b767f854e",
-    "timestamp": "2023-11-05  21:04",
-    "sourceTable": "products",
-    "exportedFile": "products_1699214698452.xlsx",
-    "exportedFileUrl": "http://localhost:8000/exports/products_1699214698452.xlsx"
-  },
-  {
-    "id": "a6a9fdc9-a85c-469e-b4d5-0aa5758981b7",
-    "timestamp": "2023-11-05  21:05",
-    "sourceTable": "products",
-    "exportedFile": "products_1699214705519.xlsx",
-    "exportedFileUrl": "http://localhost:8000/exports/products_1699214705519.xlsx"
-  },
-  {
-    "id": "e8a5ec47-7acc-4c52-91ed-c8ee4c7ca790",
-    "timestamp": "2023-11-05  21:06",
-    "sourceTable": "products",
-    "exportedFile": "products_1699214775014.xlsx",
-    "exportedFileUrl": "http://localhost:8000/exports/products_1699214775014.xlsx"
-  },
-  {
-    "id": "4d3777b6-5acf-4e44-95ae-26909db79c9a",
-    "timestamp": "2023-11-05  21:10",
+    "id": "c1df7ed2-31e1-42ba-9305-719105b8ab8c",
+    "timestamp": "2023-11-05  22:28",
     "sourceTable": "orders",
-    "exportedFile": "orders_1699215051360.xlsx",
-    "exportedFileUrl": "http://localhost:8000/exports/orders_1699215051360.xlsx"
+    "exportedFile": "orders_1699219709053.xlsx",
+    "exportedFileUrl": "http://localhost:8000/exports/orders_1699219709053.xlsx"
   },
   {
-    "id": "dbfd0b2c-d7d4-4710-a8b5-cc09f5e02a22",
-    "timestamp": "2023-11-05  21:11",
-    "sourceTable": "orders",
-    "exportedFile": "orders_1699215063486.xlsx",
-    "exportedFileUrl": "http://localhost:8000/exports/orders_1699215063486.xlsx"
-  },
-  {
-    "id": "d0f7294a-14a1-42d3-bd08-f98ed13ec727",
-    "timestamp": "2023-11-05  21:12",
-    "sourceTable": "customers",
-    "exportedFile": "customers_1699215122108.xlsx",
-    "exportedFileUrl": "http://localhost:8000/exports/customers_1699215122108.xlsx"
-  },
-  {
-    "id": "eff4ae96-5756-4723-87d7-873fc475c2a0",
-    "timestamp": "2023-11-05  21:12",
-    "sourceTable": "customers",
-    "exportedFile": "customers_1699215156549.xlsx",
-    "exportedFileUrl": "http://localhost:8000/exports/customers_1699215156549.xlsx"
-  },
-  {
-    "id": "cc9f3f1c-594c-45fa-97ab-cad1e05db146",
-    "timestamp": "2023-11-05  21:22",
+    "id": "8d67d6c1-c0b2-4445-ad08-788f2b790e1a",
+    "timestamp": "2023-11-05  22:29",
     "sourceTable": "products",
-    "exportedFile": "products_1699215738432.xlsx",
-    "exportedFileUrl": "http://localhost:8000/exports/products_1699215738432.xlsx"
-  },
-  {
-    "id": "133d36d4-cf4c-4063-9af1-83d31f676959",
-    "timestamp": "2023-11-05  21:39",
-    "sourceTable": "products",
-    "exportedFile": "products_1699216791092.xlsx",
-    "exportedFileUrl": "http://localhost:8000/exports/products_1699216791092.xlsx"
+    "exportedFile": "products_1699219783338.xlsx",
+    "exportedFileUrl": "http://localhost:8000/exports/products_1699219783338.xlsx"
   }
 ]

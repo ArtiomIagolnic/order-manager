@@ -133,7 +133,7 @@ const exportCustomer = asyncHandler(async (req, res) => {
     //send file for downloading
     res.setHeader(
       "Content-Type",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     );
     res.setHeader(
       "Content-Disposition",

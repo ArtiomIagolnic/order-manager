@@ -127,12 +127,20 @@ export const useProductStore = defineStore("product", {
           const response = await api.get("/api/products/export/" + product, {
             responseType: "blob",
           });
-    
+
           useNotificationStore().addNotification({
             type: "success",
             message: "Product was exported successfully",
           });
-          saveAs(response.data, "products-export.xlsx");
+          const contentDisposition = response.headers.get(
+            "Content-Disposition"
+          );
+          const filenameMatch = contentDisposition.match(
+            /filename\s*=\s*["']?([^"']+)/
+          );
+          const filename = filenameMatch && filenameMatch[1];
+
+          saveAs(response.data, filename);
         } else {
           useNotificationStore().addNotification({
             type: "warning",

@@ -136,7 +136,15 @@ export const useCustomerStore = defineStore("customer", {
             type: "success",
             message: "Customer was exported successfully",
           });
-          saveAs(response.data, "customers-export.xlsx");
+          const contentDisposition = response.headers.get(
+            "Content-Disposition"
+          );
+          const filenameMatch = contentDisposition.match(
+            /filename\s*=\s*["']?([^"']+)/
+          );
+          const filename = filenameMatch && filenameMatch[1];
+
+          saveAs(response.data, filename);
         } else {
           useNotificationStore().addNotification({
             type: "warning",
