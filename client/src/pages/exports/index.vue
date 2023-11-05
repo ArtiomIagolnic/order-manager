@@ -1,11 +1,29 @@
 <template>
-  <!-- Alert -->
-  <AlertComponent
-    :alert-active="showDeleteAlert"
-    :entity="'export(s)'"
-    :on-confirm="deleteExport"
-    @close-alert="closeAlert"
-  />
+  <!-- Confirm Action Modal -->
+  <ConfirmActionModal
+    v-if="showConfirmModal"
+    type="danger"
+    title="Confirm Action"
+    width="sm"
+    v-on:close="showConfirmModal = false"
+  >
+    <p class="text-gray-800">Are you sure you want you delete export(s)?</p>
+
+    <div class="text-right mt-4">
+      <button
+        @click="showConfirmModal = false"
+        class="px-4 py-2 text-sm text-gray-600 focus:outline-none hover:underline"
+      >
+        Cancel
+      </button>
+      <button
+        @click="deleteExport()"
+        class="mr-2 px-4 py-2 text-sm rounded text-white bg-red-500 focus:outline-none hover:bg-red-400"
+      >
+        Delete
+      </button>
+    </div>
+  </ConfirmActionModal>
   <!-- Search Field -->
   <SearchComponent
     @filtered-results="updateDisplayedExports"
@@ -21,7 +39,7 @@
     :selected-count="selectedCount"
     :items="displayedExports"
     :disabled="true"
-    @delete-item="confirmDelete"
+    @delete-item="submitDeleting"
   >
     <template #mobile-sort-menu>
       <div class="w-full text-left px-4 py-2 text-gray-800">
@@ -76,7 +94,7 @@
     <template #mobile-card-buttons="{ item }">
       <div class="mt-3 space-x-4 flex justify-start">
         <button
-          @click="confirmDelete(item)"
+          @click="submitDeleting(item)"
           class="text-red-600 hover:text-red-800 hover:font-medium cursor-pointer"
         >
           Delete
@@ -148,7 +166,7 @@
         </div>
         <div class="p-2 text-center col-span-2">
           <button
-            @click="confirmDelete(item)"
+            @click="submitDeleting(item)"
             class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer"
           >
             Delete
@@ -172,7 +190,7 @@
   </div>
 </template>
 <script>
-import AlertComponent from "@/components/AlertComponet.vue";
+import ConfirmActionModal from "@/components/ConfirmActionModal.vue";
 import { useExportStore } from "@/store/export.js";
 import SearchComponent from "@/components/SearchComponent.vue";
 import TableComponent from "@/components/TableComponent.vue";
@@ -182,7 +200,7 @@ export default {
     SearchComponent,
     TableComponent,
     SortIconsComponent,
-    AlertComponent,
+    ConfirmActionModal,
   },
   data() {
     return {
@@ -200,6 +218,7 @@ export default {
       sortHeader: "",
       searchActive: false,
       itemToDelete: null,
+      showConfirmModal: false,
     };
   },
   created() {
@@ -245,12 +264,9 @@ export default {
         this.searchActive = false;
       }
     },
-    closeAlert() {
-      this.showDeleteAlert = false;
-    },
-    confirmDelete(item) {
+    submitDeleting(item) {
       this.itemToDelete = item;
-      this.showDeleteAlert = true;
+      this.showConfirmModal = true;
     },
     async deleteExport() {
       if (this.itemToDelete) {
@@ -261,7 +277,7 @@ export default {
           await this.exportStore.deleteExport(this.itemToDelete.id);
         }
         this.itemToDelete = null;
-        this.showDeleteAlert = false;
+        this.showConfirmModal = false;
       }
       this.loadExports();
     },

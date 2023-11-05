@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import { useNotificationStore } from "@/store/notifications";
 import { useOrderStore } from "./order";
-import axios from "axios";
+import api from "./api/api.js";
 
 export const useProductStore = defineStore("product", {
   state: () => ({
@@ -12,9 +12,7 @@ export const useProductStore = defineStore("product", {
     async getProducts(filters) {
       if (!filters) {
         try {
-          const response = await axios.get(
-            "http://localhost:8000/api/products/all"
-          );
+          const response = await api.get("/api/products/all");
           return (this.products = response.data || []);
         } catch (error) {
           useNotificationStore().addNotification({
@@ -35,8 +33,8 @@ export const useProductStore = defineStore("product", {
     },
     async sortProducts(sortHeader, sortOrder) {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/products/all?sortHeader=${sortHeader}&sortOrder=${sortOrder}`
+        const response = await api.get(
+          `/api/products/all?sortHeader=${sortHeader}&sortOrder=${sortOrder}`
         );
         return (this.products = response.data || []);
       } catch (error) {
@@ -53,7 +51,7 @@ export const useProductStore = defineStore("product", {
           ...data,
           id: productId,
         };
-        await axios.post("http://localhost:8000/api/products/add", newProduct);
+        await api.post("/api/products/add", newProduct);
         useNotificationStore().addNotification({
           type: "success",
           message: "Product was added successfully",
@@ -111,10 +109,7 @@ export const useProductStore = defineStore("product", {
     },
     async updateProduct(updatedProduct) {
       try {
-        await axios.put(
-          "http://localhost:8000/api/products/update",
-          updatedProduct
-        );
+        await api.put("/api/products/update", updatedProduct);
         useNotificationStore().addNotification({
           type: "success",
           message: "Product was updated successfully",
@@ -123,6 +118,31 @@ export const useProductStore = defineStore("product", {
         useNotificationStore().addNotification({
           type: "failed",
           message: `An error occurred while updating product: ${error.message}`,
+        });
+      }
+    },
+    async exportSelected(product) {
+      try {
+        if (product.length > 0) {
+          const response = await api.get("/api/products/export/" + product, {
+            responseType: "blob",
+          });
+    
+          useNotificationStore().addNotification({
+            type: "success",
+            message: "Product was exported successfully",
+          });
+          saveAs(response.data, "products-export.xlsx");
+        } else {
+          useNotificationStore().addNotification({
+            type: "warning",
+            message: "You didn't select any product",
+          });
+        }
+      } catch (error) {
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while exporting product: ${error.message}`,
         });
       }
     },

@@ -1,11 +1,30 @@
 <template>
-  <!-- Alert -->
-  <AlertComponent
-    :alert-active="showDeleteAlert"
-    :entity="'product(s)'"
-    :on-confirm="deleteProduct"
-    @close-alert="closeAlert"
-  />
+  <!-- Confirm Action Modal -->
+  <ConfirmActionModal
+    v-if="showConfirmModal"
+    type="danger"
+    title="Confirm Action"
+    width="sm"
+    v-on:close="showConfirmModal = false"
+  >
+    <p class="text-gray-800">Are you sure you want you delete product(s)?</p>
+
+    <div class="text-right mt-4">
+      <button
+        @click="showConfirmModal = false"
+        class="px-4 py-2 text-sm text-gray-600 focus:outline-none hover:underline"
+      >
+        Cancel
+      </button>
+      <button
+        @click="deleteProduct()"
+        class="mr-2 px-4 py-2 text-sm rounded text-white bg-red-500 focus:outline-none hover:bg-red-400"
+      >
+        Delete
+      </button>
+    </div>
+  </ConfirmActionModal>
+
   <!-- Modal -->
   <ProductModal
     :updatedProduct="updatedProduct"
@@ -38,9 +57,9 @@
   <TableComponent
     :items="displayedProducts"
     :selectedCount="selectedCount"
-    :export-selected="exportLink"
+    @export-selected="exportProduct"
     @update-item="openModal"
-    @delete-item="confirmDelete"
+    @delete-item="submitDeleting"
   >
     <!-- Mobile cards -->
     <template #mobile-sort-menu>
@@ -109,17 +128,17 @@
           Update
         </button>
         <button
-          @click="confirmDelete(item)"
+          @click="submitDeleting(item)"
           class="text-red-600 hover:text-red-800 hover:font-medium cursor-pointer"
         >
           Delete
         </button>
-        <a
-          :href="`http://localhost:8000/api/products/export/${item.id}`"
+        <button
+          @click="exportProduct(item.id)"
           class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer"
         >
           Export
-        </a>
+        </button>
       </div>
     </template>
 
@@ -201,17 +220,17 @@
             Update
           </button>
           <button
-            @click="confirmDelete(item)"
+            @click="submitDeleting(item)"
             class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer ml-1"
           >
             Delete
           </button>
-          <a
-            :href="`http://localhost:8000/api/products/export/${item.id}`"
+          <button
+            @click="exportProduct(item.id)"
             class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer ml-1"
           >
             Export
-          </a>
+          </button>
         </div>
       </div>
     </template>
@@ -234,7 +253,7 @@
 </template>
 
 <script>
-import AlertComponent from "@/components/AlertComponet.vue";
+import ConfirmActionModal from "@/components/ConfirmActionModal.vue";
 import { useProductStore } from "@/store/product.js";
 import ProductModal from "./components/ProductModal.vue";
 import SearchComponent from "@/components/SearchComponent.vue";
@@ -247,11 +266,11 @@ export default {
     SearchComponent,
     TableComponent,
     SortIconsComponent,
-    AlertComponent,
+    ConfirmActionModal,
   },
   data() {
     return {
-      showDeleteAlert: false,
+      showConfirmModal: false,
       products: [],
       pageSize: 10,
       displayedProducts: [],
@@ -285,13 +304,7 @@ export default {
     selectedCount() {
       return this.selectedItems.length;
     },
-    exportLink() {
-      return this.selectedItems.length > 0
-        ? `http://localhost:8000/api/products/export/${this.selectedItems.join(
-            ","
-          )}`
-        : "";
-    },
+
     showNoDataMessage() {
       return this.displayedProducts.length === 0 && this.searchActive;
     },
@@ -316,9 +329,9 @@ export default {
     closeAlert() {
       this.showDeleteAlert = false;
     },
-    confirmDelete(item) {
+    submitDeleting(item) {
       this.itemsToDelete = item;
-      this.showDeleteAlert = true;
+      this.showConfirmModal = true;
     },
     async deleteProduct() {
       if (this.itemsToDelete) {
@@ -328,7 +341,7 @@ export default {
         } else {
           await this.productStore.deleteProduct(this.itemsToDelete.id);
         }
-        this.showDeleteAlert = false;
+        this.showConfirmModal = false;
         this.itemsToDelete = null;
       }
 
@@ -370,6 +383,14 @@ export default {
       await this.productStore.sortProducts(this.sortHeader, this.sortDirection);
 
       this.displayedProducts = this.productStore.products;
+    },
+    async exportProduct(id) {
+      if (id) {
+        await this.productStore.exportSelected(id);
+      } else {
+        await this.productStore.exportSelected(this.selectedItems);
+        this.selectedItems = [];
+      }
     },
   },
 };

@@ -4,54 +4,78 @@
     <div class="bg-white md:hidden">
       <div class="sticky-header" :style="{ top: stickyHeaderTop }">
         <div class="px-6 py-4 flex items-center justify-between">
-          <div class="text-gray-700">{{ selectedCount }} selected</div>
+          <div class="text-gray-700">
+            <font-awesome-icon icon="fa-solid fa-square-check" />
+            {{ selectedCount }}
+          </div>
           <div class="flex space-x-4">
-            <button
-              @click="toggleSortMenu"
-              class="px-3 ml-2 py-1 text-white bg-gray-700 hover:bg-gray-800 rounded-md"
-            >
-            <font-awesome-icon icon="fa-solid fa-sort" />
-            </button>
-            <div
-              v-show="isSortMenuOpen"
-              class="dropdown-menu right-0 absolute mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-20"
-            >
-              <slot name="mobile-sort-menu"></slot>
-            </div>
+            <!-- Sorting button and dropdown-->
+            <DropDownMenu>
+              <!-- Button content -->
+              <template v-slot:button>
+                <span
+                  class="px-2 py-2 border rounded inline-flex items-center text-sm"
+                >
+                  <span class="mr-2">Sort</span>
 
-            <button
-              @click="toggleActionsMenu"
-              class="px-3 ml-2 py-1 text-white bg-gray-700 hover:bg-gray-800 rounded-md"
-            >
-            <font-awesome-icon icon="fa-solid fa-mobile-button" />
-            </button>
+                  <svg
+                    class="w-4 h-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M4.516 7.548c.436-.446 1.043-.481 1.576 0L10 11.295l3.908-3.747c.533-.481 1.141-.446 1.574 0 .436.445.408 1.197 0 1.615-.406.418-4.695 4.502-4.695 4.502a1.095 1.095 0 0 1-1.576 0S4.924 9.581 4.516 9.163c-.409-.418-.436-1.17 0-1.615z"
+                    />
+                  </svg>
+                </span>
+              </template>
 
-            <div
-              v-show="isMenuOpen"
-              class="dropdown-menu right-0 absolute mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-20"
-            >
-              <ul>
-                <li>
-                  <button
-                    @click="deleteSelected"
-                    class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+              <!-- Opened dropdown content -->
+              <template v-slot:content>
+                <slot name="mobile-sort-menu"></slot>
+              </template>
+            </DropDownMenu>
+
+            <!-- Actions button and dropdown -->
+            <DropDownMenu>
+              <!-- Button content -->
+              <template v-slot:button>
+                <span
+                  class="px-2 py-2 border rounded inline-flex items-center text-sm"
+                >
+                  <span class="mr-2">Actions</span>
+
+                  <svg
+                    class="w-4 h-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
                   >
-                    <font-awesome-icon icon="fa-solid fa-trash" />
-                    Delete Selected
-                  </button>
-                </li>
-                <li>
-                  <a
-                    :href="exportSelected"
-                    class="text-left block w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
-                    :class="disabledClass"
-                  >
-                    <font-awesome-icon icon="fa-solid fa-file-export" />
-                    Export Selected as Excel
-                  </a>
-                </li>
-              </ul>
-            </div>
+                    <path
+                      d="M4.516 7.548c.436-.446 1.043-.481 1.576 0L10 11.295l3.908-3.747c.533-.481 1.141-.446 1.574 0 .436.445.408 1.197 0 1.615-.406.418-4.695 4.502-4.695 4.502a1.095 1.095 0 0 1-1.576 0S4.924 9.581 4.516 9.163c-.409-.418-.436-1.17 0-1.615z"
+                    />
+                  </svg>
+                </span>
+              </template>
+
+              <!-- Opened dropdown content -->
+              <template v-slot:content>
+                <button
+                  @click="deleteSelected"
+                  class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                >
+                  <font-awesome-icon icon="fa-solid fa-trash" />
+                  Delete Selected
+                </button>
+                <button
+                  @click="$emit('exportSelected')"
+                  class="text-left block w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
+                  :class="disabledClass"
+                >
+                  <font-awesome-icon icon="fa-solid fa-file-export" />
+                  Export Selected as Excel
+                </button>
+              </template>
+            </DropDownMenu>
           </div>
         </div>
       </div>
@@ -88,50 +112,46 @@
       <div class="flex items-center justify-between mb-4">
         <div class="text-gray-700">{{ selectedCount }} selected</div>
 
-        <div class="relative">
-          <button
-            @click="isMenuOpen = !isMenuOpen"
-            class="bg-white border-b border-gray-300 hover:border-gray-700 hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:hover:bg-white dark:hover:border-gray-300 dark:hover:text-gray-800 font-bold py-2 px-4 ml-2 rounded"
-          >
-            Actions
-            <svg
-              class="w-4 h-4 inline ml-2 -mr-1"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
+        <!-- Actions button and dropdown -->
+        <DropDownMenu placement="right">
+          <!-- Button content -->
+          <template v-slot:button>
+            <span
+              class="px-2 py-2 border rounded inline-flex items-center text-sm"
             >
-              <path
-                fill-rule="evenodd"
-                d="M7.293 10.293a1 1 0 011.414 0L10 11.586l1.293-1.293a1 1 0 111.414 1.414l-2 2a1 1 0 01-1.414 0l-2-2a1 1 0 010-1.414 1 1 0 010 1.414z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
-          </button>
-          <ul
-            v-show="isMenuOpen"
-            class="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10"
-          >
-            <li>
-              <button
-                @click="deleteSelected"
-                class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+              <span class="mr-2">Actions</span>
+
+              <svg
+                class="w-4 h-4"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
               >
-                <font-awesome-icon icon="fa-solid fa-trash" />
-                Delete Selected
-              </button>
-            </li>
-            <li>
-              <a
-                :href="exportSelected"
-                class="text-left block w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
-                :class="disabledClass"
-              >
-                <font-awesome-icon icon="fa-solid fa-file-export" />
-                Export Selected as Excel
-              </a>
-            </li>
-          </ul>
-        </div>
+                <path
+                  d="M4.516 7.548c.436-.446 1.043-.481 1.576 0L10 11.295l3.908-3.747c.533-.481 1.141-.446 1.574 0 .436.445.408 1.197 0 1.615-.406.418-4.695 4.502-4.695 4.502a1.095 1.095 0 0 1-1.576 0S4.924 9.581 4.516 9.163c-.409-.418-.436-1.17 0-1.615z"
+                />
+              </svg>
+            </span>
+          </template>
+
+          <!-- Opened dropdown content -->
+          <template v-slot:content>
+            <button
+              @click="deleteSelected"
+              class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+            >
+              <font-awesome-icon icon="fa-solid fa-trash" />
+              Delete Selected
+            </button>
+            <button
+              @click="$emit('exportSelected')"
+              class="text-left block w-full px-4 py-2 text-gray-800 hover:bg-gray-100"
+              :class="disabledClass"
+            >
+              <font-awesome-icon icon="fa-solid fa-file-export" />
+              Export Selected as Excel
+            </button>
+          </template>
+        </DropDownMenu>
       </div>
 
       <div
@@ -155,7 +175,12 @@
   </div>
 </template>
 <script>
+import DropDownMenu from "./DropDownMenu.vue";
+
 export default {
+  components: {
+    DropDownMenu,
+  },
   data() {
     return {
       isMenuOpen: false,

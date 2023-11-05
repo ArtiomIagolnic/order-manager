@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import { useNotificationStore } from "@/store/notifications";
-import axios from "axios";
+import api from "./api/api.js";
 
 export const useOrderStore = defineStore("order", {
   state: () => ({
@@ -11,9 +11,7 @@ export const useOrderStore = defineStore("order", {
     async getOrders(filters) {
       if (!filters) {
         try {
-          const response = await axios.get(
-            "http://localhost:8000/api/orders/all"
-          );
+          const response = await api.get("/api/orders/all");
           return (this.orders = response.data || []);
         } catch (error) {
           useNotificationStore().addNotification({
@@ -38,8 +36,8 @@ export const useOrderStore = defineStore("order", {
     },
     async sortOrders(sortHeader, sortOrder) {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/orders/all?sortHeader=${sortHeader}&sortOrder=${sortOrder}`
+        const response = await api.get(
+          `/api/orders/all?sortHeader=${sortHeader}&sortOrder=${sortOrder}`
         );
         return (this.orders = response.data || []);
       } catch (error) {
@@ -61,7 +59,7 @@ export const useOrderStore = defineStore("order", {
           displayedId: this.generateReadableOrderId(),
           id: orderId,
         };
-        await axios.post("http://localhost:8000/api/orders/add", newOrder);
+        await api.post("/api/orders/add", newOrder);
 
         useNotificationStore().addNotification({
           type: "success",
@@ -77,10 +75,7 @@ export const useOrderStore = defineStore("order", {
     async deleteOrder(order) {
       try {
         if (order) {
-          await axios.delete(
-            `http://localhost:8000/api/orders/delete/${order}`,
-            order
-          );
+          await api.delete(`/api/orders/delete/${order}`, order);
           useNotificationStore().addNotification({
             type: "success",
             message: "Order was deleted successfully",
@@ -101,10 +96,7 @@ export const useOrderStore = defineStore("order", {
 
     async updateOrder(updatedOrder) {
       try {
-        await axios.put(
-          "http://localhost:8000/api/orders/update",
-          updatedOrder
-        );
+        await api.put("/api/orders/update", updatedOrder);
         useNotificationStore().addNotification({
           type: "success",
           message: "Order was updated successfully",
@@ -113,6 +105,31 @@ export const useOrderStore = defineStore("order", {
         useNotificationStore().addNotification({
           type: "failed",
           message: `An error occurred while updating order: ${error.message}`,
+        });
+      }
+    },
+    async exportSelected(order) {
+      try {
+        if (order.length > 0) {
+          const response = await api.get("/api/orders/export/" + order, {
+            responseType: "blob",
+          });
+
+          useNotificationStore().addNotification({
+            type: "success",
+            message: "Customer was exported successfully",
+          });
+          saveAs(response.data, "orders-export.xlsx");
+        } else {
+          useNotificationStore().addNotification({
+            type: "warning",
+            message: "You didn't select any customer",
+          });
+        }
+      } catch (error) {
+        useNotificationStore().addNotification({
+          type: "failed",
+          message: `An error occurred while exporting customer: ${error.message}`,
         });
       }
     },

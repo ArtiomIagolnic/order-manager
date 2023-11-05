@@ -2,7 +2,8 @@ import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import { useNotificationStore } from "@/store/notifications";
 import { useOrderStore } from "./order";
-import axios from "axios";
+import api from "./api/api.js";
+import { saveAs } from "file-saver";
 
 export const useCustomerStore = defineStore("customer", {
   state: () => ({
@@ -12,9 +13,7 @@ export const useCustomerStore = defineStore("customer", {
   actions: {
     async getCustomers(filters) {
       try {
-        const response = await axios.get(
-          "http://localhost:8000/api/customers/all"
-        );
+        const response = await api.get("/api/customers/all");
         this.customers = response.data || [];
 
         if (filters) {
@@ -40,8 +39,8 @@ export const useCustomerStore = defineStore("customer", {
     },
     async sortCustomers(sortHeader, sortOrder) {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/customers/all?sortHeader=${sortHeader}&sortOrder=${sortOrder}`
+        const response = await api.get(
+          `/api/customers/all?sortHeader=${sortHeader}&sortOrder=${sortOrder}`
         );
         return (this.customers = response.data || []);
       } catch (error) {
@@ -58,10 +57,7 @@ export const useCustomerStore = defineStore("customer", {
           ...data,
           id: customerId,
         };
-        await axios.post(
-          "http://localhost:8000/api/customers/add",
-          newCustomer
-        );
+        await api.post("/api/customers/add", newCustomer);
         useNotificationStore().addNotification({
           type: "success",
           message: "Customer was added successfully",
@@ -75,10 +71,7 @@ export const useCustomerStore = defineStore("customer", {
     },
     async updateCustomer(updatedCustomer) {
       try {
-        await axios.put(
-          "http://localhost:8000/api/customers/update",
-          updatedCustomer
-        );
+        await api.put("/api/customers/update", updatedCustomer);
         useNotificationStore().addNotification({
           type: "success",
           message: "Customer was updated successfully",
@@ -114,10 +107,7 @@ export const useCustomerStore = defineStore("customer", {
                 "One or more customers are already in orders, so you can't delete them.",
             });
           } else {
-            await axios.delete(
-              `http://localhost:8000/api/customers/delete/${customer}`,
-              customer
-            );
+            await api.delete(`/api/customers/delete/${customer}`, customer);
             useNotificationStore().addNotification({
               type: "success",
               message: "Customer was deleted successfully",
@@ -138,14 +128,15 @@ export const useCustomerStore = defineStore("customer", {
     },
     async exportSelected(customer) {
       try {
-        if (customer) {
-          await axios.get(
-            "http://localhost:8000/api/customers/export/" + customer
-          );
+        if (customer.length > 0) {
+          const response = await api.get("/api/customers/export/" + customer, {
+            responseType: "blob",
+          });
           useNotificationStore().addNotification({
             type: "success",
             message: "Customer was exported successfully",
           });
+          saveAs(response.data, "customers-export.xlsx");
         } else {
           useNotificationStore().addNotification({
             type: "warning",

@@ -942,5 +942,205 @@
   {
     "event": "Order has been deleted",
     "timestamp": "2023-11-01  10:57"
+  },
+  {
+    "event": "Customer has been updated",
+    "timestamp": "2023-11-02  11:16"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-02  11:16"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-02  15:21"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-02  15:29"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-02  15:36"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-02  15:36"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-03  11:28"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-04  14:31"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-04  14:32"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-04  14:32"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-04  14:41"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-04  17:32"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-04  17:39"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-04  17:49"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  13:27"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  13:34"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  13:36"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  13:36"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  13:36"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  13:38"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  13:40"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  13:42"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  13:45"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  13:46"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  13:46"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  13:46"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  13:47"
+  },
+  {
+    "event": "Customer has been deleted",
+    "timestamp": "2023-11-05  20:32"
+  },
+  {
+    "event": "Customer has been deleted",
+    "timestamp": "2023-11-05  20:33"
+  },
+  {
+    "event": "Customer has been deleted",
+    "timestamp": "2023-11-05  20:34"
+  },
+  {
+    "event": "Export has been deleted",
+    "timestamp": "2023-11-05  20:48"
+  },
+  {
+    "event": "Export has been deleted",
+    "timestamp": "2023-11-05  20:49"
+  },
+  {
+    "event": "Export has been deleted",
+    "timestamp": "2023-11-05  20:49"
+  },
+  {
+    "event": "Export has been deleted",
+    "timestamp": "2023-11-05  20:49"
+  },
+  {
+    "event": "Order has been updated",
+    "timestamp": "2023-11-05  20:53"
+  },
+  {
+    "event": "Order has been deleted",
+    "timestamp": "2023-11-05  20:53"
+  },
+  {
+    "event": "Order has been deleted",
+    "timestamp": "2023-11-05  20:53"
+  },
+  {
+    "event": "Export has been deleted",
+    "timestamp": "2023-11-05  20:59"
+  },
+  {
+    "event": "Export has been deleted",
+    "timestamp": "2023-11-05  20:59"
+  },
+  {
+    "event": "Export has been deleted",
+    "timestamp": "2023-11-05  21:00"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  21:04"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  21:04"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  21:04"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  21:05"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  21:06"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  21:10"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  21:11"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  21:12"
+  },
+  {
+    "event": "Export has been created",
+    "timestamp": "2023-11-05  21:12"
+  },
+  {
+    "event": "Customer has been updated",
+    "timestamp": "2023-11-05  21:13"
   }
 ]

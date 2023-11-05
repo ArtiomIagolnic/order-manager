@@ -1,11 +1,29 @@
 <template>
-  <!-- Alert -->
-  <AlertComponent
-    :alert-active="showDeleteAlert"
-    :entity="'order(s)'"
-    :on-confirm="deleteOrder"
-    @close-alert="closeAlert"
-  />
+  <!-- Confirm Action Modal -->
+  <ConfirmActionModal
+    v-if="showConfirmModal"
+    type="danger"
+    title="Confirm Action"
+    width="sm"
+    v-on:close="showConfirmModal = false"
+  >
+    <p class="text-gray-800">Are you sure you want you delete customer(s)?</p>
+
+    <div class="text-right mt-4">
+      <button
+        @click="showConfirmModal = false"
+        class="px-4 py-2 text-sm text-gray-600 focus:outline-none hover:underline"
+      >
+        Cancel
+      </button>
+      <button
+        @click="deleteOrder()"
+        class="mr-2 px-4 py-2 text-sm rounded text-white bg-red-500 focus:outline-none hover:bg-red-400"
+      >
+        Delete
+      </button>
+    </div>
+  </ConfirmActionModal>
   <!-- Modal -->
   <OrderModal
     :updatedOrder="updatedOrder"
@@ -36,9 +54,9 @@
   <TableComponent
     :items="displayedOrders"
     :selectedCount="selectedCount"
-    :export-selected="exportLink"
+    @export-selected="exportOrder"
     @update-item="openModal"
-    @delete-item="confirmDelete"
+    @delete-item="submitDeleting"
   >
     <template #mobile-sort-menu>
       <div class="w-full text-left px-4 py-2 text-gray-800">
@@ -106,17 +124,17 @@
           Update
         </button>
         <button
-          @click="confirmDelete(item)"
+          @click="submitDeleting(item)"
           class="text-red-600 hover:text-red-800 hover:font-medium cursor-pointer"
         >
           Delete
         </button>
-        <a
-          :href="`http://localhost:8000/api/orders/export/${item.id}`"
+        <button
+          @click="exportOrder(item.id)"
           class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer"
         >
           Export
-        </a>
+        </button>
       </div>
     </template>
     <template #table-header>
@@ -197,17 +215,17 @@
             Update
           </button>
           <button
-            @click="confirmDelete(item)"
+            @click="submitDeleting(item)"
             class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer ml-1"
           >
             Delete
           </button>
-          <a
-            :href="`http://localhost:8000/api/orders/export/${item.id}`"
+          <button
+            @click="exportOrder(item.id)"
             class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer ml-1"
           >
             Export
-          </a>
+          </button>
         </div>
       </div>
     </template>
@@ -229,7 +247,7 @@
 </template>
 
 <script>
-import AlertComponent from "@/components/AlertComponet.vue";
+import ConfirmActionModal from "@/components/ConfirmActionModal.vue";
 import { useOrderStore } from "@/store/order.js";
 import OrderModal from "./components/OrderModal.vue";
 import SearchComponent from "@/components/SearchComponent.vue";
@@ -242,11 +260,11 @@ export default {
     SearchComponent,
     TableComponent,
     SortIconsComponent,
-    AlertComponent,
+    ConfirmActionModal,
   },
   data() {
     return {
-      showDeleteAlert: false,
+      showConfirmModal: false,
       orders: [],
       updatedOrder: {},
       openOrderModal: false,
@@ -279,13 +297,6 @@ export default {
     },
     selectedCount() {
       return this.selectedItems.length;
-    },
-    exportLink() {
-      return this.selectedItems.length > 0
-        ? `http://localhost:8000/api/orders/export/${this.selectedItems.join(
-            ","
-          )}`
-        : "";
     },
     getSortDirection() {
       return (column) => {
@@ -336,12 +347,9 @@ export default {
     closeModal() {
       this.openOrderModal = false;
     },
-    closeAlert() {
-      this.showDeleteAlert = false;
-    },
-    confirmDelete(item) {
+    submitDeleting(item) {
       this.itemsToDelete = item;
-      this.showDeleteAlert = true;
+      this.showConfirmModal = true;
     },
     async deleteOrder() {
       if (this.itemsToDelete) {
@@ -351,7 +359,7 @@ export default {
         } else {
           await this.orderStore.deleteOrder(this.itemsToDelete.id);
         }
-        this.showDeleteAlert = false;
+        this.showConfirmModal = false;
         this.itemsToDelete = null;
       }
 
@@ -388,6 +396,14 @@ export default {
 
       // Update the displayed data
       this.displayedOrders = this.orderStore.orders;
+    },
+    async exportOrder(id) {
+      if (id) {
+        await this.orderStore.exportSelected(id);
+      } else {
+        await this.orderStore.exportSelected(this.selectedItems);
+        this.selectedItems = [];
+      }
     },
   },
 };

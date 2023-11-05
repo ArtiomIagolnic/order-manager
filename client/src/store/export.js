@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { useNotificationStore } from "@/store/notifications";
-import axios from "axios";
+import api from "./api/api.js";
 
 export const useExportStore = defineStore("export", {
   state: () => ({
@@ -11,9 +11,7 @@ export const useExportStore = defineStore("export", {
     async getExports(filters) {
       if (!filters) {
         try {
-          const response = await axios.get(
-            "http://localhost:8000/api/exports/all"
-          );
+          const response = await api.get("/api/exports/all");
           return (this.excelExports = response.data || []);
         } catch (error) {
           useNotificationStore().addNotification({
@@ -37,8 +35,8 @@ export const useExportStore = defineStore("export", {
 
     async sortExports(sortHeader, sortOrder) {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/exports/all?sortHeader=${sortHeader}&sortOrder=${sortOrder}`
+        const response = await api.get(
+          `/api/exports/all?sortHeader=${sortHeader}&sortOrder=${sortOrder}`
         );
         return (this.excelExports = response.data || []);
       } catch (error) {
@@ -52,10 +50,7 @@ export const useExportStore = defineStore("export", {
     async deleteExport(excelExport) {
       try {
         if (excelExport) {
-          await axios.delete(
-            `http://localhost:8000/api/exports/delete/${excelExport}`,
-            excelExport
-          );
+          await api.delete(`/api/exports/delete/${excelExport}`, excelExport);
           useNotificationStore().addNotification({
             type: "success",
             message: "Export was deleted successfully",

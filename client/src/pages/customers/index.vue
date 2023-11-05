@@ -1,11 +1,30 @@
 <template>
-  <!-- Alert -->
-  <AlertComponent
-    :alert-active="showDeleteAlert"
-    :entity="'customer(s)'"
-    :on-confirm="deleteCustomer"
-    @close-alert="closeAlert"
-  />
+  <!-- Confirm Action Modal -->
+  <ConfirmActionModal
+    v-if="showConfirmModal"
+    type="danger"
+    title="Confirm Action"
+    width="sm"
+    v-on:close="showConfirmModal = false"
+  >
+    <p class="text-gray-800">Are you sure you want you delete customer(s)?</p>
+
+    <div class="text-right mt-4">
+      <button
+        @click="showConfirmModal = false"
+        class="px-4 py-2 text-sm text-gray-600 focus:outline-none hover:underline"
+      >
+        Cancel
+      </button>
+      <button
+        @click="deleteCustomer()"
+        class="mr-2 px-4 py-2 text-sm rounded text-white bg-red-500 focus:outline-none hover:bg-red-400"
+      >
+        Delete
+      </button>
+    </div>
+  </ConfirmActionModal>
+
   <!-- Modal -->
   <CustomerModal
     :updatedCustomer="updatedCustomer"
@@ -37,9 +56,9 @@
   <TableComponent
     :items="displayedCustomers"
     :selectedCount="selectedCount"
-    :export-selected="exportLink"
+    @export-selected="exportCustomer"
     @update-item="openModal"
-    @delete-item="confirmDelete"
+    @delete-item="submitDeleting"
   >
     <!-- Mobile Sorting Menu -->
     <template #mobile-sort-menu>
@@ -109,17 +128,17 @@
           Update
         </button>
         <button
-          @click="confirmDelete(item)"
+          @click="submitDeleting(item)"
           class="text-red-600 hover:text-red-800 hover:font-medium cursor-pointer"
         >
           Delete
         </button>
-        <a
-          :href="`http://localhost:8000/api/customers/export/${item.id}`"
+        <button
+          @click="exportCustomer(item.id)"
           class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer"
         >
           Export
-        </a>
+        </button>
       </div>
     </template>
 
@@ -205,17 +224,17 @@
             Update
           </button>
           <button
-            @click="confirmDelete(item)"
+            @click="submitDeleting(item)"
             class="text-red-400 hover:text-red-600 hover:font-medium cursor-pointer ml-1"
           >
             Delete
           </button>
-          <a
-            :href="`http://localhost:8000/api/customers/export/${item.id}`"
+          <button
+            @click="exportCustomer(item.id)"
             class="text-green-400 hover:text-green-600 hover:font-medium cursor-pointer ml-1"
           >
             Export
-          </a>
+          </button>
         </div>
       </div>
     </template>
@@ -238,7 +257,7 @@
 </template>
 
 <script>
-import AlertComponent from "@/components/AlertComponet.vue";
+import ConfirmActionModal from "@/components/ConfirmActionModal.vue";
 import { useCustomerStore } from "@/store/customer.js";
 import CustomerModal from "./components/CustomerModal.vue";
 import SearchComponent from "@/components/SearchComponent.vue";
@@ -247,7 +266,7 @@ import SortIconsComponent from "@/components/SortIconsComponent.vue";
 
 export default {
   components: {
-    AlertComponent,
+    ConfirmActionModal,
     CustomerModal,
     SearchComponent,
     TableComponent,
@@ -272,6 +291,7 @@ export default {
       sortHeader: "",
       searchActive: false,
       itemToDelete: null,
+      showConfirmModal: false,
     };
   },
   // Load initial customer data
@@ -291,14 +311,6 @@ export default {
     selectedCount() {
       // Count of selected items
       return this.selectedItems.length;
-    },
-    exportLink() {
-      // Generate export link based on selected items
-      return this.selectedItems.length > 0
-        ? `http://localhost:8000/api/customers/export/${this.selectedItems.join(
-            ","
-          )}`
-        : "";
     },
     showNoDataMessage() {
       // Determine if a "No data found" message should be displayed
@@ -350,12 +362,9 @@ export default {
       // Close the customer modal
       this.openCustomerModal = false;
     },
-    closeAlert() {
-      this.showDeleteAlert = false;
-    },
-    confirmDelete(item) {
+    submitDeleting(item) {
       this.itemToDelete = item;
-      this.showDeleteAlert = true;
+      this.showConfirmModal = true;
     },
     // Delete customer(s)
     async deleteCustomer() {
@@ -367,7 +376,7 @@ export default {
           await this.customerStore.deleteCustomer(this.itemToDelete.id);
         }
         this.itemToDelete = null;
-        this.showDeleteAlert = false;
+        this.showConfirmModal = false;
       }
 
       this.loadCustomers();
@@ -391,6 +400,14 @@ export default {
       // Update displayed customers from filtered customers
       this.displayedCustomers = this.filteredCustomers.slice(0, this.pageSize);
       this.loadedCustomersCount = this.displayedCustomers.length;
+    },
+    async exportCustomer(id) {
+      if (id) {
+        await this.customerStore.exportSelected(id);
+      } else {
+        await this.customerStore.exportSelected(this.selectedItems);
+        this.selectedItems = [];
+      }
     },
   },
 };

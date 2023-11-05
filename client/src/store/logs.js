@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { useNotificationStore } from "@/store/notifications";
-import axios from "axios";
+import api from "./api/api.js";
 
 export const useLogsStore = defineStore("logs", {
   state: () => ({
@@ -11,9 +11,7 @@ export const useLogsStore = defineStore("logs", {
     async getLogs(filters) {
       if (!filters) {
         try {
-          const response = await axios.get(
-            "http://localhost:8000/api/logs/all"
-          );
+          const response = await api.get("/api/logs/all");
           return (this.logs = response.data || []);
         } catch (error) {
           useNotificationStore().addNotification({
@@ -35,8 +33,8 @@ export const useLogsStore = defineStore("logs", {
     },
     async sortLogs(sortHeader, sortOrder) {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/logs/all?sortHeader=${sortHeader}&sortOrder=${sortOrder}`
+        const response = await api.get(
+          `/api/logs/all?sortHeader=${sortHeader}&sortOrder=${sortOrder}`
         );
         return (this.logs = response.data || []);
       } catch (error) {
