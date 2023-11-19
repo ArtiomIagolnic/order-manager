@@ -121,7 +121,7 @@
     <!-- Mobile Card Buttons -->
     <template #mobile-card-buttons="{ item }">
       <div
-        class="bg-gray-200 text-sm py-1 px-1 rounded select-none text-gray-700 inline-block mt-2"
+        class="text-sm py-1 px-1 rounded select-none text-gray-700 inline-block mt-2"
       >
         <button
           @click="openModal(item)"
@@ -150,7 +150,15 @@
       <div
         class="bg-teal-400 p-3 flex-no-wrap rounded-l-lg mb-0 text-white grid grid-cols-12 divide-x divide-gray-300"
       >
-        <div class="p-2 text-left font-bold col-span-1">Nr</div>
+        <div class="p-2 text-left font-bold col-span-1">
+          <input
+            v-model="selectAll"
+            @click="toggleSelectAll"
+            type="checkbox"
+            class="form-checkbox text-blue-400 h-5 w-5"
+          />
+          Nr
+        </div>
         <div class="p-2 text-left font-bold col-span-2">
           <SortIconsComponent
             column="firstName"
@@ -221,7 +229,7 @@
         <div class="col-span-3">
           <div class="flex justify-center">
             <div
-              class="bg-gray-200 text-sm py-1 px-1 rounded select-none text-gray-700 inline-block"
+              class="text-sm py-1 px-1 rounded select-none text-gray-700 inline-block"
             >
               <button
                 @click="openModal(item)"
@@ -284,7 +292,6 @@ export default {
   },
   data() {
     return {
-      showDeleteAlert: false,
       customers: [],
       pageSize: 10,
       displayedCustomers: [],
@@ -302,6 +309,7 @@ export default {
       searchActive: false,
       itemToDelete: null,
       showConfirmModal: false,
+      selectAll: false,
     };
   },
   // Load initial customer data
@@ -382,6 +390,7 @@ export default {
         if (this.selectedItems.length > 0) {
           await this.customerStore.deleteCustomer(this.selectedItems);
           this.selectedItems.length = 0;
+          this.selectAll = false;
         } else {
           await this.customerStore.deleteCustomer(this.itemToDelete.id);
         }
@@ -417,7 +426,14 @@ export default {
       } else {
         await this.customerStore.exportSelected(this.selectedItems);
         this.selectedItems = [];
+        this.selectAll = false;
       }
+    },
+    toggleSelectAll() {
+      this.selectAll = !this.selectAll;
+      this.selectedItems = this.selectAll
+        ? this.customers.map((item) => item.id)
+        : [];
     },
   },
 };

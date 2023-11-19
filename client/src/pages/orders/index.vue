@@ -7,7 +7,7 @@
     width="sm"
     v-on:close="showConfirmModal = false"
   >
-    <p class="text-gray-800">Are you sure you want you delete customer(s)?</p>
+    <p class="text-gray-800">Are you sure you want you delete order(s)?</p>
 
     <div class="text-right mt-4">
       <button
@@ -117,7 +117,7 @@
     </template>
     <template #mobile-card-buttons="{ item }">
       <div
-        class="bg-gray-200 text-sm py-1 px-1 rounded select-none text-gray-700 inline-block mt-2"
+        class="text-sm py-1 px-1 rounded select-none text-gray-700 inline-block mt-2"
       >
         <button
           @click="openModal(item)"
@@ -143,7 +143,15 @@
       <div
         class="bg-teal-400 p-3 rounded-l-lg mb-0 text-white grid grid-cols-12 divide-x divide-gray-300"
       >
-        <div class="p-2 text-left font-bold col-span-1">Nr</div>
+        <div class="p-2 text-left font-bold col-span-1">
+          <input
+            v-model="selectAll"
+            @click="toggleSelectAll"
+            type="checkbox"
+            class="form-checkbox text-blue-400 h-5 w-5"
+          />
+          Nr
+        </div>
         <div class="p-2 text-left font-bold col-span-2">
           <SortIconsComponent
             column="displayedId"
@@ -188,14 +196,14 @@
       <div
         class="grid grid-cols-12 divide-x divide-gray-300 p-3 border-b hover:bg-gray-100"
       >
-        <div class="p-2 text-center col-span-1">
+        <div class="p-2 text-left col-span-1">
           <input
             :value="item.id"
             v-model="selectedItems"
             type="checkbox"
             class="form-checkbox text-blue-400 h-5 w-5"
           />
-          <span class="ml-1">{{ index + 1 }}</span>
+          <span class="ml-1 ">{{ index + 1 }}</span>
         </div>
         <div class="p-2 text-left col-span-2">
           {{ item.displayedId }}
@@ -212,7 +220,7 @@
         <div class="col-span-3">
           <div class="flex justify-center">
             <div
-              class="bg-gray-200 text-sm py-1 px-1 rounded select-none text-gray-700 inline-block"
+              class="text-sm py-1 px-1 rounded select-none text-gray-700 inline-block"
             >
               <button
                 @click="openModal(item)"
@@ -293,6 +301,7 @@ export default {
       sortHeader: "",
       searchActive: false,
       itemsToDelete: null,
+      selectAll: false,
     };
   },
   created() {
@@ -414,6 +423,12 @@ export default {
         await this.orderStore.exportSelected(this.selectedItems);
         this.selectedItems = [];
       }
+    },
+    toggleSelectAll() {
+      this.selectAll = !this.selectAll;
+      this.selectedItems = this.selectAll
+        ? this.orders.map((item) => item.id)
+        : [];
     },
   },
 };

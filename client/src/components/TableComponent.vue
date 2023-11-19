@@ -5,7 +5,6 @@
       <div class="sticky-header" :style="{ top: stickyHeaderTop }">
         <div class="px-6 py-4 flex items-center justify-between">
           <div class="text-gray-700">
-            <font-awesome-icon icon="fa-solid fa-square-check" />
             {{ selectedCount }}
           </div>
           <div class="flex space-x-4">
@@ -79,8 +78,8 @@
           </div>
         </div>
       </div>
+
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <!-- Loop Through Items -->
         <div
           v-for="(item, i) in items"
           :key="item.id"
